@@ -17,7 +17,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import Signup from "./page/signup/Signup";
 import OAuth2RedirectHandler from './oauth2/OAuth2RedirectHandler';
 import NotFound from './common/NotFound';
-import DashboardRentaler from './page/rentaler/DashboardRetaler';
+import DashboardRentaler from './page/rentaler/DashboardRentaler';
+import LoginRentaler from './page/login/LoginRentaler';
+import LoginAdmin from './page/login/LoginAdmin';
+import SignupRentaler from './page/signup/SignupRentaler';
 
 
 
@@ -76,14 +79,14 @@ function App() {
     localStorage.removeItem(ACCESS_TOKEN);
     setAuthenticated(false);
     setCurrentUser(null);
-    toast.success("Bạn đăng xuất thành công!!!");  
+    toast.success("Bạn đăng xuất thành công!!!");
+    window.location.reload()
   }
 
   useEffect(() => {
     loadCurrentlyLoggedInUser();
     loadCurrentlyLoggedInRetanler();
     loadCurrentlyLoggedInAdmin();
-
   }, []);
 
   if (loading) {
@@ -101,11 +104,17 @@ function App() {
           <Route exact path="/about-us" element={<About authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/contact" element={<Contact authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/login" element={<Login authenticated={authenticated} />} />
-          <Route exact path="/signup" element={<Signup authenticated={authenticated} />} />
-          <Route exact path="/admin" element={<DashboardAdmin />} />
-          <Route exact path="/rentaler" element={<DashboardRentaler />} />
+          <Route exact path="/login-rentaler" element={<LoginRentaler authenticated={authenticated} currentUser={currentUser} role={role} />} />
+          <Route exact path="/login-admin" element={<LoginAdmin authenticated={authenticated} currentUser={currentUser} role={role} />} />
+          <Route exact path="/signup" element={<Signup authenticated={authenticated} currentUser={currentUser} role={role} />} />
+          <Route exact path="/signup-rentaler" element={<SignupRentaler authenticated={authenticated} />} />
+          <Route exact path="/admin" element={<DashboardAdmin authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
+          <Route exact path="/rentaler" element={<DashboardRentaler authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
           <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />}/>
           <Route component={NotFound}></Route>
+        </Routes>
+        <Routes>
+          
         </Routes>
       </Router>
 

@@ -21,6 +21,10 @@ public class SignUpRequest {
     @NotBlank
     private String password;
 
+    private String phone;
+
+    private String address;
+
     private String confirmPassword;
 
     private RoleName role;
