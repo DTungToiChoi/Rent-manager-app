@@ -95,7 +95,7 @@ function LoginForm() {
                 history("/rentaler");
                 setTimeout(() => {
                     window.location.reload();
-                }, 1000);     
+                }, 1000);
             }).catch(error => {
                 toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
             });
@@ -103,18 +103,20 @@ function LoginForm() {
 
     return (
         <form onSubmit={handleSubmit}>
-        <div className="form-group first">
-            <span>Email</span>
-            <input type="email" className="form-control" name="email" value={formState.email} onChange={handleInputChange} required />
+            <div className="form-group first">
+                <span>Email</span>
+                <input type="email" className="form-control" name="email" value={formState.email} onChange={handleInputChange} required />
 
-        </div>
-        <div className="form-group last mb-4">
-            <span>Mật khẩu</span>
-            <input type="password" className="form-control" name="password" value={formState.password} onChange={handleInputChange} required />
-
-        </div>
-        <input type="submit" value="Đăng nhập" className="btn text-white btn-block btn-primary" />
-    </form>
+            </div>
+            <div className="form-group last mb-4">
+                <span>Mật khẩu</span>
+                <input type="password" className="form-control" name="password" value={formState.password} onChange={handleInputChange} required />
+            </div>
+            <div class="d-flex mb-5 align-items-center">
+                <span class="ml-auto"><a href="/forgot-password" class="forgot-pass">Quên mật khẩu</a></span>
+            </div>
+            <input type="submit" value="Đăng nhập" className="btn text-white btn-block btn-primary" />
+        </form>
     )
 }
 

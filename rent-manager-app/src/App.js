@@ -21,6 +21,9 @@ import DashboardRentaler from './page/rentaler/DashboardRentaler';
 import LoginRentaler from './page/login/LoginRentaler';
 import LoginAdmin from './page/login/LoginAdmin';
 import SignupRentaler from './page/signup/SignupRentaler';
+import ForgotPassword from './common/ForgotPassword';
+import ResetPassword from './common/ResetPassword';
+import SuccessConfirmed from './common/SuccessConfirmed';
 
 
 
@@ -103,6 +106,9 @@ function App() {
           <Route exact path="/rental-home/:id" element={<RentailHomeDetail authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/about-us" element={<About authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/contact" element={<Contact authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/forgot-password" element={<ForgotPassword />} />
+          <Route exact path="/reset-password/:email" element={<ResetPassword />} />
+          <Route exact path="/success-comfirmed/:email" element={<SuccessConfirmed />} />
           <Route exact path="/login" element={<Login authenticated={authenticated} />} />
           <Route exact path="/login-rentaler" element={<LoginRentaler authenticated={authenticated} currentUser={currentUser} role={role} />} />
           <Route exact path="/login-admin" element={<LoginAdmin authenticated={authenticated} currentUser={currentUser} role={role} />} />

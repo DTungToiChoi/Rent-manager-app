@@ -30,7 +30,7 @@ function SignupRentaler(props) {
             const signUpRequest = { name, email,phone, address, password, confirmPassword , role };
             signup(signUpRequest)
                 .then(response => {
-                    toast.success("Tài khoản đăng kí thành công. Vui lòng đăng nhập.");
+                    toast.success("Tài khoản đăng kí thành công. Vui lòng kiểm tra email đễ xác thực.");
                     history("/login-rentaler");
                 })
                 .catch(error => {

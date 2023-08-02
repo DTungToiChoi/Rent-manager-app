@@ -56,6 +56,30 @@ export function getCurrentAdmin() {
     });
 }
 
+export function forgotPassword(emailRequest) {
+    return request({
+        url: API_BASE_URL + "/auth/forgot-password",
+        method: 'POST',
+        body: JSON.stringify(emailRequest)
+    });
+}
+
+export function changeConfirmedStatus(emailRequest) {
+    return request({
+        url: API_BASE_URL + "/auth/confirmed",
+        method: 'POST',
+        body: JSON.stringify(emailRequest)
+    });
+}
+
+export function resetPassword(resetPassword) {
+    return request({
+        url: API_BASE_URL + "/auth/reset-password",
+        method: 'POST',
+        body: JSON.stringify(resetPassword)
+    });
+}
+
 export function login(loginRequest) {
     return request({
         url: API_BASE_URL + "/auth/login",

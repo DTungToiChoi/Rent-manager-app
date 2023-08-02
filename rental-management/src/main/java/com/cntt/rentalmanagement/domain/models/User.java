@@ -52,6 +52,9 @@ public class User extends DateAudit {
     @Column(name = "is_locked")
     private Boolean isLocked;
 
+    @Column(name = "is_confirmed")
+    private Boolean isConfirmed;
+
     private String address;
 
     private String phone;
