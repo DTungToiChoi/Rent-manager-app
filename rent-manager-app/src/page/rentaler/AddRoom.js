@@ -31,6 +31,13 @@ function AddRoom(props) {
         }));
     };
 
+    const handleRemoveAsset = (indexToRemove) => {
+        setRoomData(prevState => ({
+          ...prevState,
+          assets: prevState.assets.filter((asset, index) => index !== indexToRemove)
+        }));
+    }
+
     const handleAssetChange = (event, index) => {
         const { name, value } = event.target;
         setRoomData(prevState => ({
@@ -47,6 +54,7 @@ function AddRoom(props) {
             files: [...prevState.files, ...event.target.files]
         }));
     };
+
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -74,26 +82,26 @@ function AddRoom(props) {
             .then(response => {
                 toast.success(response.message);
                 toast.success("Đăng tin thành công!!")
-                
+
             })
             .then(data => {
                 console.log(data);
                 // Do something with the response data here
                 setRoomData({
-                  title: '',
-                  description: '',
-                  price: 0,
-                  latitude: 0.0,
-                  longitude: 0.0,
-                  address: '',
-                  locationId: 0,
-                  categoryId: 0,
-                  assets: [
-                    { name: '', number: '' }
-                  ],
-                  files: []
+                    title: '',
+                    description: '',
+                    price: 0,
+                    latitude: 0.0,
+                    longitude: 0.0,
+                    address: '',
+                    locationId: 0,
+                    categoryId: 0,
+                    assets: [
+                        { name: '', number: '' }
+                    ],
+                    files: []
                 });
-              })
+            })
             .catch(error => {
                 toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
             });
@@ -185,21 +193,24 @@ function AddRoom(props) {
                                                 <label className="form-label" htmlFor={`assetName${index}`}>Tên tài sản {index + 1}</label>
                                                 <input type="text" className="form-control" id={`assetName${index}`} name="name" value={asset.name} onChange={(event) => handleAssetChange(event, index)} />
                                             </div>
-                                            <div className="mb-3 col-md-6">
+                                            <div className="mb-3 col-md-4">
                                                 <label className="form-label" htmlFor={`assetNumber${index}`}>Số lượng</label>
                                                 <input type="number" className="form-control" id={`assetNumber${index}`} name="number" value={asset.number} onChange={(event) => handleAssetChange(event, index)} />
                                             </div>
+                                            <div className="col-md-2">
+                                                <button type="button" style={{marginTop: "34px"}} className="btn btn-danger" onClick={() => handleRemoveAsset(index)}>Xóa tài sản</button>
+                                            </div>
                                         </div>
                                     ))}
-                                    <button type="button" className="btn btn-primary" onClick={() => setRoomData(prevState => ({ ...prevState, assets: [...prevState.assets, { name: '', number: '' }] }))}>Thêm tài sản</button>
-                                    <br /><br />
-                                    <button type="submit" className="btn btn-primary">Submit</button>
-                                </form>
-                            </div>
-                        </div>
+                            <button type="button" className="btn btn-primary" onClick={() => setRoomData(prevState => ({ ...prevState, assets: [...prevState.assets, { name: '', number: '' }] }))}>Thêm tài sản</button>
+                            <br /><br />
+                            <button type="submit" className="btn btn-primary">Submit</button>
+                        </form>
                     </div>
                 </div>
             </div>
+        </div >
+            </div >
 
         </>
     )
