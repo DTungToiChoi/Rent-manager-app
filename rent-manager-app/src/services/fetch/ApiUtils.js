@@ -95,3 +95,5 @@ export function signup(signupRequest) {
         body: JSON.stringify(signupRequest)
     });
 }
+
+// RENTALER

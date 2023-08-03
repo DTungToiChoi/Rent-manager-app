@@ -77,4 +77,17 @@ public class Room extends DateAudit {
     private List<RoomMedia> roomMedia;
 
 
+    public Room(String title, String description, BigDecimal price, Double latitude, Double longitude, String address, String createdBy, String updatedBy, Location location, Category category, User user) {
+        this.title = title;
+        this.description = description;
+        this.price = price;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.address = address;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.location = location;
+        this.category = category;
+        this.user = user;
+    }
 }
