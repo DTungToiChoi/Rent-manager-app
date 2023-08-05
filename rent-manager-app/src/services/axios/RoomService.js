@@ -15,6 +15,17 @@ class RoomService {
     );
 
   }
+
+  updateRoom(id,formData) {
+    return axios.put(BASE_URL + 'room/'+id, formData,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`
+        }
+      }
+    );
+
+  }
 }
 
 export default new RoomService();

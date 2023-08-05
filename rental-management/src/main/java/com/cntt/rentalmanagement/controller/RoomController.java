@@ -1,5 +1,6 @@
 package com.cntt.rentalmanagement.controller;
 
+import com.cntt.rentalmanagement.domain.enums.RoomStatus;
 import com.cntt.rentalmanagement.domain.payload.request.AssetRequest;
 import com.cntt.rentalmanagement.domain.payload.request.RoomRequest;
 import com.cntt.rentalmanagement.services.RoomService;
@@ -28,8 +29,28 @@ public class RoomController {
         return ResponseEntity.ok(roomService.getRoomByRentaler(title, pageNo, pageSize));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getRoomById(@PathVariable Long id) {
+        return ResponseEntity.ok(roomService.getRoomById(id));
+    }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<?> disableRoom(@PathVariable Long id){
+        return ResponseEntity.ok(roomService.disableRoom(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateRoomInfo(@PathVariable Long id, MultipartHttpServletRequest request){
+return ResponseEntity.ok(roomService.updateRoomInfo(id, putRoomRequest(request)));
+    }
+
     @PostMapping
     public ResponseEntity<?> addRoom(MultipartHttpServletRequest request) {
+return ResponseEntity.ok(roomService.addNewRoom(putRoomRequest(request)));
+    }
+
+
+    private RoomRequest putRoomRequest(MultipartHttpServletRequest request) {
         String title = request.getParameter("title");
         String description = request.getParameter("description");
         BigDecimal price = BigDecimal.valueOf(Double.valueOf(request.getParameter("price")));
@@ -46,8 +67,7 @@ public class RoomController {
         }
 
         List<MultipartFile> files = request.getFiles("files");
-        RoomRequest roomRequest = new RoomRequest(title, description, price, latitude, longitude, address, locationId, categoryId, assets, files);
-        return ResponseEntity.ok(roomService.addNewRoom(roomRequest));
+        return new RoomRequest(title, description, price, latitude, longitude, address, locationId, categoryId, RoomStatus.ROOM_RENT, assets, files);
     }
 
 }

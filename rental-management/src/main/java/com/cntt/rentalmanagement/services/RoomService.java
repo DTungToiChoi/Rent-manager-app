@@ -10,4 +10,10 @@ public interface RoomService {
     MessageResponse addNewRoom(RoomRequest roomRequest);
 
     Page<RoomResponse> getRoomByRentaler(String title, Integer pageNo, Integer pageSize);
+
+    RoomResponse getRoomById(Long id);
+
+    MessageResponse disableRoom(Long id);
+
+    MessageResponse updateRoomInfo(Long id, RoomRequest roomRequest);
 }

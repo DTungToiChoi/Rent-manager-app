@@ -27,6 +27,7 @@ public class RoomResponse {
     private String address;
 
     private String status;
+    private String isLocked;
 
     private LocationResponse location;
 

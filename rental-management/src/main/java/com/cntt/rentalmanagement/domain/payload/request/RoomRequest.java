@@ -1,5 +1,6 @@
 package com.cntt.rentalmanagement.domain.payload.request;
 
+import com.cntt.rentalmanagement.domain.enums.RoomStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,8 @@ public class RoomRequest {
     private Long locationId;
 
     private Long categoryId;
+
+    private RoomStatus status;
 
     private List<AssetRequest> assets;
 

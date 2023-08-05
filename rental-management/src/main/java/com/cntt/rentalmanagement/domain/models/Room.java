@@ -1,5 +1,6 @@
 package com.cntt.rentalmanagement.domain.models;
 
+import com.cntt.rentalmanagement.domain.enums.LockedStatus;
 import com.cntt.rentalmanagement.domain.enums.RoomStatus;
 import com.cntt.rentalmanagement.domain.models.audit.DateAudit;
 import lombok.AllArgsConstructor;
@@ -38,6 +39,9 @@ public class Room extends DateAudit {
 
     @Enumerated(EnumType.STRING)
     private RoomStatus status;
+
+    @Enumerated(EnumType.STRING)
+    private LockedStatus isLocked;
 
     @Column(name = "created_by")
     private String createdBy;
@@ -90,5 +94,6 @@ public class Room extends DateAudit {
         this.category = category;
         this.user = user;
         this.status = roomStatus;
+        this.isLocked = LockedStatus.ENABLE;
     }
 }
