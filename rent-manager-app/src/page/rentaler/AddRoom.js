@@ -108,7 +108,7 @@ function AddRoom(props) {
 
         console.log(roomData);
     };
-
+    console.log("Add room",authenticated);
     if (!authenticated) {
         return <Navigate
             to={{

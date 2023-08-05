@@ -25,7 +25,7 @@ public class RoomRepositoryCustomImpl implements RoomRepositoryCustom {
         strQuery.append(" from rental_home.room r ");
         strQuery.append(" where 1=1");
         Map<String, Object> params = new HashMap<>();
-        if (Objects.nonNull(title) && title.isEmpty()) {
+        if (Objects.nonNull(title) && !title.isEmpty()) {
             strQuery.append(" AND r.title LIKE :title");
             params.put("title", "%"+title+"%");
         }

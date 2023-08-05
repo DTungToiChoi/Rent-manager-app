@@ -97,3 +97,13 @@ export function signup(signupRequest) {
 }
 
 // RENTALER
+export function getAllRoomOfRentaler(pageNo, pageSize, name) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/room?pageNo="+pageNo+"&pageSize="+pageSize+"&title="+name,
+        method: 'GET'
+    });
+}

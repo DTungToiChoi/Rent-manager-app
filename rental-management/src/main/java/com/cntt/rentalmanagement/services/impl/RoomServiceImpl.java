@@ -1,5 +1,6 @@
 package com.cntt.rentalmanagement.services.impl;
 
+import com.cntt.rentalmanagement.domain.enums.RoomStatus;
 import com.cntt.rentalmanagement.domain.models.*;
 import com.cntt.rentalmanagement.domain.payload.request.AssetRequest;
 import com.cntt.rentalmanagement.domain.payload.request.RoomRequest;
@@ -45,7 +46,8 @@ public class RoomServiceImpl extends BaseService implements RoomService {
                 getUsername(),
                 location,
                 category,
-                getUser());
+                getUser(),
+                RoomStatus.ROOM_RENT);
         roomRepository.save(room);
         for (MultipartFile file : roomRequest.getFiles()) {
             String fileName = fileStorageService.storeFile(file);

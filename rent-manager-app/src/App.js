@@ -25,6 +25,7 @@ import ForgotPassword from './common/ForgotPassword';
 import ResetPassword from './common/ResetPassword';
 import SuccessConfirmed from './common/SuccessConfirmed';
 import AddRoom from './page/rentaler/AddRoom';
+import RoomManagement from './page/rentaler/RoomManagement';
 
 
 
@@ -119,7 +120,8 @@ function App() {
           <Route exact path="/admin" element={<DashboardAdmin authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
           {/* RENTALER */}
           <Route exact path="/rentaler" element={<DashboardRentaler authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
-          <Route exact path="/rentaler/room-management" element={<AddRoom authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
+          <Route exact path="/rentaler/add-room" element={<AddRoom authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
+          <Route exact path="/rentaler/room-management" element={<RoomManagement authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
           <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />}/>
           <Route component={NotFound}></Route>
         </Routes>

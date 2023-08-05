@@ -1,5 +1,6 @@
 package com.cntt.rentalmanagement.domain.payload.response;
 
+import com.cntt.rentalmanagement.domain.enums.RoomStatus;
 import com.cntt.rentalmanagement.domain.payload.request.AssetRequest;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +25,8 @@ public class RoomResponse {
     private Double longitude;
 
     private String address;
+
+    private String status;
 
     private LocationResponse location;
 
