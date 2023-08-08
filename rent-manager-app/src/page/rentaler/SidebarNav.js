@@ -8,18 +8,13 @@ const SidebarNav = () => {
         Quản lí chức năng
       </li>
       <li className="sidebar-item">
-        <NavLink to="/rentaler/room-management" className="sidebar-link">
+        <NavLink to="/rentaler" className="sidebar-link">
           <i className="align-middle" data-feather="sliders"></i> <span className="align-middle">Thống kê</span>
         </NavLink>
       </li>
       <li className="sidebar-item">
         <NavLink to="/rentaler/room-management" className="sidebar-link">
           <i className="align-middle" data-feather="sliders"></i> <span className="align-middle">Quản lý phòng trọ</span>
-        </NavLink>
-      </li>
-      <li className="sidebar-item">
-        <NavLink to="/rentaler/asset-management" className="sidebar-link">
-          <i className="align-middle" data-feather="sliders"></i> <span className="align-middle">Quản lý tài sản</span>
         </NavLink>
       </li>
       <li className="sidebar-item">

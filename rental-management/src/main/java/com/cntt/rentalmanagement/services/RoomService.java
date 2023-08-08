@@ -16,4 +16,6 @@ public interface RoomService {
     MessageResponse disableRoom(Long id);
 
     MessageResponse updateRoomInfo(Long id, RoomRequest roomRequest);
+
+    Page<RoomResponse> getRentOfHome();
 }

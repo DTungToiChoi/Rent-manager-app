@@ -29,6 +29,11 @@ public class RoomController {
         return ResponseEntity.ok(roomService.getRoomByRentaler(title, pageNo, pageSize));
     }
 
+    @GetMapping("/rent-home")
+    public ResponseEntity<?> getRentOfHome(){
+        return ResponseEntity.ok(roomService.getRentOfHome());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getRoomById(@PathVariable Long id) {
         return ResponseEntity.ok(roomService.getRoomById(id));

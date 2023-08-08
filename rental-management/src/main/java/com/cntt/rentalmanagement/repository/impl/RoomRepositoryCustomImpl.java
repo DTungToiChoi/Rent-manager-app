@@ -40,4 +40,23 @@ public class RoomRepositoryCustomImpl implements RoomRepositoryCustom {
         String strCountQuery = "SELECT COUNT(DISTINCT r.id)" + strQuery;
         return BaseRepository.getPagedNativeQuery(em,strSelectQuery, strCountQuery, params, pageable, Room.class);
     }
+
+    @Override
+    public Page<Room> getAllRentOfHome(Long userId, Pageable pageable) {
+        StringBuilder strQuery = new StringBuilder();
+        strQuery.append(" from rental_home.room r ");
+        strQuery.append(" where 1=1");
+        strQuery.append(" AND r.status IN ('CHECKED_OUT','ROOM_RENT')");
+        strQuery.append(" AND r.is_locked = 'ENABLE'");
+        Map<String, Object> params = new HashMap<>();
+        if (Objects.nonNull(userId)) {
+            strQuery.append(" AND r.user_id = :userId");
+            params.put("userId", userId);
+        }
+        String strSelectQuery = "SELECT * " + strQuery;
+
+        String strCountQuery = "SELECT COUNT(DISTINCT r.id)" + strQuery;
+        return BaseRepository.getPagedNativeQuery(em,strSelectQuery, strCountQuery, params, pageable, Room.class);
+
+    }
 }

@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "contract")
@@ -20,6 +22,10 @@ public class Contract extends DateAudit {
     private Long id;
     private String name;
     private String files;
+    @Column(name = "name_of_rent")
+    private String nameOfRent;
+    @Column(name = "deadline_contract")
+    private LocalDateTime deadlineContract;
     @Column(name = "created_by")
     private String createdBy;
 
@@ -29,4 +35,14 @@ public class Contract extends DateAudit {
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
+
+    public Contract(String name, String files, String nameOfRent, String deadlineContract, String createdBy, String updatedBy, Room room) {
+        this.name = name;
+        this.files = files;
+        this.nameOfRent = nameOfRent;
+        this.deadlineContract = LocalDateTime.parse(deadlineContract);
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.room = room;
+    }
 }

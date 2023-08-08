@@ -135,6 +135,12 @@ public class RoomServiceImpl extends BaseService implements RoomService {
         return MessageResponse.builder().message("Cập nhật thông tin thành công").build();
     }
 
+    @Override
+    public Page<RoomResponse> getRentOfHome() {
+        Pageable pageable = PageRequest.of(0,100);
+        return mapperUtils.convertToResponsePage(roomRepository.getAllRentOfHome( getUserId(), pageable), RoomResponse.class, pageable);
+    }
+
     private User getUser() {
         return userRepository.findById(getUserId()).orElseThrow(() -> new BadRequestException("Người dùng không tồn tại"));
     }
