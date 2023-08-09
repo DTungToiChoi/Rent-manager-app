@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import SidebarNav from './SidebarNav';
 import Nav from './Nav';
-import { getAllContractOfRentaler } from '../../services/fetch/ApiUtils';
+import { deleteMaintenance, getAllContractOfRentaler, getAllMaintenceOfRentaler } from '../../services/fetch/ApiUtils';
 import Pagination from './Pagnation';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +22,7 @@ function MaintenceManagement(props) {
     }, [currentPage, searchQuery]);
 
     const fetchData = () => {
-        getAllContractOfRentaler(currentPage, itemsPerPage, searchQuery).then(response => {
+        getAllMaintenceOfRentaler(currentPage, itemsPerPage, searchQuery).then(response => {
             setTableData(response.content);
             setTotalItems(response.totalElements);
         }).catch(
@@ -48,6 +48,17 @@ function MaintenceManagement(props) {
     const paginate = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
+
+    const handleDeleteMaintenance = (id) => {
+        deleteMaintenance(id).then(response => {
+            console.log(response.message)
+            toast.success("Xóa phiếu bảo trì thành công")
+        }).catch(
+            error => {
+                toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
+            }
+        )
+    }
 
 
     return (
@@ -86,32 +97,36 @@ function MaintenceManagement(props) {
                                         <tr>
                                             <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "224px" }}  >Tên Phòng</th>
                                             <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "180px" }} >Địa Chỉ</th>
-                                            <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "180px" }} >Mô tả</th>
                                             <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "166px" }} >Phiếu bảo trì</th>
-                                            <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "75px"  }} >Chi phí</th>
+                                            <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "90px" }} >Chi phí</th>
                                             <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "142px" }} >Thời gian</th>
-                                            <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "134px" }} >Chế độ</th></tr>
+                                            <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "75px" }} >Chế độ</th></tr>
                                     </thead>
                                     <tbody>
                                         {tableData.map((item) => (
                                             <tr className="odd">
                                                 <td className="dtr-control sorting_1" tabindex="0">{item.room.title}</td>
                                                 <td>{item.room.address}</td>
-                                                <td>{item.nameOfRent}</td>
                                                 <td>
                                                     <button type="button" class="btn btn-outline-success">
                                                         <a href={item.files === null ? "" : `http://localhost:8080/document/` + item.files.replace('photographer/files/', '')} target="_blank">Xem</a>
                                                     </button>
                                                 </td>
-                                                <td>{item.room.price.toLocaleString('vi-VN', {
+                                                <td>{item.price && item.price.toLocaleString('vi-VN', {
                                                     style: 'currency',
                                                     currency: 'VND',
                                                 })}</td>
-                                                <td>{(new Date(item.deadlineContract).getFullYear() - new Date().getFullYear()) * 12 + (new Date(item.deadlineContract).getMonth() - new Date().getMonth())} tháng</td>
-                                                <td style={{ color: "green" }}>{item.room.status === "ROOM_RENT" || item.status === "CHECKED_OUT" ? "Chưa thuê" : "Đã thuê"}</td>
+                                                <td>{item.maintenanceDate && new Date(item.maintenanceDate).toLocaleDateString('en-GB', {
+                                                    day: '2-digit',
+                                                    month: '2-digit',
+                                                    year: 'numeric',
+                                                })}</td>
                                                 <td>
-                                                    <a href="#" onClick={() => handleEditMaintenance(item.id)} data-toggle="modal" data-target="#exampleModal"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 align-middle"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg></a>
+                                                    <a href="#" onClick={() => handleEditMaintenance(item.id)} data-toggle="tooltip" tabindex="0" data-placement="bottom" title="Sửa"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 align-middle"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg></a>
+                                                    &nbsp;
+                                                    <a href="#" onClick={() => handleDeleteMaintenance(item.id)} data-toggle="tooltip" tabindex="0" data-placement="bottom" title="Xóa"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-middle"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></a>
                                                 </td>
+
                                             </tr>
                                         ))}
                                     </tbody>

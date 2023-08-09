@@ -27,6 +27,11 @@ const SidebarNav = () => {
           <i className="align-middle" data-feather="sliders"></i> <span className="align-middle">Quản lý hợp đồng</span>
         </NavLink>
       </li>
+      <li className="sidebar-item">
+        <NavLink to="/rentaler/request-management" className="sidebar-link">
+          <i className="align-middle" data-feather="sliders"></i> <span className="align-middle">Quản lý yêu cầu</span>
+        </NavLink>
+      </li>
     </ul>
   )
 }

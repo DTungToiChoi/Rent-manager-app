@@ -72,6 +72,9 @@ public class Room extends DateAudit {
     private List<Asset> assets;
 
     @OneToMany(mappedBy = "room")
+    private List<Request> requests;
+
+    @OneToMany(mappedBy = "room")
     private List<Maintenance> maintenances;
 
     @OneToMany(mappedBy = "room")

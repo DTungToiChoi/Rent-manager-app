@@ -119,6 +119,17 @@ export function getAllContractOfRentaler(pageNo, pageSize, name) {
     });
 }
 
+export function getAllMaintenceOfRentaler(pageNo, pageSize, name) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/maintenance?pageNo="+pageNo+"&pageSize="+pageSize+"&keyword="+name,
+        method: 'GET'
+    });
+}
+
 export function getRoom(id) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -152,6 +163,17 @@ export function getContract(id) {
     });
 }
 
+export function getMaintenance(id) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/maintenance/" + id,
+        method: 'GET'
+    });
+}
+
 
 export function disableRoom(id) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
@@ -161,5 +183,16 @@ export function disableRoom(id) {
     return request({
         url: API_BASE_URL + "/room/"+id,
         method: 'POST'
+    });
+}
+
+export function deleteMaintenance(id) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/maintenance/"+id,
+        method: 'DELETE'
     });
 }

@@ -31,6 +31,8 @@ import ContractManagement from './page/rentaler/ContractManagement';
 import AddContract from './page/rentaler/AddContract';
 import EditContract from './page/rentaler/EditContract';
 import MaintenceManagement from './page/rentaler/MaintenceManagement';
+import AddMaintence from './page/rentaler/AddMaintence';
+import EditMaintenance from './page/rentaler/EditMaintence';
 
 
 
@@ -129,8 +131,8 @@ function App() {
           <Route exact path="/rentaler/edit-room/:id" element={<EditRoom authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
           <Route exact path="/rentaler/add-contract" element={<AddContract authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
           <Route exact path="/rentaler/edit-contract/:id" element={<EditContract authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
-          <Route exact path="/rentaler/add-maintenance" element={<AddContract authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
-          <Route exact path="/rentaler/edit-maintenance/:id" element={<EditContract authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
+          <Route exact path="/rentaler/add-maintenance" element={<AddMaintence authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
+          <Route exact path="/rentaler/edit-maintenance/:id" element={<EditMaintenance authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
           <Route exact path="/rentaler/contract-management" element={<ContractManagement authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
           <Route exact path="/rentaler/room-management" element={<RoomManagement authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
           <Route exact path="/rentaler/maintenance-management" element={<MaintenceManagement authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />

@@ -84,8 +84,8 @@ function ContractManagement(props) {
                                 </div></div></div><div className="row dt-row"><div className="col-sm-12"><table id="datatables-buttons" className="table table-striped dataTable no-footer dtr-inline" style={{ width: "100%" }} aria-describedby="datatables-buttons_info">
                                     <thead>
                                         <tr>
-                                            <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "224px" }}  >Tên Phòng</th>
-                                            <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "180px" }} >Địa Chỉ</th>
+                                        <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "224px" }}  >Tên Hợp Đồng</th>
+                                            <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "224px" }}  >Tên Phòng</th>                                        
                                             <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "180px" }} >Người thuê</th>
                                             <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "166px" }} >Hợp Đồng</th>
                                             <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "75px" }} >Giá</th>
@@ -96,22 +96,22 @@ function ContractManagement(props) {
                                     <tbody>
                                         {tableData.map((item) => (
                                             <tr className="odd">
-                                                <td className="dtr-control sorting_1" tabindex="0">{item.room.title}</td>
-                                                <td>{item.room.address}</td>
+                                                <td className="dtr-control sorting_1" tabindex="0">{item.name}</td>
+                                                <td>{item.room.title}</td>
                                                 <td>{item.nameOfRent}</td>
                                                 <td>
                                                     <button type="button" class="btn btn-outline-success">
                                                         <a href={item.files === null ? "" : `http://localhost:8080/document/` + item.files.replace('photographer/files/', '')} target="_blank">Xem</a>
                                                     </button>
                                                 </td>
-                                                <td>{item.room.price.toLocaleString('vi-VN', {
+                                                <td>{item.room.price && item.room.price.toLocaleString('vi-VN', {
                                                     style: 'currency',
                                                     currency: 'VND',
                                                 })}</td>
                                                 <td>{(new Date(item.deadlineContract).getFullYear() - new Date().getFullYear()) * 12 + (new Date(item.deadlineContract).getMonth() - new Date().getMonth())} tháng</td>
                                                 <td style={{ color: "green" }}>{item.room.status === "ROOM_RENT" || item.status === "CHECKED_OUT" ? "Chưa thuê" : "Đã thuê"}</td>
                                                 <td>
-                                                    <a href="#" onClick={() => handleEditContract(item.id)} data-toggle="modal" data-target="#exampleModal"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 align-middle"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg></a>
+                                                    <a href="#" onClick={() => handleEditContract(item.id)} data-toggle="tooltip" data-placement="bottom" title="Sửa hợp đồng"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 align-middle"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg></a>
                                                 </td>
                                             </tr>
                                         ))}

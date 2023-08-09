@@ -110,16 +110,19 @@ function RoomManagement(props) {
                                                 <td className="dtr-control sorting_1" tabindex="0">{item.title}</td>
                                                 <td>{item.description}</td>
                                                 <td>{item.address}</td>
-                                                <td>{item.price}</td>
+                                                <td>{item.price && item.price.toLocaleString('vi-VN', {
+                                                    style: 'currency',
+                                                    currency: 'VND',
+                                                })}</td>
                                                 <td style={{ color: "green" }}>{item.status === "ROOM_RENT" || item.status === "CHECKED_OUT" ? "Chưa thuê" : "Đã thuê"}</td>
                                                 <td style={{ color: "green" }}>{item.isLocked === "ENABLE" ? "Hiển" : "Ẩn"}</td>
                                                 <td>
-                                                    <a href="#" onClick={() => handleEditRoom(item.id)} data-toggle="modal" data-target="#exampleModal"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 align-middle"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg></a>
+                                                    <a href="#" onClick={() => handleEditRoom(item.id)} data-toggle="tooltip" data-placement="bottom" title="Sửa"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 align-middle"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg></a>
                                                     &nbsp;&nbsp;
-                                                    <a href={`/rental-home/`+item.id} data-toggle="modal" data-target=".bd-example-modal-lg" target='_blank'>
+                                                    <a href={`/rental-home/`+item.id} data-toggle="tooltip" data-placement="bottom" title="Xem chi tiết" target='_blank'>
                                                         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z" /></svg> </a>
                                                     &nbsp;&nbsp;
-                                                    <a href="#" onClick={() => handleDisableRoom(item.id)}><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-middle"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></a>
+                                                    <a href="#" onClick={() => handleDisableRoom(item.id)} data-toggle="tooltip" data-placement="bottom" title="Ẩn phòng"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-middle"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></a>
 
                                                 </td>
                                             </tr>
