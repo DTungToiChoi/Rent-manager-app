@@ -33,6 +33,7 @@ import EditContract from './page/rentaler/EditContract';
 import MaintenceManagement from './page/rentaler/MaintenceManagement';
 import AddMaintence from './page/rentaler/AddMaintence';
 import EditMaintenance from './page/rentaler/EditMaintence';
+import RequierManagement from './page/rentaler/RequierManagement';
 
 
 
@@ -136,6 +137,7 @@ function App() {
           <Route exact path="/rentaler/contract-management" element={<ContractManagement authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
           <Route exact path="/rentaler/room-management" element={<RoomManagement authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
           <Route exact path="/rentaler/maintenance-management" element={<MaintenceManagement authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
+          <Route exact path="/rentaler/request-management" element={<RequierManagement authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
           <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />}/>
           <Route component={NotFound}></Route>
         </Routes>

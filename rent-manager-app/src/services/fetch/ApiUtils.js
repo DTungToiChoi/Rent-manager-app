@@ -130,6 +130,17 @@ export function getAllMaintenceOfRentaler(pageNo, pageSize, name) {
     });
 }
 
+export function getAllRequireOfRentaler(pageNo, pageSize, name) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/request?pageNo="+pageNo+"&pageSize="+pageSize+"&keyword="+name,
+        method: 'GET'
+    });
+}
+
 export function getRoom(id) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -160,6 +171,17 @@ export function getContract(id) {
     return request({
         url: API_BASE_URL + "/contract/" + id,
         method: 'GET'
+    });
+}
+
+export function changeStatusOfRequest(id) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/request/" + id,
+        method: 'POST'
     });
 }
 

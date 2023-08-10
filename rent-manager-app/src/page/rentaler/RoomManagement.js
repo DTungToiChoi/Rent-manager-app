@@ -47,9 +47,7 @@ function RoomManagement(props) {
     const handleDisableRoom = (roomId) => {
         disableRoom(roomId).then(response => {
             toast.success(response.message)
-            setTimeout(() => {
-                window.location.reload();
-            }, 5000);
+            fetchData();
         }).catch(
             error => {
                 toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
