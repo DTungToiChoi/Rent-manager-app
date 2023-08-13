@@ -96,6 +96,18 @@ export function signup(signupRequest) {
     });
 }
 
+export function changePassword(changePasswordRequest) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/auth/change-password",
+        method: 'POST',
+        body: JSON.stringify(changePasswordRequest)
+    });
+}
+
 // RENTALER
 export function getAllRoomOfRentaler(pageNo, pageSize, name) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
@@ -174,6 +186,17 @@ export function getContract(id) {
     });
 }
 
+export function getRequestById(id) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/request/" + id,
+        method: 'GET'
+    });
+}
+
 export function changeStatusOfRequest(id) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -192,6 +215,17 @@ export function getMaintenance(id) {
 
     return request({
         url: API_BASE_URL + "/maintenance/" + id,
+        method: 'GET'
+    });
+}
+
+export function exportBillRequest(nameBill, description, price, nameRoom, nameOfRent) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/export-bill" +"?nameBill=" +nameBill+"&description="+description+"&price="+price+"&nameRoom="+nameRoom+"&nameOfRent="+nameOfRent,
         method: 'GET'
     });
 }

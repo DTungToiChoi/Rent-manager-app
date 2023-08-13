@@ -34,6 +34,10 @@ import MaintenceManagement from './page/rentaler/MaintenceManagement';
 import AddMaintence from './page/rentaler/AddMaintence';
 import EditMaintenance from './page/rentaler/EditMaintence';
 import RequierManagement from './page/rentaler/RequierManagement';
+import ExportBillRequier from './page/rentaler/ExportBillRequier';
+import ExportCheckoutRoom from './page/rentaler/ExportCheckoutRoom';
+import ProfileRentaler from './page/rentaler/ProfileRentaler';
+import ChangePassword from './page/rentaler/ChangePassword';
 
 
 
@@ -96,6 +100,12 @@ function App() {
     window.location.reload()
   }
 
+  const exitLogoutChangePassword = () => {
+    localStorage.removeItem(ACCESS_TOKEN);
+    setAuthenticated(false);
+    setCurrentUser(null);
+  }
+
   useEffect(() => {
     loadCurrentlyLoggedInUser();
     loadCurrentlyLoggedInRetanler();
@@ -125,24 +135,27 @@ function App() {
           <Route exact path="/signup" element={<Signup authenticated={authenticated} currentUser={currentUser} role={role} />} />
           <Route exact path="/signup-rentaler" element={<SignupRentaler authenticated={authenticated} />} />
           {/* ADMIN */}
-          <Route exact path="/admin" element={<DashboardAdmin authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
+          <Route exact path="/admin" element={<DashboardAdmin authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
           {/* RENTALER */}
-          <Route exact path="/rentaler" element={<DashboardRentaler authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
-          <Route exact path="/rentaler/add-room" element={<AddRoom authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
-          <Route exact path="/rentaler/edit-room/:id" element={<EditRoom authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
-          <Route exact path="/rentaler/add-contract" element={<AddContract authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
-          <Route exact path="/rentaler/edit-contract/:id" element={<EditContract authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
-          <Route exact path="/rentaler/add-maintenance" element={<AddMaintence authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
-          <Route exact path="/rentaler/edit-maintenance/:id" element={<EditMaintenance authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
-          <Route exact path="/rentaler/contract-management" element={<ContractManagement authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
-          <Route exact path="/rentaler/room-management" element={<RoomManagement authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
-          <Route exact path="/rentaler/maintenance-management" element={<MaintenceManagement authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
-          <Route exact path="/rentaler/request-management" element={<RequierManagement authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout}/>} />
-          <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />}/>
-          <Route component={NotFound}></Route>
+          <Route exact path="/rentaler/change-password" element={<ChangePassword authenticated={authenticated} exit={exitLogoutChangePassword} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route exact path="/rentaler/profile" element={<ProfileRentaler authenticated={authenticated} currentUser={currentUser} role={role} loadCurrentUser={loadCurrentlyLoggedInRetanler} onLogout={handleLogout} />} />
+          <Route exact path="/rentaler" element={<DashboardRentaler authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route exact path="/rentaler/add-room" element={<AddRoom authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route exact path="/rentaler/edit-room/:id" element={<EditRoom authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route exact path="/rentaler/add-contract" element={<AddContract authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route exact path="/rentaler/edit-contract/:id" element={<EditContract authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route exact path="/rentaler/add-maintenance" element={<AddMaintence authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route exact path="/rentaler/edit-maintenance/:id" element={<EditMaintenance authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route exact path="/rentaler/contract-management" element={<ContractManagement authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route exact path="/rentaler/room-management" element={<RoomManagement authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route exact path="/rentaler/maintenance-management" element={<MaintenceManagement authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route exact path="/rentaler/request-management" element={<RequierManagement authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route exact path="/rentaler/export-bill/:id" element={<ExportBillRequier authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route exact path="/rentaler/export-contract/:id" element={<ExportCheckoutRoom authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
         </Routes>
         <Routes>
-          
+          <Route path='*' exact={true} component={NotFound} />
         </Routes>
       </Router>
 

@@ -42,8 +42,8 @@ function AddContract(props) {
         const formData = new FormData();
         formData.append('name', contractData.name);
         formData.append('roomId', contractData.roomId);
-        formData.append('nameRentHome', contractData.nameRentHome);
-        formData.append('deadline', contractData.deadline);
+        formData.append('nameOfRent', contractData.nameRentHome);
+        formData.append('deadlineContract', contractData.deadline);
         contractData.files.forEach((file, index) => {
             formData.append(`files`, file);
         });

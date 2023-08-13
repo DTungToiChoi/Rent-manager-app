@@ -8,4 +8,6 @@ public interface RequestService {
     Page<RequireResponse> getRequestOfRentHome(String keyword, Integer pageNo, Integer pageSize);
 
     MessageResponse changeStatusOfRequest(Long id);
+
+    RequireResponse getRequest(Long id);
 }

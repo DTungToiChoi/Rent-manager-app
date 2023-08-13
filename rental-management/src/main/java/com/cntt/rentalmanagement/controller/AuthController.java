@@ -1,15 +1,13 @@
 package com.cntt.rentalmanagement.controller;
 
-import com.cntt.rentalmanagement.domain.payload.request.EmailRequest;
-import com.cntt.rentalmanagement.domain.payload.request.LoginRequest;
-import com.cntt.rentalmanagement.domain.payload.request.ResetPasswordRequest;
-import com.cntt.rentalmanagement.domain.payload.request.SignUpRequest;
+import com.cntt.rentalmanagement.domain.payload.request.*;
 import com.cntt.rentalmanagement.domain.payload.response.ApiResponse;
 import com.cntt.rentalmanagement.domain.payload.response.AuthResponse;
 import com.cntt.rentalmanagement.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import javax.mail.MessagingException;
@@ -47,5 +45,15 @@ public class AuthController {
     @PostMapping("/confirmed")
     public ResponseEntity<?> confirmedAccount(@RequestBody EmailRequest emailRequest){
         return ResponseEntity.ok(authService.confirmedAccount(emailRequest));
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
+        return ResponseEntity.ok(authService.changePassword(changePasswordRequest));
+    }
+
+    @PostMapping("/upload-avatar")
+    public  ResponseEntity<?> changeImage(@RequestParam MultipartFile file){
+        return ResponseEntity.ok(authService.changeImage(file));
     }
 }

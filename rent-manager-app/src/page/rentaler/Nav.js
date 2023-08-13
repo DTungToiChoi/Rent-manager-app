@@ -1,8 +1,9 @@
 import React from "react"
+import { Link } from "react-router-dom";
 
 const Nav = (props) => {
-    const {currentUser, onLogout} = props;
-    console.log("User", currentUser)
+  const { currentUser, onLogout } = props;
+  console.log("User", currentUser)
 
   return (
     <nav className="navbar navbar-expand navbar-light navbar-bg">
@@ -18,10 +19,23 @@ const Nav = (props) => {
             </a>
 
             <a className="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-              <img src="../../assets/img/author-2.jpg" className="avatar img-fluid rounded me-1" alt="Charles Hall" /> <span className="text-dark">{currentUser === null ? "" : currentUser.name }</span>
+              {
+                currentUser && currentUser.imageUrl ? (
+                  <img src={currentUser.imageUrl} className="avatar img-fluid rounded me-1" alt={currentUser.name} />
+                ) : (
+                  <img src="../../assets/img/author-2.jpg" className="avatar img-fluid rounded me-1" alt="Charles Hall" />
+                )
+              }
+
+              <span className="text-dark">{currentUser === null ? "" : currentUser.name}</span>
             </a>
             <div className="dropdown-menu dropdown-menu-end">
-              <a className="dropdown-item">Trang cá nhân</a>
+              <Link className="dropdown-item" to={'/rentaler/profile'}>
+                Trang cá nhân
+              </Link>
+              <Link className="dropdown-item" to={'/rentaler/change-password'}>
+                Đổi mật khẩu
+              </Link>
               <div className="dropdown-divider"></div>
               <a className="dropdown-item" onClick={onLogout}>Đăng xuất</a>
             </div>

@@ -34,4 +34,9 @@ public class RequestServiceImpl extends BaseService implements RequestService {
         requestRepository.save(request);
         return MessageResponse.builder().message("Yêu cầu đã được xử lý").build();
     }
+
+    @Override
+    public RequireResponse getRequest(Long id) {
+        return mapperUtils.convertToResponse(requestRepository.findById(id).orElseThrow(() -> new BadRequestException("Yêu cầu này không tồn tại")), RequireResponse.class);
+    }
 }

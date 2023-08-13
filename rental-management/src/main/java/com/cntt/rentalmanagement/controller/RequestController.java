@@ -18,6 +18,10 @@ public class RequestController {
                                                   @RequestParam Integer pageSize){
         return ResponseEntity.ok(requestService.getRequestOfRentHome(keyword, pageNo, pageSize));
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getRequestById(@PathVariable Long id) {
+        return ResponseEntity.ok(requestService.getRequest(id));
+    }
 
     @PostMapping("/{id}")
     public ResponseEntity<?> changeStatus(@PathVariable Long id) {

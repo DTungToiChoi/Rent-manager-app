@@ -15,5 +15,6 @@ public class ContractResponse {
     private String nameOfRent;
     private LocalDateTime deadlineContract;
     private RoomResponse room;
+    private LocalDateTime createdAt;
 
 }

@@ -49,7 +49,7 @@ function AddMaintence(props) {
         MaintenanceService.addNewMaintenance(formData)
             .then(response => {
                 toast.success(response.message);
-                toast.success("Hợp đồng lưu thành công!!")
+                toast.success("Phiếu bảo trì lưu thành công!!")
 
             })
             .then(data => {

@@ -4,10 +4,7 @@ import com.cntt.rentalmanagement.domain.enums.AuthProvider;
 import com.cntt.rentalmanagement.domain.enums.RoleName;
 import com.cntt.rentalmanagement.domain.models.Role;
 import com.cntt.rentalmanagement.domain.models.User;
-import com.cntt.rentalmanagement.domain.payload.request.EmailRequest;
-import com.cntt.rentalmanagement.domain.payload.request.LoginRequest;
-import com.cntt.rentalmanagement.domain.payload.request.ResetPasswordRequest;
-import com.cntt.rentalmanagement.domain.payload.request.SignUpRequest;
+import com.cntt.rentalmanagement.domain.payload.request.*;
 import com.cntt.rentalmanagement.domain.payload.response.MessageResponse;
 import com.cntt.rentalmanagement.exception.BadRequestException;
 import com.cntt.rentalmanagement.repository.RoleRepository;
@@ -15,15 +12,18 @@ import com.cntt.rentalmanagement.repository.UserRepository;
 import com.cntt.rentalmanagement.secruity.TokenProvider;
 import com.cntt.rentalmanagement.services.AuthService;
 import com.cntt.rentalmanagement.services.BaseService;
+import com.cntt.rentalmanagement.services.FileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
@@ -57,6 +57,9 @@ public class AuthServiceImpl extends BaseService implements AuthService {
 
     @Autowired
     private JavaMailSender mailSender;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
 
     @Override
@@ -143,6 +146,31 @@ public class AuthServiceImpl extends BaseService implements AuthService {
         user.setIsConfirmed(true);
         userRepository.save(user);
         return MessageResponse.builder().message("Tài khoản đã được xác thực. Vui lòng đăng nhập").build();
+    }
+
+    @Override
+    public MessageResponse changePassword(ChangePasswordRequest changePasswordRequest) {
+        User user = userRepository.findById(getUserId()).orElseThrow(() -> new BadRequestException("Tài khoảng không tồn tại"));
+        boolean passwordMatch = BCrypt.checkpw(changePasswordRequest.getOldPassword(), user.getPassword());
+        if (!passwordMatch) {
+            throw new BadRequestException("Mật khẩu cũ không chính xác");
+        }
+        if (!changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmPassword())) {
+            throw new BadRequestException("Mật khẩu không trùng khớp");
+        }
+
+        user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+        userRepository.save(user);
+        return MessageResponse.builder().message("Cập nhật mật khẩu thành công").build();
+    }
+
+    @Override
+    public MessageResponse changeImage(MultipartFile file) {
+        User user = userRepository.findById(getUserId()).orElseThrow(() -> new BadRequestException("Tài khoảng không tồn tại"));
+        String image = fileStorageService.storeFile(file).replace("photographer/files/", "");
+        user.setImageUrl("http://localhost:8080/image/" + image);
+        userRepository.save(user);
+        return MessageResponse.builder().message("Thay ảnh đại diện thành công.").build();
     }
 
     public void sendEmailFromTemplate(String email) throws MessagingException, IOException {

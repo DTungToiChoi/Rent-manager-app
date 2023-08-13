@@ -44,6 +44,10 @@ function ContractManagement(props) {
         history('/rentaler/edit-contract/' + id)
     }
 
+    const handleExportBill = (id) => {
+        history('/rentaler/export-contract/' + id)
+    }
+
 
     const paginate = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -113,7 +117,7 @@ function ContractManagement(props) {
                                                 <td>
                                                     <a href="#" onClick={() => handleEditContract(item.id)} data-toggle="tooltip" data-placement="bottom" title="Sửa hợp đồng"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 align-middle"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg></a>
                                                     &nbsp;&nbsp;
-                                                    <a data-toggle="tooltip" data-placement="bottom" title="Trả phòng và xuất hóa đơn">                                                
+                                                    <a data-toggle="tooltip" onClick={() => handleExportBill(item.id)} data-placement="bottom" title="Trả phòng và xuất hóa đơn">                                                
                                                         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM80 64h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H80c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H80c-8.8 0-16-7.2-16-16s7.2-16 16-16zm16 96H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V256c0-17.7 14.3-32 32-32zm0 32v64H288V256H96zM240 416h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H240c-8.8 0-16-7.2-16-16s7.2-16 16-16z" /></svg>
                                                     </a>
                                                 </td>
