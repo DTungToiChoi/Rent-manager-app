@@ -175,6 +175,17 @@ export function getRentOfHome() {
     });
 }
 
+export function getNumber() {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/statistical" ,
+        method: 'GET'
+    });
+}
+
 export function getContract(id) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");

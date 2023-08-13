@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom'
 import Nav from './Nav';
 import SidebarNav from './SidebarNav';
@@ -6,11 +6,34 @@ import '../../assets/css/app.css';
 import { UserData } from '../../utils/Data';
 import BarChart from './chart/BarChart';
 import PieChart from './chart/PieChart';
+import { getNumber } from '../../services/fetch/ApiUtils';
 
 
 function DashboardRentaler(props) {
     console.log("Props:", props)
     const { authenticated, role, currentUser, location, onLogout } = props;
+
+    const [number, setNumber] = useState({
+        numberOfRoom: '',
+        numberOfPeople: '',
+        numberOfEmptyRoom: '',
+        revenue: '',
+    });
+
+    useEffect(() => {
+        getNumber()
+            .then(response => {
+                const number = response;
+                setNumber(prevState => ({
+                    ...prevState,
+                    ...number
+                }));
+            })
+            .catch(error => {
+               console.log(error)
+            });
+
+    }, []);
 
     const [userData, setUserData] = useState({
         labels: UserData.map((data) => data.year),
@@ -76,7 +99,7 @@ function DashboardRentaler(props) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <h1 class="mt-1 mb-3">$47.482</h1>
+                                        <h1 class="mt-1 mb-3">{number.numberOfRoom}</h1>
                                         <div class="mb-0">
                                             <span class="badge badge-success-light"> <i class="mdi mdi-arrow-bottom-right"></i> 3.65% </span>
 
@@ -98,7 +121,7 @@ function DashboardRentaler(props) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <h1 class="mt-1 mb-3">2.542</h1>
+                                        <h1 class="mt-1 mb-3">{number.numberOfPeople}</h1>
                                         <div class="mb-0">
                                             <span class="badge badge-danger-light"> <i class="mdi mdi-arrow-bottom-right"></i> -5.25% </span>
 
@@ -120,7 +143,7 @@ function DashboardRentaler(props) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <h1 class="mt-1 mb-3">16.300</h1>
+                                        <h1 class="mt-1 mb-3">{number.numberOfEmptyRoom}</h1>
                                         <div class="mb-0">
                                             <span class="badge badge-success-light"> <i class="mdi mdi-arrow-bottom-right"></i> 4.65% </span>
                                         </div>
@@ -141,7 +164,10 @@ function DashboardRentaler(props) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <h1 class="mt-1 mb-3">$20.120</h1>
+                                        <h1 class="mt-1 mb-3">{number.revenue.toLocaleString('vi-VN', {
+                                                    style: 'currency',
+                                                    currency: 'VND',
+                                                })}</h1>
                                         <div class="mb-0">
                                             <span class="badge badge-success-light"> <i class="mdi mdi-arrow-bottom-right"></i> 2.35% </span>
 
