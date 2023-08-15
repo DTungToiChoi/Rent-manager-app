@@ -173,6 +173,18 @@ public class AuthServiceImpl extends BaseService implements AuthService {
         return MessageResponse.builder().message("Thay ảnh đại diện thành công.").build();
     }
 
+    @Override
+    public MessageResponse lockAccount(Long id) {
+        User user = userRepository.findById(id).orElseThrow();
+        if (user.getIsLocked().equals(true)) {
+            user.setIsLocked(false);
+        } else {
+            user.setIsLocked(true);
+        }
+        userRepository.save(user);
+        return MessageResponse.builder().message("Cập nhật trạng thái của tài khoản thành công").build();
+    }
+
     public void sendEmailFromTemplate(String email) throws MessagingException, IOException {
 
         MimeMessage message = mailSender.createMimeMessage();

@@ -56,4 +56,9 @@ public class AuthController {
     public  ResponseEntity<?> changeImage(@RequestParam MultipartFile file){
         return ResponseEntity.ok(authService.changeImage(file));
     }
+
+    @PostMapping("/{id}/locked")
+    private ResponseEntity<?> lockedAccount(@PathVariable Long id) {
+        return ResponseEntity.ok(authService.lockAccount(id));
+    }
 }

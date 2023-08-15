@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import Nav from './Nav';
 import SidebarNav from './SidebarNav';
-import { getContract, getRequestById } from '../../services/fetch/ApiUtils';
+import { checkoutRoom, getContract, getRequestById } from '../../services/fetch/ApiUtils';
 import * as XLSX from 'xlsx';
 
 
@@ -34,12 +34,7 @@ function ExportCheckoutRoom(props) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        toast.success("Xuât hóa đơn thành công!!")
-        setContractData({
-            nameBill: "",
-            priceRequest: "",
-
-        });
+    
     };
 
     useEffect(() => {
@@ -57,8 +52,20 @@ function ExportCheckoutRoom(props) {
             });
     }, [id]);
 
-    const handleExport = () => {
-        exportToExcel(contractData);
+    const handleExport = (id) => {
+        checkoutRoom(id)
+        .then(response => {
+            toast.success(response.message)
+            exportToExcel(contractData);
+        })
+        .catch(error => {
+            toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
+        });
+        setContractData({
+            nameBill: "",
+            priceRequest: "",
+
+        });
     };
 
 
@@ -135,7 +142,7 @@ function ExportCheckoutRoom(props) {
                                             onChange={handleInputChange}
                                         />
                                     </div>
-                                    <button type="submit" onClick={handleExport} className="btn btn-primary">Xuất hóa đơn</button>
+                                    <button type="submit" onClick={() => handleExport(contractData.room.id)} className="btn btn-primary">Xuất hóa đơn</button>
                                 </form>
                             </div>
                         </div>

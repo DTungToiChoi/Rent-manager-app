@@ -64,7 +64,7 @@ const DashboardAdmin = (props) => {
                   <div class="card-body">
                     <div class="row">
                       <div class="col mt-0">
-                        <h5 class="card-title">Tổng Phòng</h5>
+                        <h5 class="card-title">Tài khoản</h5>
                       </div>
 
                       <div class="col-auto">
@@ -86,7 +86,7 @@ const DashboardAdmin = (props) => {
                   <div class="card-body">
                     <div class="row">
                       <div class="col mt-0">
-                        <h5 class="card-title">Số người thuê</h5>
+                        <h5 class="card-title">Tin duyệt</h5>
                       </div>
 
                       <div class="col-auto">
@@ -108,7 +108,7 @@ const DashboardAdmin = (props) => {
                   <div class="card-body">
                     <div class="row">
                       <div class="col mt-0">
-                        <h5 class="card-title">Phòng trống</h5>
+                        <h5 class="card-title">Tin chưa duyệt</h5>
                       </div>
 
                       <div class="col-auto">
@@ -129,7 +129,7 @@ const DashboardAdmin = (props) => {
                   <div class="card-body">
                     <div class="row">
                       <div class="col mt-0">
-                        <h5 class="card-title">Doanh Thu</h5>
+                        <h5 class="card-title">Tổng tin</h5>
                       </div>
 
                       <div class="col-auto">

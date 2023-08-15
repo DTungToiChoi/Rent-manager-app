@@ -38,6 +38,9 @@ import ExportBillRequier from './page/rentaler/ExportBillRequier';
 import ExportCheckoutRoom from './page/rentaler/ExportCheckoutRoom';
 import ProfileRentaler from './page/rentaler/ProfileRentaler';
 import ChangePassword from './page/rentaler/ChangePassword';
+import RoomManagementAdmin from './page/admin/RoomManagerment';
+import AccountManagement from './page/admin/AccountManagement';
+import SendEmail from './page/admin/SendEmail';
 
 
 
@@ -136,6 +139,9 @@ function App() {
           <Route exact path="/signup-rentaler" element={<SignupRentaler authenticated={authenticated} />} />
           {/* ADMIN */}
           <Route exact path="/admin" element={<DashboardAdmin authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route exact path="/admin/room-management" element={<RoomManagementAdmin authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route exact path="/admin/account-management" element={<AccountManagement authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route exact path="/admin/send-email/:id" element={<SendEmail authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
           {/* RENTALER */}
           <Route exact path="/rentaler/change-password" element={<ChangePassword authenticated={authenticated} exit={exitLogoutChangePassword} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
           <Route exact path="/rentaler/profile" element={<ProfileRentaler authenticated={authenticated} currentUser={currentUser} role={role} loadCurrentUser={loadCurrentlyLoggedInRetanler} onLogout={handleLogout} />} />

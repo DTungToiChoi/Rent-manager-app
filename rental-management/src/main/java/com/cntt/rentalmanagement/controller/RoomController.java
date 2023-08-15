@@ -22,15 +22,22 @@ public class RoomController {
 
     private final RoomService roomService;
 
+    @GetMapping("/all")
+    private ResponseEntity<?> getAllRoom(@RequestParam(required = false) String title,
+                                         @RequestParam Integer pageNo,
+                                         @RequestParam Integer pageSize) {
+        return ResponseEntity.ok(roomService.getAllRoomForAdmin(title, pageNo, pageSize));
+    }
+
     @GetMapping
     public ResponseEntity<?> getRoomByRentaler(@RequestParam(required = false) String title,
                                                @RequestParam Integer pageNo,
-                                               @RequestParam Integer pageSize){
+                                               @RequestParam Integer pageSize) {
         return ResponseEntity.ok(roomService.getRoomByRentaler(title, pageNo, pageSize));
     }
 
     @GetMapping("/rent-home")
-    public ResponseEntity<?> getRentOfHome(){
+    public ResponseEntity<?> getRentOfHome() {
         return ResponseEntity.ok(roomService.getRentOfHome());
     }
 
@@ -40,18 +47,33 @@ public class RoomController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<?> disableRoom(@PathVariable Long id){
+    public ResponseEntity<?> disableRoom(@PathVariable Long id) {
         return ResponseEntity.ok(roomService.disableRoom(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateRoomInfo(@PathVariable Long id, MultipartHttpServletRequest request){
-return ResponseEntity.ok(roomService.updateRoomInfo(id, putRoomRequest(request)));
+    public ResponseEntity<?> updateRoomInfo(@PathVariable Long id, MultipartHttpServletRequest request) {
+        return ResponseEntity.ok(roomService.updateRoomInfo(id, putRoomRequest(request)));
     }
 
     @PostMapping
     public ResponseEntity<?> addRoom(MultipartHttpServletRequest request) {
-return ResponseEntity.ok(roomService.addNewRoom(putRoomRequest(request)));
+        return ResponseEntity.ok(roomService.addNewRoom(putRoomRequest(request)));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> removeRoom(@PathVariable Long id) {
+        return ResponseEntity.ok(roomService.removeRoom(id));
+    }
+
+    @PostMapping("/{id}/approve")
+    public ResponseEntity<?> isApprove(@PathVariable Long id) {
+        return ResponseEntity.ok(roomService.isApproveRoom(id));
+    }
+
+    @PostMapping("/{id}/checkout")
+    public ResponseEntity<?> checkoutRoom(@PathVariable Long id) {
+        return ResponseEntity.ok(roomService.checkoutRoom(id));
     }
 
 
@@ -65,9 +87,9 @@ return ResponseEntity.ok(roomService.addNewRoom(putRoomRequest(request)));
         Long locationId = Long.valueOf(request.getParameter("locationId"));
         Long categoryId = Long.valueOf(request.getParameter("categoryId"));
         List<AssetRequest> assets = new ArrayList<>();
-        for (int i = 0; i < Integer.valueOf(request.getParameter("asset")) ; i++) {
-            String assetName = request.getParameterValues("assets["+i+"][name]")[0];
-            Integer assetNumber = Integer.valueOf(request.getParameterValues("assets["+i+"][number]")[0]);
+        for (int i = 0; i < Integer.valueOf(request.getParameter("asset")); i++) {
+            String assetName = request.getParameterValues("assets[" + i + "][name]")[0];
+            Integer assetNumber = Integer.valueOf(request.getParameterValues("assets[" + i + "][number]")[0]);
             assets.add(new AssetRequest(assetName, assetNumber));
         }
 

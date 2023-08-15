@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import SidebarNav from './SidebarNav';
 import Nav from './Nav';
-import { disableRoom, getAllRoomOfRentaler } from '../../services/fetch/ApiUtils';
 import Pagination from './Pagnation';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { approveRoomOfAdmin, disableRoom, getAllRoomOfAdmin, removeRoomOfAdmin } from '../../services/fetch/ApiUtils';
 import ModalRoomDetails from './modal/ModalRoomDetail';
 
 function RoomManagement(props) {
     const { authenticated, role, currentUser, location, onLogout } = props;
     const history = useNavigate();
 
+    const [roomId, setRoomId] = useState(4);
+    const [showModal, setShowModal] = useState(false);
     const [tableData, setTableData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
     const [searchQuery, setSearchQuery] = useState('');
-
-    const [roomId, setRoomId] = useState(4);
-    const [showModal, setShowModal] = useState(false);
 
     // Fetch data from the API
     useEffect(() => {
@@ -26,7 +25,7 @@ function RoomManagement(props) {
     }, [currentPage, searchQuery]);
 
     const fetchData = () => {
-        getAllRoomOfRentaler(currentPage, itemsPerPage, searchQuery).then(response => {
+        getAllRoomOfAdmin(currentPage, itemsPerPage, searchQuery).then(response => {
             setTableData(response.content);
             setTotalItems(response.totalElements);
         }).catch(
@@ -40,21 +39,17 @@ function RoomManagement(props) {
         setSearchQuery(event.target.value);
     };
 
-    const handleRedirectAddRoom = () => {
-        history('/rentaler/add-room')
-    }
-
-    const handleEditRoom = (id) => {
-        history('/rentaler/edit-room/' + id)
-    }
-
     const handleSetRoomId = (id) => {
         setRoomId(id);
         setShowModal(true);
     }
 
-    const handleDisableRoom = (roomId) => {
-        disableRoom(roomId).then(response => {
+    const handleSendEmail = (userId) => {
+        history('/admin/send-email/' + userId)
+    }
+
+    const handleIsApprove = (id) => {
+        approveRoomOfAdmin(id).then(response => {
             toast.success(response.message)
             fetchData();
         }).catch(
@@ -62,12 +57,24 @@ function RoomManagement(props) {
                 toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
             }
         )
-    };
+    }
 
+    const handleIsRemove = (id) => {
+        removeRoomOfAdmin(id).then(response => {
+            toast.success(response.message)
+            fetchData();
+        }).catch(
+            error => {
+                toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
+            }
+        )
+    }
 
     const paginate = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
+
+    console.log("ROOMID", roomId)
 
     return (
         <>
@@ -75,7 +82,7 @@ function RoomManagement(props) {
                 <nav id="sidebar" className="sidebar js-sidebar">
                     <div className="sidebar-content js-simplebar">
                         <a className="sidebar-brand" href="index.html">
-                            <span className="align-middle">RENTALER PRO</span>
+                            <span className="align-middle">ADMIN PRO</span>
                         </a>
                         <SidebarNav />
                     </div>
@@ -93,7 +100,6 @@ function RoomManagement(props) {
                         </div>
                         <div className="card-body">
                             <div id="datatables-buttons_wrapper" className="dataTables_wrapper dt-bootstrap5 no-footer"><div className="row"><div className="col-sm-12 col-md-6"><div className="dt-buttons btn-group flex-wrap">
-                                <button className="btn btn-secondary buttons-copy buttons-html5" tabindex="0" aria-controls="datatables-buttons" type="button"><a onClick={handleRedirectAddRoom}>Thêm Phòng</a></button>
                             </div></div>
                                 <div className="col-sm-12 col-md-6"><div id="datatables-buttons_filter" className="dataTables_filter">
                                     <label>Search:<input type="search" className="form-control form-control-sm" placeholder=""
@@ -104,49 +110,41 @@ function RoomManagement(props) {
                                     <thead>
                                         <tr>
                                             <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "224px" }}  >Tên Phòng</th>
-                                            <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "266px" }} >Địa Chỉ</th>
+                                            <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "290px" }} >Mô Tả</th>
+                                            <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "156px" }} >Địa Chỉ</th>
                                             <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "75px" }} >Giá</th>
                                             <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "142px" }} >Trạng Thái</th>
-                                            <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "90px" }} >Ẩn\Hiện</th>
-                                            <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "90px" }} >Duyệt</th>
-                                            <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "134px" }} >Chế độ</th></tr>
+                                            <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "110px" }} >Phê duyệt</th>
+                                            <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "134px" }} >Gỡ tin</th>
+                                            <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "54px" }} ></th></tr>
                                     </thead>
                                     <tbody>
                                         {tableData.map((item) => (
                                             <tr className="odd">
                                                 <td className="dtr-control sorting_1" tabindex="0">{item.title}</td>
+                                                <td>{item.description}</td>
                                                 <td>{item.address}</td>
                                                 <td>{item.price && item.price.toLocaleString('vi-VN', {
                                                     style: 'currency',
                                                     currency: 'VND',
                                                 })}</td>
                                                 <td style={{ color: "green" }}>{item.status === "ROOM_RENT" || item.status === "CHECKED_OUT" ? "Chưa thuê" : "Đã thuê"}</td>
-                                                <td style={{ color: "green" }}>{item.isLocked === "ENABLE" ? "Hiển" : "Ẩn"}</td>
-                                                <td style={{ color: "green" }}>{item.isApprove === false ? "Chưa duyệt" : "Đã duyệt"}</td>
-
+                                                <td style={{ color: "green" }}>
+                                                    <button type="button" class="btn btn-outline-success" onClick={() => handleIsApprove(item.id)}>
+                                                        {item.isApprove === false ? "Duyệt" : "Đã duyệt"}
+                                                    </button>
+                                                </td>
+                                                <td style={{ color: "green" }}>
+                                                    <button type="button" class="btn btn-outline-danger" onClick={() => handleIsRemove(item.id)}>
+                                                        {item.isRemove === false ? "Gỡ" : "Đã gỡ"}
+                                                    </button>
+                                                </td>
                                                 <td>
-                                                    {
-                                                        item.isRemove === true ?
-                                                            (
-                                                                <>
-                                                                    <span style={{ color: "red" }} data-toggle="tooltip" data-placement="bottom" title="Chi tiết thông tin gỡ ở email của bạn.">Admin gỡ tin</span>
-                                                                </>
-                                                            )
-                                                            :
-                                                            (
-                                                                <>
-                                                                    <a href="#" onClick={() => handleEditRoom(item.id)} data-toggle="tooltip" data-placement="bottom" title="Sửa"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 align-middle"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg></a>
-                                                                    &nbsp;&nbsp;
+                                                    <a href="#" onClick={() => handleSendEmail(item.user.id)} data-toggle="tooltip" data-placement="bottom" title="Gửi email"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z" /></svg></a>
 
-                                                                    &nbsp;
-                                                                    <a onClick={() => handleSetRoomId(item.id)} data-bs-toggle="modal" data-bs-target="#exampleModal" data-toggle="tooltip" data-placement="bottom" title="Xem chi tiết" >
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z" /></svg> </a>
-                                                                    &nbsp;&nbsp;
-                                                                    <a href="#" onClick={() => handleDisableRoom(item.id)} data-toggle="tooltip" data-placement="bottom" title="Ẩn phòng"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-middle"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></a>
-
-                                                                </>
-                                                            )
-                                                    }
+                                                    &nbsp;
+                                                    <a onClick={() => handleSetRoomId(item.id)} data-bs-toggle="modal" data-bs-target="#exampleModal" data-toggle="tooltip" data-placement="bottom" title="Xem chi tiết" >
+                                                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z" /></svg> </a>
 
                                                 </td>
                                             </tr>
@@ -164,9 +162,10 @@ function RoomManagement(props) {
                             </div>
                         </div>
                     </div>
+
                     {showModal && <ModalRoomDetails roomId={roomId} />}
                 </div>
-            </div >
+            </div>
         </>
     )
 }

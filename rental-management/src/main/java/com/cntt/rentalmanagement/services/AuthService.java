@@ -25,4 +25,6 @@ public interface AuthService {
     MessageResponse changePassword(ChangePasswordRequest changePasswordRequest);
 
     MessageResponse changeImage(MultipartFile file);
+
+    MessageResponse lockAccount(Long id);
 }

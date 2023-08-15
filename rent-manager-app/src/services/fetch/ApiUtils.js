@@ -108,6 +108,86 @@ export function changePassword(changePasswordRequest) {
     });
 }
 
+// ADMIN
+export function getAllRoomOfAdmin(pageNo, pageSize, name) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/room/all?pageNo="+pageNo+"&pageSize="+pageSize+"&keyword="+name,
+        method: 'GET'
+    });
+}
+
+export function getAllAccpuntOfAdmin(pageNo, pageSize, name) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/account?pageNo="+pageNo+"&pageSize="+pageSize+"&keyword="+name,
+        method: 'GET'
+    });
+}
+
+export function getAccountById(id) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/account/" + id,
+        method: 'GET'
+    });
+}
+
+export function approveRoomOfAdmin(id) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL +"/room/"+ id + "/approve",
+        method: 'POST'
+    });
+}
+
+export function removeRoomOfAdmin(id) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL +"/room/"+ id ,
+        method: 'DELETE'
+    });
+}
+
+export function lockedAccount(id) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL +"/auth/"+ id + "/locked",
+        method: 'POST'
+    });
+}
+
+export function sendEmailForRentaler(id, sendEmailRequest) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL +"/account/send-email/"+ id ,
+        method: 'POST',
+        body: JSON.stringify(sendEmailRequest)
+    });
+}
+
+
 // RENTALER
 export function getAllRoomOfRentaler(pageNo, pageSize, name) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
@@ -194,6 +274,17 @@ export function getContract(id) {
     return request({
         url: API_BASE_URL + "/contract/" + id,
         method: 'GET'
+    });
+}
+
+export function checkoutRoom(id) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL +"/room/"+ id + "/checkout",
+        method: 'POST'
     });
 }
 

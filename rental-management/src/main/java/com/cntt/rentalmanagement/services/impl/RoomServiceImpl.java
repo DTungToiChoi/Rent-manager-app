@@ -141,6 +141,44 @@ public class RoomServiceImpl extends BaseService implements RoomService {
         return mapperUtils.convertToResponsePage(roomRepository.getAllRentOfHome( getUserId(), pageable), RoomResponse.class, pageable);
     }
 
+    @Override
+    public Page<RoomResponse> getAllRoomForAdmin(String title, Integer pageNo, Integer pageSize) {
+        int page = pageNo == 0 ? pageNo : pageNo - 1;
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return mapperUtils.convertToResponsePage(roomRepository.searchingRoomForAdmin(title,pageable), RoomResponse.class, pageable);
+    }
+
+    @Override
+    public MessageResponse checkoutRoom(Long id) {
+        Room room = roomRepository.findById(id).orElseThrow(() -> new BadRequestException("Phòng không còn tồn tại"));
+        room.setStatus(RoomStatus.CHECKED_OUT);
+        roomRepository.save(room);
+        return MessageResponse.builder().message("Trả phòng và xuất hóa đơn thành công.").build();
+    }
+
+    @Override
+    public MessageResponse isApproveRoom(Long id) {
+        Room room = roomRepository.findById(id).orElseThrow(() -> new BadRequestException("Phòng không còn tồn tại"));
+        if (room.getIsApprove().equals(Boolean.TRUE)) {
+            throw new BadRequestException("Phòng đã được phê duyệt");
+        } else {
+            room.setIsApprove(Boolean.TRUE);
+        }
+        roomRepository.save(room);
+        return MessageResponse.builder().message("Phê duyệt tin phòng thành công.").build();
+    }
+
+    @Override
+    public MessageResponse removeRoom(Long id) {
+        Room room = roomRepository.findById(id).orElseThrow(() -> new BadRequestException("Phòng không còn tồn tại"));
+        if(Boolean.TRUE.equals(room.getIsRemove())){
+            throw new BadRequestException("Bài đăng đã bị gỡ");
+        }
+        room.setIsRemove(Boolean.TRUE);
+        roomRepository.save(room);
+        return MessageResponse.builder().message("Bài đăng đã bị gỡ thành công").build();
+    }
+
     private User getUser() {
         return userRepository.findById(getUserId()).orElseThrow(() -> new BadRequestException("Người dùng không tồn tại"));
     }

@@ -18,4 +18,12 @@ public interface RoomService {
     MessageResponse updateRoomInfo(Long id, RoomRequest roomRequest);
 
     Page<RoomResponse> getRentOfHome();
+
+    Page<RoomResponse> getAllRoomForAdmin(String title, Integer pageNo, Integer pageSize);
+
+    MessageResponse checkoutRoom(Long id);
+
+    MessageResponse isApproveRoom(Long id);
+
+    MessageResponse removeRoom(Long id);
 }

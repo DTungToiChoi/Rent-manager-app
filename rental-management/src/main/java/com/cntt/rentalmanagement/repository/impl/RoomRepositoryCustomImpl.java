@@ -42,6 +42,23 @@ public class RoomRepositoryCustomImpl implements RoomRepositoryCustom {
     }
 
     @Override
+    public Page<Room> searchingRoomForAdmin(String title, Pageable pageable) {
+        StringBuilder strQuery = new StringBuilder();
+        strQuery.append(" from rental_home.room r ");
+        strQuery.append(" where 1=1");
+        Map<String, Object> params = new HashMap<>();
+        if (Objects.nonNull(title) && !title.isEmpty()) {
+            strQuery.append(" AND r.title LIKE :title");
+            params.put("title", "%"+title+"%");
+        }
+
+        String strSelectQuery = "SELECT * " + strQuery;
+
+        String strCountQuery = "SELECT COUNT(DISTINCT r.id)" + strQuery;
+        return BaseRepository.getPagedNativeQuery(em,strSelectQuery, strCountQuery, params, pageable, Room.class);
+    }
+
+    @Override
     public Page<Room> getAllRentOfHome(Long userId, Pageable pageable) {
         StringBuilder strQuery = new StringBuilder();
         strQuery.append(" from rental_home.room r ");
