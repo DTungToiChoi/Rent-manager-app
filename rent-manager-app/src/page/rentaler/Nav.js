@@ -14,6 +14,25 @@ const Nav = (props) => {
       <div className="navbar-collapse collapse">
         <ul className="navbar-nav navbar-align">
           <li className="nav-item dropdown">
+            <a className="nav-icon dropdown-toggle" href="#" id="messagesDropdown" data-bs-toggle="dropdown">
+              <div className="position-relative">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="feather feather-message-square align-middle"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+              </div>
+            </a>
+            <div className="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="messagesDropdown">
+              <div className="dropdown-menu-header">
+                <div className="position-relative">
+                  4 tin nhắn mới
+                </div>
+              </div>
+              <div className="dropdown-menu-footer">
+                <Link className="text-muted" to={'/rentaler/chat'}>
+                Xem tất cả tin nhắn
+              </Link>
+              </div>
+            </div>
+          </li>
+          <li className="nav-item dropdown">
             <a className="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
               <i className="align-middle" data-feather="settings"></i>
             </a>
