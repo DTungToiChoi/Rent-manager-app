@@ -22,6 +22,7 @@ public class Maintenance extends DateAudit {
     private Long id;
     private LocalDateTime maintenanceDate;
     private BigDecimal price;
+    private String files;
 
     @Column(name = "created_by")
     private String createdBy;
@@ -32,4 +33,13 @@ public class Maintenance extends DateAudit {
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
+
+    public Maintenance(LocalDateTime maintenanceDate, BigDecimal price, String files, String createdBy, String updatedBy, Room room) {
+        this.maintenanceDate = maintenanceDate;
+        this.price = price;
+        this.files = files;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.room = room;
+    }
 }

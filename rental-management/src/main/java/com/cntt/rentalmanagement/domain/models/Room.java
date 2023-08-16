@@ -43,6 +43,12 @@ public class Room extends DateAudit {
     @Enumerated(EnumType.STRING)
     private LockedStatus isLocked;
 
+    @Column(name = "is_approve")
+    private Boolean isApprove;
+
+    @Column(name = "is_remove")
+    private Boolean isRemove;
+
     @Column(name = "created_by")
     private String createdBy;
 
@@ -72,6 +78,9 @@ public class Room extends DateAudit {
     private List<Asset> assets;
 
     @OneToMany(mappedBy = "room")
+    private List<Request> requests;
+
+    @OneToMany(mappedBy = "room")
     private List<Maintenance> maintenances;
 
     @OneToMany(mappedBy = "room")
@@ -95,5 +104,7 @@ public class Room extends DateAudit {
         this.user = user;
         this.status = roomStatus;
         this.isLocked = LockedStatus.ENABLE;
+        this.isApprove = Boolean.FALSE;
+        this.isRemove = Boolean.FALSE;
     }
 }

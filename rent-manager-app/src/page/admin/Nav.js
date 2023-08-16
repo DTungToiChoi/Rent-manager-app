@@ -20,7 +20,10 @@ const Nav = (props) => {
               <img src="../../assets/img/author-2.jpg" className="avatar img-fluid rounded me-1" alt="Charles Hall" /> <span className="text-dark">{currentUser === null ? "" : currentUser.name }</span>
             </a>
             <div className="dropdown-menu dropdown-menu-end">
+<<<<<<< HEAD
               <a className="dropdown-item">Trang cá nhân</a>
+=======
+>>>>>>> 710218f6c061481477397eb534333dc8e5e7326c
               <div className="dropdown-divider"></div>
               <a className="dropdown-item" onClick={onLogout}>Đăng xuất</a>
             </div>

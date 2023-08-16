@@ -27,7 +27,12 @@ public class RoomResponse {
     private String address;
 
     private String status;
+
     private String isLocked;
+
+    private Boolean isApprove;
+
+    private Boolean isRemove;
 
     private LocationResponse location;
 
@@ -36,4 +41,6 @@ public class RoomResponse {
     private List<AssetResponse> assets;
 
     private List<RoomMediaResponse> roomMedia;
+
+    private UserResponse user;
 }

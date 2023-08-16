@@ -1,8 +1,16 @@
 import React from "react"
+<<<<<<< HEAD
 
 const Nav = (props) => {
     const {currentUser, onLogout} = props;
     console.log("User", currentUser)
+=======
+import { Link } from "react-router-dom";
+
+const Nav = (props) => {
+  const { currentUser, onLogout } = props;
+  console.log("User", currentUser)
+>>>>>>> 710218f6c061481477397eb534333dc8e5e7326c
 
   return (
     <nav className="navbar navbar-expand navbar-light navbar-bg">
@@ -13,15 +21,57 @@ const Nav = (props) => {
       <div className="navbar-collapse collapse">
         <ul className="navbar-nav navbar-align">
           <li className="nav-item dropdown">
+<<<<<<< HEAD
+=======
+            <a className="nav-icon dropdown-toggle" href="#" id="messagesDropdown" data-bs-toggle="dropdown">
+              <div className="position-relative">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="feather feather-message-square align-middle"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+              </div>
+            </a>
+            <div className="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="messagesDropdown">
+              <div className="dropdown-menu-header">
+                <div className="position-relative">
+                  4 tin nhắn mới
+                </div>
+              </div>
+              <div className="dropdown-menu-footer">
+                <Link className="text-muted" to={'/rentaler/chat'}>
+                Xem tất cả tin nhắn
+              </Link>
+              </div>
+            </div>
+          </li>
+          <li className="nav-item dropdown">
+>>>>>>> 710218f6c061481477397eb534333dc8e5e7326c
             <a className="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
               <i className="align-middle" data-feather="settings"></i>
             </a>
 
             <a className="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
+<<<<<<< HEAD
               <img src="../../assets/img/author-2.jpg" className="avatar img-fluid rounded me-1" alt="Charles Hall" /> <span className="text-dark">{currentUser === null ? "" : currentUser.name }</span>
             </a>
             <div className="dropdown-menu dropdown-menu-end">
               <a className="dropdown-item">Trang cá nhân</a>
+=======
+              {
+                currentUser && currentUser.imageUrl ? (
+                  <img src={currentUser.imageUrl} className="avatar img-fluid rounded me-1" alt={currentUser.name} />
+                ) : (
+                  <img src="../../assets/img/author-2.jpg" className="avatar img-fluid rounded me-1" alt="Charles Hall" />
+                )
+              }
+
+              <span className="text-dark">{currentUser === null ? "" : currentUser.name}</span>
+            </a>
+            <div className="dropdown-menu dropdown-menu-end">
+              <Link className="dropdown-item" to={'/rentaler/profile'}>
+                Trang cá nhân
+              </Link>
+              <Link className="dropdown-item" to={'/rentaler/change-password'}>
+                Đổi mật khẩu
+              </Link>
+>>>>>>> 710218f6c061481477397eb534333dc8e5e7326c
               <div className="dropdown-divider"></div>
               <a className="dropdown-item" onClick={onLogout}>Đăng xuất</a>
             </div>

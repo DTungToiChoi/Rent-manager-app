@@ -1,11 +1,11 @@
 package com.cntt.rentalmanagement.services;
 
 
-import com.cntt.rentalmanagement.domain.payload.request.EmailRequest;
-import com.cntt.rentalmanagement.domain.payload.request.LoginRequest;
-import com.cntt.rentalmanagement.domain.payload.request.ResetPasswordRequest;
-import com.cntt.rentalmanagement.domain.payload.request.SignUpRequest;
+
+
+import com.cntt.rentalmanagement.domain.payload.request.*;
 import com.cntt.rentalmanagement.domain.payload.response.MessageResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
@@ -21,4 +21,10 @@ public interface AuthService {
     MessageResponse resetPassword(ResetPasswordRequest resetPasswordRequest);
 
     MessageResponse confirmedAccount(EmailRequest emailRequest);
+
+    MessageResponse changePassword(ChangePasswordRequest changePasswordRequest);
+
+    MessageResponse changeImage(MultipartFile file);
+
+    MessageResponse lockAccount(Long id);
 }
