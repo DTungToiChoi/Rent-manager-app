@@ -72,5 +72,4 @@ public class User extends DateAudit {
 
     @OneToMany(mappedBy = "user")
     private List<Rate> rates;
-
 }

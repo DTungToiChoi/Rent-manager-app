@@ -1,10 +1,14 @@
 package com.cntt.rentalmanagement.services.impl;
 
+import com.cntt.rentalmanagement.domain.enums.RoleName;
+import com.cntt.rentalmanagement.domain.models.Role;
 import com.cntt.rentalmanagement.domain.models.User;
+import com.cntt.rentalmanagement.domain.payload.request.RoleRequest;
 import com.cntt.rentalmanagement.domain.payload.request.SendEmailRequest;
 import com.cntt.rentalmanagement.domain.payload.response.MessageResponse;
 import com.cntt.rentalmanagement.domain.payload.response.UserResponse;
 import com.cntt.rentalmanagement.exception.BadRequestException;
+import com.cntt.rentalmanagement.repository.RoleRepository;
 import com.cntt.rentalmanagement.repository.UserRepository;
 import com.cntt.rentalmanagement.services.AccountService;
 import com.cntt.rentalmanagement.utils.MapperUtils;
@@ -23,6 +27,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +38,7 @@ public class AccountServiceImpl implements AccountService {
     private final UserRepository userRepository;
     private final MapperUtils mapperUtils;
     private final JavaMailSender mailSender;
+    private final RoleRepository roleRepository;
 
     @Override
     public Page<User> getAllAccount(String keyword, Integer pageNo, Integer pageSize) {
@@ -39,14 +48,37 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public UserResponse getAccountById(Long id) {
-        return mapperUtils.convertToResponse(userRepository.findById(id).orElseThrow(() -> new BadRequestException("Tài khoản không tồn tại")), UserResponse.class);
+    public User getAccountById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new BadRequestException("Tài khoản không tồn tại"));
     }
 
     @Override
     public MessageResponse sendEmailForRentaler(Long id, SendEmailRequest sendEmailRequest) throws MessagingException, IOException {
         sendEmailFromTemplate(sendEmailRequest);
         return MessageResponse.builder().message("Gửi mail thành công").build();
+    }
+
+    @Override
+    public MessageResponse divideAuthorization(Long id, RoleRequest roleRequest) {
+        User user = userRepository.findById(id).orElseThrow(() -> new BadRequestException("Tài khoản không tồn tại"));
+        userRepository.deleteRoleOfAccount(user.getId());
+        if (roleRequest.getRoleName().equals("RENTALER")) {
+            Role userRole = roleRepository.findByName(RoleName.ROLE_RENTALER)
+                    .orElseThrow(() -> new IllegalArgumentException("User Role not set."));
+            Set<Role> roleSet = new HashSet<>();
+            roleSet.add(userRole);
+            user.setRoles(roleSet);
+            userRepository.save(user);
+        } else {
+            Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+                    .orElseThrow(() -> new IllegalArgumentException("User Role not set."));
+            Set<Role> roleSet = new HashSet<>();
+            roleSet.add(userRole);
+            user.setRoles(roleSet);
+            userRepository.save(user);
+        }
+
+        return MessageResponse.builder().message("Phân quyền thành công.").build();
     }
 
 

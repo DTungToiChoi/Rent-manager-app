@@ -187,6 +187,19 @@ export function sendEmailForRentaler(id, sendEmailRequest) {
     });
 }
 
+export function setAuthorization(id, roleRequest) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL +"/account/"+ id +"/authorization" ,
+        method: 'POST',
+        body: JSON.stringify(roleRequest)
+    });
+}
+
+
 
 // RENTALER
 export function getAllRoomOfRentaler(pageNo, pageSize, name) {

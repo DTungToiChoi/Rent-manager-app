@@ -26,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found with email : " + email)
+                        new UsernameNotFoundException("Email của bạn không tồn tại : " + email)
                 );
         if (Boolean.TRUE.equals(user.getIsLocked()))
         {

@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
@@ -11,11 +11,10 @@ import './assets/css/bootstrap.min.css';
 import './assets/css/style.css';
 
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+ReactDOM.render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>
+      <App />
+  </React.StrictMode>,
+  document.getElementById('root')
 );
-
 registerServiceWorker();

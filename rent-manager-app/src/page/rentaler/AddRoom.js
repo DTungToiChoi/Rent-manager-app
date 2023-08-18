@@ -4,6 +4,7 @@ import SidebarNav from './SidebarNav';
 import { useState } from 'react';
 import RoomService from "../../services/axios/RoomService";
 import { toast } from 'react-toastify';
+import PlacesWithStandaloneSearchBox from './map/StandaloneSearchBox';
 
 function AddRoom(props) {
     const { authenticated, role, currentUser, location, onLogout } = props;
@@ -33,8 +34,8 @@ function AddRoom(props) {
 
     const handleRemoveAsset = (indexToRemove) => {
         setRoomData(prevState => ({
-          ...prevState,
-          assets: prevState.assets.filter((asset, index) => index !== indexToRemove)
+            ...prevState,
+            assets: prevState.assets.filter((asset, index) => index !== indexToRemove)
         }));
     }
 
@@ -55,6 +56,14 @@ function AddRoom(props) {
         }));
     };
 
+    const setLatLong = (lat, long, address) => {
+        setRoomData((prevRoomData) => ({
+            ...prevRoomData,
+            latitude: lat,
+            longitude: long,
+            address: address,
+          }));
+      };
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -108,7 +117,7 @@ function AddRoom(props) {
 
         console.log(roomData);
     };
-    console.log("Add room",authenticated);
+    console.log("Add room", authenticated);
     if (!authenticated) {
         return <Navigate
             to={{
@@ -155,17 +164,18 @@ function AddRoom(props) {
                                     </div>
                                     <div className="row">
                                         <div className="mb-3 col-md-6">
-                                            <label className="form-label" htmlFor="address">Địa Chỉ</label>
-                                            <input type="text" className="form-control" id="address" name="address" value={roomData.address} onChange={handleInputChange} />
-                                        </div>
-
-                                        <div className="mb-3 col-md-6">
                                             <label className="form-label" htmlFor="locationId">Khu vực</label>
                                             <select className="form-select" id="locationId" name="locationId" value={roomData.locationId} onChange={handleInputChange}>
                                                 <option value={0}>Chọn...</option>
                                                 <option value={1}>Hà Nội</option>
                                             </select>
                                         </div>
+                                        <div className="mb-3 col-md-6">
+                                            <label className="form-label" htmlFor="address">Địa Chỉ</label>
+                                            {/* <input type="text" className="form-control" id="address" name="address" value={roomData.address} onChange={handleInputChange} /> */}
+                                            <PlacesWithStandaloneSearchBox latLong={setLatLong} />
+                                        </div>
+
 
                                         <div className="mb-3 col-md-6">
                                             <label className="form-label" htmlFor="categoryId">Danh mục</label>
@@ -198,18 +208,18 @@ function AddRoom(props) {
                                                 <input type="number" className="form-control" id={`assetNumber${index}`} name="number" value={asset.number} onChange={(event) => handleAssetChange(event, index)} />
                                             </div>
                                             <div className="col-md-2">
-                                                <button type="button" style={{marginTop: "34px"}} className="btn btn-danger" onClick={() => handleRemoveAsset(index)}>Xóa tài sản</button>
+                                                <button type="button" style={{ marginTop: "34px" }} className="btn btn-danger" onClick={() => handleRemoveAsset(index)}>Xóa tài sản</button>
                                             </div>
                                         </div>
                                     ))}
-                            <button type="button" className="btn btn-primary" onClick={() => setRoomData(prevState => ({ ...prevState, assets: [...prevState.assets, { name: '', number: '' }] }))}>Thêm tài sản</button>
-                            <br /><br />
-                            <button type="submit" className="btn btn-primary">Submit</button>
-                        </form>
+                                    <button type="button" className="btn btn-primary" onClick={() => setRoomData(prevState => ({ ...prevState, assets: [...prevState.assets, { name: '', number: '' }] }))}>Thêm tài sản</button>
+                                    <br /><br />
+                                    <button type="submit" className="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div >
+                </div >
             </div >
 
         </>
