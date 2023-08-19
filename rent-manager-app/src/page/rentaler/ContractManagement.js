@@ -4,7 +4,7 @@ import Nav from './Nav';
 import { disableRoom, getAllContractOfRentaler } from '../../services/fetch/ApiUtils';
 import Pagination from './Pagnation';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 function ContractManagement(props) {
     const { authenticated, role, currentUser, location, onLogout } = props;
@@ -62,6 +62,14 @@ function ContractManagement(props) {
       
         return remainingMonths;
       }
+
+      if (!props.authenticated) {
+        return <Navigate
+            to={{
+                pathname: "/login-rentaler",
+                state: { from: location }
+            }} />;
+    }
 
     return (
         <>

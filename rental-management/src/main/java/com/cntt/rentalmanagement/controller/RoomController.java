@@ -24,9 +24,10 @@ public class RoomController {
 
     @GetMapping("/all")
     private ResponseEntity<?> getAllRoom(@RequestParam(required = false) String title,
+                                         @RequestParam(required = false) Boolean approve,
                                          @RequestParam Integer pageNo,
                                          @RequestParam Integer pageSize) {
-        return ResponseEntity.ok(roomService.getAllRoomForAdmin(title, pageNo, pageSize));
+        return ResponseEntity.ok(roomService.getAllRoomForAdmin(title,approve, pageNo, pageSize));
     }
 
     @GetMapping

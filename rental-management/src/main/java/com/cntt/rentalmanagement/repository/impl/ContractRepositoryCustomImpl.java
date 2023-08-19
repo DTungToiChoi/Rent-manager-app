@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -45,5 +46,22 @@ public class ContractRepositoryCustomImpl implements ContractRepositoryCustom {
         String strCountQuery = "SELECT COUNT(DISTINCT c.id)" + strQuery;
         return BaseRepository.getPagedNativeQuery(em,strSelectQuery, strCountQuery, params, pageable, Contract.class);
 
+    }
+
+    @Override
+    public List<Contract> getAllContract(Long userId) {
+        StringBuilder strQuery = new StringBuilder();
+        strQuery.append(FROM_CONTRACT);
+        strQuery.append(INNER_JOIN_ROOM);
+        strQuery.append(" where 1=1");
+
+        Map<String, Object> params = new HashMap<>();
+        if (Objects.nonNull(userId)) {
+            strQuery.append(" AND r.user_id = :userId");
+            params.put("userId", userId);
+        }
+
+        String strSelectQuery = "SELECT * " + strQuery;
+        return BaseRepository.getResultListNativeQuery(em,strSelectQuery, params, Contract.class);
     }
 }

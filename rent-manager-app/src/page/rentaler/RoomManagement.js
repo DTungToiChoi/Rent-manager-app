@@ -4,7 +4,7 @@ import Nav from './Nav';
 import { disableRoom, getAllRoomOfRentaler } from '../../services/fetch/ApiUtils';
 import Pagination from './Pagnation';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import ModalRoomDetails from './modal/ModalRoomDetail';
 
 function RoomManagement(props) {
@@ -70,6 +70,14 @@ function RoomManagement(props) {
     };
 
     console.log("ROOM_ID", roomId)
+
+    if (!props.authenticated) {
+        return <Navigate
+            to={{
+                pathname: "/login-rentaler",
+                state: { from: location }
+            }} />;
+    }
 
     return (
         <>

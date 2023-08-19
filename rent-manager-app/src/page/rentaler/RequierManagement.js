@@ -4,7 +4,7 @@ import Nav from './Nav';
 import { changeStatusOfRequest, deleteMaintenance, getAllMaintenceOfRentaler, getAllRequireOfRentaler } from '../../services/fetch/ApiUtils';
 import Pagination from './Pagnation';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 function RequierManagement(props) {
     const { authenticated, role, currentUser, location, onLogout } = props;
@@ -56,6 +56,14 @@ function RequierManagement(props) {
                 toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
             }
         )
+    }
+
+    if (!props.authenticated) {
+        return <Navigate
+            to={{
+                pathname: "/login-rentaler",
+                state: { from: location }
+            }} />;
     }
 
 

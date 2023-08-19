@@ -3,10 +3,10 @@ import { Link, Navigate } from 'react-router-dom'
 import Nav from './Nav';
 import SidebarNav from './SidebarNav';
 import '../../assets/css/app.css';
-import { UserData } from '../../utils/Data';
 import BarChart from './chart/BarChart';
 import PieChart from './chart/PieChart';
-import { getNumber } from '../../services/fetch/ApiUtils';
+import { getByCost, getByMonth, getNumber } from '../../services/fetch/ApiUtils';
+import { RevenueData } from '../../utils/Data';
 
 
 function DashboardRentaler(props) {
@@ -20,6 +20,46 @@ function DashboardRentaler(props) {
         revenue: '',
     });
 
+    const [revenueData, setRevenueData] = useState(); 
+
+    const [userData, setUserData] = useState({
+        labels: [],
+        datasets: [
+          {
+            label: "Doanh thu",
+            data: [],
+            backgroundColor: [
+              "rgba(75,192,192,1)",
+              "#ecf0f1",
+              "#50AF95",
+              "#f3ba2f",
+              "#2a71d0",
+            ],
+            borderColor: "black",
+            borderWidth: 2,
+          },
+        ],
+      });
+
+      const [costData, setCostData] = useState({
+        labels: [],
+        datasets: [
+          {
+            label: "Doanh thu",
+            data: [],
+            backgroundColor: [
+              "rgba(75,192,192,1)",
+              "#ecf0f1",
+              "#50AF95",
+              "#f3ba2f",
+              "#2a71d0",
+            ],
+            borderColor: "black",
+            borderWidth: 2,
+          },
+        ],
+      });
+
     useEffect(() => {
         getNumber()
             .then(response => {
@@ -30,29 +70,48 @@ function DashboardRentaler(props) {
                 }));
             })
             .catch(error => {
-               console.log(error)
+                console.log(error)
             });
+
 
     }, []);
 
-    const [userData, setUserData] = useState({
-        labels: UserData.map((data) => data.year),
-        datasets: [
-            {
-                label: "Users Gained",
-                data: UserData.map((data) => data.userGain),
-                backgroundColor: [
-                    "rgba(75,192,192,1)",
-                    "#ecf0f1",
-                    "#50AF95",
-                    "#f3ba2f",
-                    "#2a71d0",
-                ],
-                borderColor: "black",
-                borderWidth: 2,
-            },
-        ],
-    });
+
+    useEffect(() => {
+        getByMonth()
+          .then((revenueData) => {
+            setUserData((prevUserData) => ({
+              ...prevUserData,
+              labels: revenueData.content.map((data) => data.month),
+              datasets: [
+                {
+                  ...prevUserData.datasets[0],
+                  data: revenueData.content.map((data) => data.revenue),
+                },
+              ],
+            }));
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
+          getByCost()
+          .then((revenueData) => {
+            setCostData((prevUserData) => ({
+              ...prevUserData,
+              labels: revenueData.content.map((data) => data.name),
+              datasets: [
+                {
+                  ...prevUserData.datasets[0],
+                  data: revenueData.content.map((data) => data.cost),
+                },
+              ],
+            }));
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }, []);
 
 
     if (!props.authenticated) {
@@ -164,10 +223,10 @@ function DashboardRentaler(props) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <h1 class="mt-1 mb-3">{number.revenue.toLocaleString('vi-VN', {
-                                                    style: 'currency',
-                                                    currency: 'VND',
-                                                })}</h1>
+                                        <h1 class="mt-1 mb-4" style={{ fontSize: "xx-large" }}>{number.revenue.toLocaleString('vi-VN', {
+                                            style: 'currency',
+                                            currency: 'VND',
+                                        })}</h1>
                                         <div class="mb-0">
                                             <span class="badge badge-success-light"> <i class="mdi mdi-arrow-bottom-right"></i> 2.35% </span>
 
@@ -181,7 +240,7 @@ function DashboardRentaler(props) {
                                 <div class="card flex-fill w-100">
                                     <div class="card-header">
                                         <div class="float-end">
-                    
+
                                         </div>
                                         <h5 class="card-title mb-0">Tổng Doanh Thu</h5>
                                     </div>
@@ -199,11 +258,11 @@ function DashboardRentaler(props) {
                                         </div>
                                         <h5 class="card-title mb-0">Các chi phí khác</h5>
                                     </div>
-                                    <PieChart chartData={userData} />
+                                    <PieChart chartData={costData} />
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                 </main>
             </div>

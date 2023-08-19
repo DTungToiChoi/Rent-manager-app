@@ -32,6 +32,9 @@ public class Contract extends DateAudit {
     @Column(name = "updated_by")
     private String updatedBy;
 
+    @Column(name = "num_of_people")
+    private Long numOfPeople;
+
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;

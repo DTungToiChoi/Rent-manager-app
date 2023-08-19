@@ -95,7 +95,7 @@ function RoomManagement(props) {
                     <div className="container-fluid p-0"></div>
                     <div className="card">
                         <div className="card-header">
-                            <h5 className="card-title">Quản lý phòng trọ</h5>
+                            <h5 className="card-title">Quản lý phòng trọ và bài đăng</h5>
                             <h6 className="card-subtitle text-muted"> Quản lý thật tốt các chức năng của phòng trọ.</h6>
                         </div>
                         <div className="card-body">

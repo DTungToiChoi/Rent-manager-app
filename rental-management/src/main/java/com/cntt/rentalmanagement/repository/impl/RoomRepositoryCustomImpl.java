@@ -42,7 +42,7 @@ public class RoomRepositoryCustomImpl implements RoomRepositoryCustom {
     }
 
     @Override
-    public Page<Room> searchingRoomForAdmin(String title, Pageable pageable) {
+    public Page<Room> searchingRoomForAdmin(String title,Boolean approve, Pageable pageable) {
         StringBuilder strQuery = new StringBuilder();
         strQuery.append(" from rental_home.room r ");
         strQuery.append(" where 1=1");
@@ -50,6 +50,11 @@ public class RoomRepositoryCustomImpl implements RoomRepositoryCustom {
         if (Objects.nonNull(title) && !title.isEmpty()) {
             strQuery.append(" AND r.title LIKE :title");
             params.put("title", "%"+title+"%");
+        }
+
+        if (Objects.nonNull(approve)) {
+            strQuery.append(" AND r.is_approve = :approve");
+            params.put("approve", approve);
         }
 
         String strSelectQuery = "SELECT * " + strQuery;

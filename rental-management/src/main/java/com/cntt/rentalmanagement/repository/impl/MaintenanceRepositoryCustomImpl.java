@@ -1,7 +1,6 @@
 package com.cntt.rentalmanagement.repository.impl;
 
 import com.cntt.rentalmanagement.domain.models.Maintenance;
-import com.cntt.rentalmanagement.domain.models.Room;
 import com.cntt.rentalmanagement.repository.BaseRepository;
 import com.cntt.rentalmanagement.repository.MaintenanceRepositoryCustom;
 import org.springframework.data.domain.Page;
@@ -9,7 +8,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -49,5 +51,32 @@ public class MaintenanceRepositoryCustomImpl implements MaintenanceRepositoryCus
         String strCountQuery = "SELECT COUNT(DISTINCT m.id)" + strQuery;
         return BaseRepository.getPagedNativeQuery(em,strSelectQuery, strCountQuery, params, pageable, Maintenance.class);
 
+    }
+
+    @Override
+    public BigDecimal sumPriceOfMaintenance(Long userId) {
+        StringBuilder strQuery = new StringBuilder();
+        strQuery.append(FROM_MAINTENANCE);
+        strQuery.append(INNER_JOIN_ROOM);
+
+        Map<String, Object> params = new HashMap<>();
+        if (Objects.nonNull(userId)) {
+            strQuery.append(" AND r.user_id = :userId");
+            params.put("userId", userId);
+        }
+
+        String strSelectQuery = "SELECT sum(m.price) " + strQuery;
+
+        Query query = em.createNativeQuery(strSelectQuery);
+        params.forEach(query::setParameter);
+
+        Integer sumPrice;
+        try {
+            sumPrice = ((Number) query.getSingleResult()).intValue();
+        } catch (NoResultException e) {
+            sumPrice = 0;
+        }
+
+        return BigDecimal.valueOf(sumPrice);
     }
 }
