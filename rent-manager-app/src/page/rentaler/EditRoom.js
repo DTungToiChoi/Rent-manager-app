@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import RoomService from "../../services/axios/RoomService";
 import { toast } from 'react-toastify';
 import { getRoom } from '../../services/fetch/ApiUtils';
+import PlacesWithStandaloneSearchBox from './map/StandaloneSearchBox';
 
 function EditRoom(props) {
     const { authenticated, role, currentUser, location, onLogout } = props;
@@ -35,8 +36,8 @@ function EditRoom(props) {
 
     const handleRemoveAsset = (indexToRemove) => {
         setRoomData(prevState => ({
-          ...prevState,
-          assets: prevState.assets.filter((asset, index) => index !== indexToRemove)
+            ...prevState,
+            assets: prevState.assets.filter((asset, index) => index !== indexToRemove)
         }));
     }
 
@@ -62,15 +63,23 @@ function EditRoom(props) {
             .then(response => {
                 const room = response;
                 setRoomData(prevState => ({
-                  ...prevState,
-                  ...room
+                    ...prevState,
+                    ...room
                 }));
             })
             .catch(error => {
                 toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
             });
-    }, [id]); 
+    }, [id]);
 
+    const setLatLong = (lat, long, address) => {
+        setRoomData((prevRoomData) => ({
+            ...prevRoomData,
+            latitude: lat,
+            longitude: long,
+            address: address,
+        }));
+    };
 
 
     const handleSubmit = (event) => {
@@ -94,7 +103,7 @@ function EditRoom(props) {
         roomData.files.forEach((file, index) => {
             formData.append(`files`, file);
         });
-        RoomService.updateRoom(id,formData)
+        RoomService.updateRoom(id, formData)
             .then(response => {
                 toast.success(response.message);
                 toast.success("Cập nhật thông tin phòng thành công.");
@@ -105,7 +114,7 @@ function EditRoom(props) {
 
         console.log(roomData);
     };
-    console.log("Add room",authenticated);
+    console.log("Add room", authenticated);
     if (!authenticated) {
         return <Navigate
             to={{
@@ -152,16 +161,16 @@ function EditRoom(props) {
                                     </div>
                                     <div className="row">
                                         <div className="mb-3 col-md-6">
-                                            <label className="form-label" htmlFor="address">Địa Chỉ</label>
-                                            <input type="text" className="form-control" id="address" name="address" value={roomData.address} onChange={handleInputChange} />
-                                        </div>
-
-                                        <div className="mb-3 col-md-6">
                                             <label className="form-label" htmlFor="locationId">Khu vực</label>
                                             <select className="form-select" id="locationId" name="locationId" value={roomData.locationId} onChange={handleInputChange}>
                                                 <option value={0}>Chọn...</option>
                                                 <option value={1}>Hà Nội</option>
                                             </select>
+                                        </div>
+                                        <div className="mb-3 col-md-6">
+                                            <label className="form-label" htmlFor="address">Địa Chỉ</label>
+                                            {/* <input type="text" className="form-control" id="address" name="address" value={roomData.address} onChange={handleInputChange} /> */}
+                                            <PlacesWithStandaloneSearchBox latLong={setLatLong} />
                                         </div>
 
                                         <div className="mb-3 col-md-6">
@@ -195,18 +204,18 @@ function EditRoom(props) {
                                                 <input type="number" className="form-control" id={`assetNumber${index}`} name="number" value={asset.number} onChange={(event) => handleAssetChange(event, index)} />
                                             </div>
                                             <div className="col-md-2">
-                                                <button type="button" style={{marginTop: "34px"}} className="btn btn-danger" onClick={() => handleRemoveAsset(index)}>Xóa tài sản</button>
+                                                <button type="button" style={{ marginTop: "34px" }} className="btn btn-danger" onClick={() => handleRemoveAsset(index)}>Xóa tài sản</button>
                                             </div>
                                         </div>
                                     ))}
-                            <button type="button" className="btn btn-primary" onClick={() => setRoomData(prevState => ({ ...prevState, assets: [...prevState.assets, { name: '', number: '' }] }))}>Thêm tài sản</button>
-                            <br /><br />
-                            <button type="submit" className="btn btn-primary">Submit</button>
-                        </form>
+                                    <button type="button" className="btn btn-primary" onClick={() => setRoomData(prevState => ({ ...prevState, assets: [...prevState.assets, { name: '', number: '' }] }))}>Thêm tài sản</button>
+                                    <br /><br />
+                                    <button type="submit" className="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div >
+                </div >
             </div >
 
         </>

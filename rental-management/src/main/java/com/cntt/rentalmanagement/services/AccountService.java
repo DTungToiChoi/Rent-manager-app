@@ -1,6 +1,7 @@
 package com.cntt.rentalmanagement.services;
 
 import com.cntt.rentalmanagement.domain.models.User;
+import com.cntt.rentalmanagement.domain.payload.request.RoleRequest;
 import com.cntt.rentalmanagement.domain.payload.request.SendEmailRequest;
 import com.cntt.rentalmanagement.domain.payload.response.MessageResponse;
 import com.cntt.rentalmanagement.domain.payload.response.UserResponse;
@@ -13,7 +14,9 @@ public interface AccountService {
 
     Page<User> getAllAccount(String keyword, Integer pageNo, Integer pageSize);
 
-    UserResponse getAccountById(Long id);
+    User getAccountById(Long id);
 
     MessageResponse sendEmailForRentaler(Long id, SendEmailRequest sendEmailRequest) throws MessagingException, IOException;
+
+    MessageResponse divideAuthorization(Long id, RoleRequest roleRequest);
 }

@@ -90,7 +90,6 @@ public class User extends DateAudit {
 	@OneToMany(mappedBy = "user")
 	private List<Room> rooms;
 
-	@OneToMany(mappedBy = "user")
-	private List<Rate> rates;
-
+    @OneToMany(mappedBy = "user")
+    private List<Rate> rates;
 }

@@ -156,10 +156,10 @@ public class RoomServiceImpl extends BaseService implements RoomService {
     }
 
     @Override
-    public Page<RoomResponse> getAllRoomForAdmin(String title, Integer pageNo, Integer pageSize, String typeSort) {
+    public Page<RoomResponse> getAllRoomForAdmin(String title,Boolean approve, Integer pageNo, Integer pageSize, String typeSort) {
         int page = pageNo == 0 ? pageNo : pageNo - 1;
         Pageable pageable = PageRequest.of(page, pageSize);
-        return mapperUtils.convertToResponsePage(roomRepository.searchingRoomForAdmin(title,pageable), RoomResponse.class, pageable);
+        return mapperUtils.convertToResponsePage(roomRepository.searchingRoomForAdmin(title, approve ,pageable), RoomResponse.class, pageable);
     }
     
     private List<RoomResponse> sortRooms(List<RoomResponse> rooms, String typeSort) {

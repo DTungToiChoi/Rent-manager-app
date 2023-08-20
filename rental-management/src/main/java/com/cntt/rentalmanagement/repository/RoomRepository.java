@@ -11,5 +11,11 @@ import java.util.List;
 
 public interface RoomRepository extends JpaRepository<Room, Long>, RoomRepositoryCustom{
     long countAllByUser(User user);
+
+    long count();
     long countAllByStatusAndUser(RoomStatus status, User user);
+
+    Room[] findByUser(User user);
+
+    long countByIsApprove(Boolean isApprove);
 }

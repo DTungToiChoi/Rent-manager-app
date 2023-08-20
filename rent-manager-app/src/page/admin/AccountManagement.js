@@ -36,6 +36,10 @@ function AccountManagement(props) {
         setSearchQuery(event.target.value);
     };
 
+    const handleAuthorization = (userId) => {
+        history("/admin/authorization/"+ userId)
+    }
+
     const handleLockedAccount = (userId) => {
         lockedAccount(userId).then(response => {
             toast.success(response.message)
@@ -89,7 +93,6 @@ function AccountManagement(props) {
                                             <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "224px" }}  >Họ và tên</th>
                                             <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "290px" }} >Email</th>
                                             <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "166px" }} >Số điện thoại</th>
-                                            <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "75px" }} >Quyền</th>
                                             <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "142px" }} >Trạng Thái</th>
                                             <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "134px" }} >Chế độ</th></tr>
                                     </thead>
@@ -99,14 +102,14 @@ function AccountManagement(props) {
                                                 <td className="dtr-control sorting_1" tabindex="0">{item.name}</td>
                                                 <td>{item.email}</td>
                                                 <td>{item.phone}</td>
-                                                <td>{item.roles[0].name}</td>
+        
                                                 <td style={{ color: "green", textAlign: 'center' }}>
                                                     <button type="button" class="btn btn-outline-success" onClick={() => handleLockedAccount(item.id)}>
                                                         {item.isLocked === true ? "Mở" : "Khóa"}
                                                     </button>
                                                 </td>
                                                 <td>
-                                                    <button type="button" class="btn btn-success">
+                                                    <button type="button" class="btn btn-success" onClick={() => handleAuthorization(item.id)}>
                                                         Phân quyền
                                                     </button>
                                                 </td>

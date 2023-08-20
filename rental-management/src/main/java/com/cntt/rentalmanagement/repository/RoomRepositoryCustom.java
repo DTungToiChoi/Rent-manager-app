@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 public interface RoomRepositoryCustom {
     Page<Room> searchingRoom(String title, Long userId, Pageable pageable);
 
-    Page<Room> searchingRoomForAdmin(String title, Pageable pageable);
+    Page<Room> searchingRoomForAdmin(String title,Boolean approve, Pageable pageable);
 
     Page<Room> getAllRentOfHome(Long userId, Pageable pageable);
 

@@ -4,7 +4,7 @@ import Nav from './Nav';
 import { deleteMaintenance, getAllMaintenceOfRentaler } from '../../services/fetch/ApiUtils';
 import Pagination from './Pagnation';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 function MaintenceManagement(props) {
     const { authenticated, role, currentUser, location, onLogout } = props;
@@ -61,6 +61,13 @@ function MaintenceManagement(props) {
         )
     }
 
+    if (!props.authenticated) {
+        return <Navigate
+            to={{
+                pathname: "/login-rentaler",
+                state: { from: location }
+            }} />;
+    }
 
     return (
         <>

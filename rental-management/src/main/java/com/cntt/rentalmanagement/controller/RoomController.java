@@ -26,8 +26,9 @@ public class RoomController {
     private ResponseEntity<?> getAllRoom(@RequestParam(required = false) String title,
                                          @RequestParam(defaultValue = "1") Integer pageNo,
                                          @RequestParam(defaultValue = "6") Integer pageSize,
-                                         @RequestParam(defaultValue = "Thời gian: Cũ đến mới") String typeSort) {
-        return ResponseEntity.ok(roomService.getAllRoomForAdmin(title, pageNo, pageSize,typeSort));
+                                         @RequestParam(defaultValue = "Thời gian: Cũ đến mới") String typeSort,
+                                         @RequestParam(required = false) Boolean approve) {
+        return ResponseEntity.ok(roomService.getAllRoomForAdmin(title,approve, pageNo, pageSize,typeSort));
     }
 
     @GetMapping

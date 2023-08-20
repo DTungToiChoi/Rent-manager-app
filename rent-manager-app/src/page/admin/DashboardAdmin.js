@@ -1,33 +1,95 @@
-import React, { useState } from 'react';
-import { Link, Navigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import Nav from './Nav';
 import SidebarNav from './SidebarNav';
 import '../../assets/css/app.css';
-import BarChart from '../rentaler/chart/BarChart';
-import PieChart from '../rentaler/chart/PieChart';
-import { UserData } from '../../utils/Data';
+import { approveRoomOfAdmin, getAllRoomApprovingOfAdmin, getNumberOfAdmin, removeRoomOfAdmin } from '../../services/fetch/ApiUtils';
+import Pagination from './Pagnation';
+import { toast } from 'react-toastify';
+import ModalRoomDetails from './modal/ModalRoomDetail';
 
 const DashboardAdmin = (props) => {
   const { authenticated, roleName, location, currentUser, onLogout } = props;
 
-  const [userData, setUserData] = useState({
-    labels: UserData.map((data) => data.year),
-    datasets: [
-        {
-            label: "Users Gained",
-            data: UserData.map((data) => data.userGain),
-            backgroundColor: [
-                "rgba(75,192,192,1)",
-                "#ecf0f1",
-                "#50AF95",
-                "#f3ba2f",
-                "#2a71d0",
-            ],
-            borderColor: "black",
-            borderWidth: 2,
-        },
-    ],
-});
+  const history = useNavigate();
+  const [roomId, setRoomId] = useState(4);
+  const [showModal, setShowModal] = useState(false);
+  const [tableData, setTableData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
+
+  const [number, setNumber] = useState({
+    numberOfAccount: '',
+    numberOfApprove: '',
+    numberOfApproving: '',
+    numberOfAccountLocked: '',
+  });
+
+  useEffect(() => {
+    fetchData();
+  }, [currentPage]);
+
+  const fetchData = () => {
+    getAllRoomApprovingOfAdmin(currentPage, itemsPerPage, false).then(response => {
+      setTableData(response.content);
+      setTotalItems(response.totalElements);
+    }).catch(
+      error => {
+        toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
+      }
+    )
+  }
+
+  const handleSetRoomId = (id) => {
+    setRoomId(id);
+    setShowModal(true);
+  }
+
+  const handleSendEmail = (userId) => {
+    history('/admin/send-email/' + userId)
+  }
+
+  const handleIsApprove = (id) => {
+    approveRoomOfAdmin(id).then(response => {
+      toast.success(response.message)
+      fetchData();
+    }).catch(
+      error => {
+        toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
+      }
+    )
+  }
+
+  const handleIsRemove = (id) => {
+    removeRoomOfAdmin(id).then(response => {
+      toast.success(response.message)
+      fetchData();
+    }).catch(
+      error => {
+        toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
+      }
+    )
+  }
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  useEffect(() => {
+    getNumberOfAdmin()
+      .then(response => {
+        const number = response;
+        setNumber(prevState => ({
+          ...prevState,
+          ...number
+        }));
+      })
+      .catch(error => {
+        console.log(error)
+      });
+
+  }, []);
 
   if (!authenticated) {
     return <Navigate
@@ -73,7 +135,7 @@ const DashboardAdmin = (props) => {
                         </div>
                       </div>
                     </div>
-                    <h1 class="mt-1 mb-3">$47.482</h1>
+                    <h1 class="mt-1 mb-3">{number.numberOfAccount}</h1>
                     <div class="mb-0">
                       <span class="badge badge-success-light"> <i class="mdi mdi-arrow-bottom-right"></i> 3.65% </span>
 
@@ -95,7 +157,7 @@ const DashboardAdmin = (props) => {
                         </div>
                       </div>
                     </div>
-                    <h1 class="mt-1 mb-3">2.542</h1>
+                    <h1 class="mt-1 mb-3">{number.numberOfApprove}</h1>
                     <div class="mb-0">
                       <span class="badge badge-danger-light"> <i class="mdi mdi-arrow-bottom-right"></i> -5.25% </span>
 
@@ -117,7 +179,7 @@ const DashboardAdmin = (props) => {
                         </div>
                       </div>
                     </div>
-                    <h1 class="mt-1 mb-3">16.300</h1>
+                    <h1 class="mt-1 mb-3">{number.numberOfApproving}</h1>
                     <div class="mb-0">
                       <span class="badge badge-success-light"> <i class="mdi mdi-arrow-bottom-right"></i> 4.65% </span>
                     </div>
@@ -138,7 +200,7 @@ const DashboardAdmin = (props) => {
                         </div>
                       </div>
                     </div>
-                    <h1 class="mt-1 mb-3">$20.120</h1>
+                    <h1 class="mt-1 mb-3">{number.numberOfAccountLocked}</h1>
                     <div class="mb-0">
                       <span class="badge badge-success-light"> <i class="mdi mdi-arrow-bottom-right"></i> 2.35% </span>
 
@@ -147,34 +209,73 @@ const DashboardAdmin = (props) => {
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-12 col-lg-8 d-flex">
-                <div class="card flex-fill w-100">
-                  <div class="card-header">
-                    <div class="float-end">
 
-                    </div>
-                    <h5 class="card-title mb-0">Tổng Doanh Thu</h5>
-                  </div>
-                  <div class="card-body pt-2 pb-3">
-                    <div class="chart chart-md"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                      <BarChart chartData={userData} />
-                    </div>
-                  </div>
-                </div>
+            <div className="card">
+              <div className="card-header">
+                <h5 className="card-title">Bài đăng và phòng trọ chưa duyệt</h5>
+                <h6 className="card-subtitle text-muted"> Quản lý thật tốt các chức năng của phòng trọ và bài đăng.</h6>
               </div>
-              <div class="col-12 col-lg-4 d-flex">
-                <div class="card flex-fill w-100">
-                  <div class="card-header">
-                    <div class="float-end">
-                    </div>
-                    <h5 class="card-title mb-0">Các chi phí khác</h5>
+              <div className="card-body">
+                <div id="datatables-buttons_wrapper" className="dataTables_wrapper dt-bootstrap5 no-footer"><div className="row"><div className="col-sm-12 col-md-6"><div className="dt-buttons btn-group flex-wrap">
+                </div></div>
+                  <div className="col-sm-12 col-md-6"><div id="datatables-buttons_filter" className="dataTables_filter">
+                  </div></div></div><div className="row dt-row"><div className="col-sm-12"><table id="datatables-buttons" className="table table-striped dataTable no-footer dtr-inline" style={{ width: "100%" }} aria-describedby="datatables-buttons_info">
+                    <thead>
+                      <tr>
+                        <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "224px" }}  >Tên Phòng</th>
+                        <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "290px" }} >Mô Tả</th>
+                        <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "156px" }} >Địa Chỉ</th>
+                        <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "75px" }} >Giá</th>
+                        <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "142px" }} >Trạng Thái</th>
+                        <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "110px" }} >Phê duyệt</th>
+                        <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "134px" }} >Gỡ tin</th>
+                        <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "54px" }} ></th></tr>
+                    </thead>
+                    <tbody>
+                      {tableData.map((item) => (
+                        <tr className="odd">
+                          <td className="dtr-control sorting_1" tabindex="0">{item.title}</td>
+                          <td>{item.description}</td>
+                          <td>{item.address}</td>
+                          <td>{item.price && item.price.toLocaleString('vi-VN', {
+                            style: 'currency',
+                            currency: 'VND',
+                          })}</td>
+                          <td style={{ color: "green" }}>{item.status === "ROOM_RENT" || item.status === "CHECKED_OUT" ? "Chưa thuê" : "Đã thuê"}</td>
+                          <td style={{ color: "green" }}>
+                            <button type="button" class="btn btn-outline-success" onClick={() => handleIsApprove(item.id)}>
+                              {item.isApprove === false ? "Duyệt" : "Đã duyệt"}
+                            </button>
+                          </td>
+                          <td style={{ color: "green" }}>
+                            <button type="button" class="btn btn-outline-danger" onClick={() => handleIsRemove(item.id)}>
+                              {item.isRemove === false ? "Gỡ" : "Đã gỡ"}
+                            </button>
+                          </td>
+                          <td>
+                            <a href="#" onClick={() => handleSendEmail(item.user.id)} data-toggle="tooltip" data-placement="bottom" title="Gửi email"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z" /></svg></a>
+
+                            &nbsp;
+                            <a onClick={() => handleSetRoomId(item.id)} data-bs-toggle="modal" data-bs-target="#exampleModal" data-toggle="tooltip" data-placement="bottom" title="Xem chi tiết" >
+                              <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z" /></svg> </a>
+
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                   </div>
-                  <PieChart chartData={userData} />
+                  </div>
+                  <Pagination
+                    itemsPerPage={itemsPerPage}
+                    totalItems={totalItems}
+                    currentPage={currentPage}
+                    paginate={paginate}
+                  />
                 </div>
               </div>
             </div>
-
+            {showModal && <ModalRoomDetails roomId={roomId} />}
           </div>
         </main>
       </div>

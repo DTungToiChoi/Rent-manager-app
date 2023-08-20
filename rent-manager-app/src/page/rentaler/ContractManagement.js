@@ -4,7 +4,7 @@ import Nav from './Nav';
 import { disableRoom, getAllContractOfRentaler } from '../../services/fetch/ApiUtils';
 import Pagination from './Pagnation';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 function ContractManagement(props) {
     const { authenticated, role, currentUser, location, onLogout } = props;
@@ -53,6 +53,23 @@ function ContractManagement(props) {
         setCurrentPage(pageNumber);
     };
 
+    const calculateRemainingMonths = (deadlineContract) => {
+        const currentDate = new Date();
+        const contractDate = new Date(deadlineContract);
+      
+        const remainingMonths = (contractDate.getFullYear() - currentDate.getFullYear()) * 12 +
+          (contractDate.getMonth() - currentDate.getMonth());
+      
+        return remainingMonths;
+      }
+
+      if (!props.authenticated) {
+        return <Navigate
+            to={{
+                pathname: "/login-rentaler",
+                state: { from: location }
+            }} />;
+    }
 
     return (
         <>
@@ -112,7 +129,7 @@ function ContractManagement(props) {
                                                     style: 'currency',
                                                     currency: 'VND',
                                                 })}</td>
-                                                <td>{(new Date(item.deadlineContract).getFullYear() - new Date().getFullYear()) * 12 + (new Date(item.deadlineContract).getMonth() - new Date().getMonth())} tháng</td>
+                                                <td>{calculateRemainingMonths(new Date(item.deadlineContract))} tháng</td>
                                                 <td style={{ color: "green" }}>{item.room.status === "ROOM_RENT" || item.room.status === "CHECKED_OUT" ? "Đã trả phòng" : "Đã thuê"}</td>
                                                 <td>
                                                     <a href="#" onClick={() => handleEditContract(item.id)} data-toggle="tooltip" data-placement="bottom" title="Sửa hợp đồng"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 align-middle"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg></a>

@@ -115,7 +115,18 @@ export function getAllRoomOfAdmin(pageNo, pageSize, name) {
     }
 
     return request({
-        url: API_BASE_URL + "/room/all?pageNo="+pageNo+"&pageSize="+pageSize+"&keyword="+name,
+        url: API_BASE_URL + "/room/all?pageNo="+pageNo+"&pageSize="+pageSize+"&title="+name,
+        method: 'GET'
+    });
+}
+
+export function getAllRoomApprovingOfAdmin(pageNo, pageSize, approve) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/room/all?pageNo="+pageNo+"&pageSize="+pageSize+"&approve="+approve,
         method: 'GET'
     });
 }
@@ -186,6 +197,19 @@ export function sendEmailForRentaler(id, sendEmailRequest) {
         body: JSON.stringify(sendEmailRequest)
     });
 }
+
+export function setAuthorization(id, roleRequest) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL +"/account/"+ id +"/authorization" ,
+        method: 'POST',
+        body: JSON.stringify(roleRequest)
+    });
+}
+
 
 
 // RENTALER
@@ -265,6 +289,40 @@ export function getNumber() {
         method: 'GET'
     });
 }
+
+export function getNumberOfAdmin() {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/statistical/admin" ,
+        method: 'GET'
+    });
+}
+
+export function getByMonth() {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/statistical/get-by-month" ,
+        method: 'GET'
+    });
+}
+
+export function getByCost() {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/statistical/cost" ,
+        method: 'GET'
+    });
+}
+
 
 export function getContract(id) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {

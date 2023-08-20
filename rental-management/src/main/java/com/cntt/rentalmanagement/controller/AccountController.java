@@ -1,5 +1,6 @@
 package com.cntt.rentalmanagement.controller;
 
+import com.cntt.rentalmanagement.domain.payload.request.RoleRequest;
 import com.cntt.rentalmanagement.domain.payload.request.SendEmailRequest;
 import com.cntt.rentalmanagement.services.AccountService;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +32,10 @@ public class AccountController {
     @PostMapping("/send-email/{id}")
     private ResponseEntity<?> sendEmail(@PathVariable Long id, @RequestBody SendEmailRequest sendEmailRequest) throws MessagingException, IOException {
         return ResponseEntity.ok(accountService.sendEmailForRentaler(id, sendEmailRequest));
+    }
+
+    @PostMapping("/{id}/authorization")
+    private ResponseEntity<?> divideAuthorization(@PathVariable Long id, @RequestBody RoleRequest roleRequest) {
+        return ResponseEntity.ok(accountService.divideAuthorization(id, roleRequest));
     }
 }

@@ -6,4 +6,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface UserRepositoryCustom {
     Page<User> searchingAccount(String keyword, Pageable pageable);
+
+    void deleteRoleOfAccount(Long id);
 }
