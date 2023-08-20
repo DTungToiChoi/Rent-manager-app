@@ -75,13 +75,5 @@ public class UserController {
     	System.out.println(user.getName());
     	System.out.println(result);
         return new ResponseEntity<String>(result, result.equals("Cập nhật thông tin thành công!!!")? HttpStatus.OK : HttpStatus.BAD_GATEWAY);
-    }
-    
-    @GetMapping("/user/message")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> getMessageUser(@CurrentUser UserPrincipal userPrincipal){
-    	String result = "Success";
-        return new ResponseEntity<String>(result, result.equals("Cập nhật thông tin thành công!!!")? HttpStatus.OK : HttpStatus.BAD_GATEWAY);
-    }
-    
+    } 
 }

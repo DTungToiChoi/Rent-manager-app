@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -33,7 +34,11 @@ public class RoomResponse {
     private Boolean isApprove;
 
     private Boolean isRemove;
-
+    
+    private LocalDateTime createdAt;
+    
+    private LocalDateTime updatedAt;
+    
     private LocationResponse location;
 
     private CategoryResponse category;

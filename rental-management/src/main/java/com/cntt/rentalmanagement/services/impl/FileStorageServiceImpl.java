@@ -55,6 +55,7 @@ public class FileStorageServiceImpl implements FileStorageService {
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
             String filePath = this.fileStorageLocation + "\\" + fileName;
             ((MultipartFile) file).transferTo(new File(filePath));
+            fileName = "http://localhost:8080/image/" + fileName;
             //Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
             return fileName;

@@ -1,24 +1,15 @@
-<<<<<<< HEAD
-import React from 'react';
-=======
 import React, { useState } from 'react';
->>>>>>> 710218f6c061481477397eb534333dc8e5e7326c
 import { Link, Navigate } from 'react-router-dom'
 import Nav from './Nav';
 import SidebarNav from './SidebarNav';
 import '../../assets/css/app.css';
-<<<<<<< HEAD
-=======
 import BarChart from '../rentaler/chart/BarChart';
 import PieChart from '../rentaler/chart/PieChart';
 import { UserData } from '../../utils/Data';
->>>>>>> 710218f6c061481477397eb534333dc8e5e7326c
 
 const DashboardAdmin = (props) => {
   const { authenticated, roleName, location, currentUser, onLogout } = props;
 
-<<<<<<< HEAD
-=======
   const [userData, setUserData] = useState({
     labels: UserData.map((data) => data.year),
     datasets: [
@@ -38,7 +29,6 @@ const DashboardAdmin = (props) => {
     ],
 });
 
->>>>>>> 710218f6c061481477397eb534333dc8e5e7326c
   if (!authenticated) {
     return <Navigate
       to={{
@@ -59,12 +49,6 @@ const DashboardAdmin = (props) => {
       </nav>
 
       <div className="main">
-<<<<<<< HEAD
-        <Nav onLogout={onLogout} currentUser={currentUser}/>
-
-        <main className="content">
-          <div className="container-fluid p-0">
-=======
         <Nav onLogout={onLogout} currentUser={currentUser} />
 
         <main style={{ margin: "20px 20px 20px 20px" }}>
@@ -191,7 +175,6 @@ const DashboardAdmin = (props) => {
               </div>
             </div>
 
->>>>>>> 710218f6c061481477397eb534333dc8e5e7326c
           </div>
         </main>
       </div>

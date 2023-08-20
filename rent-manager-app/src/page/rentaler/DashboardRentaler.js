@@ -1,19 +1,8 @@
-<<<<<<< HEAD
-import React from 'react';
-=======
 import React, { useEffect, useState } from 'react';
->>>>>>> 710218f6c061481477397eb534333dc8e5e7326c
 import { Link, Navigate } from 'react-router-dom'
 import Nav from './Nav';
 import SidebarNav from './SidebarNav';
 import '../../assets/css/app.css';
-<<<<<<< HEAD
-
-function DashboardRentaler(props){
-    console.log("Props:", props)
-    const { authenticated, role, currentUser, location, onLogout } = props;
-
-=======
 import { UserData } from '../../utils/Data';
 import BarChart from './chart/BarChart';
 import PieChart from './chart/PieChart';
@@ -66,7 +55,6 @@ function DashboardRentaler(props) {
     });
 
 
->>>>>>> 710218f6c061481477397eb534333dc8e5e7326c
     if (!props.authenticated) {
         return <Navigate
             to={{
@@ -87,13 +75,6 @@ function DashboardRentaler(props) {
             </nav>
 
             <div className="main">
-<<<<<<< HEAD
-                <Nav onLogout={onLogout} currentUser={currentUser}/>
-
-                <main className="content">
-                    <div className="container-fluid p-0">
-
-=======
                 <Nav onLogout={onLogout} currentUser={currentUser} />
 
                 <main style={{ margin: "20px 20px 20px 20px" }}>
@@ -223,7 +204,6 @@ function DashboardRentaler(props) {
                             </div>
                         </div>
                         
->>>>>>> 710218f6c061481477397eb534333dc8e5e7326c
                     </div>
                 </main>
             </div>

@@ -25,19 +25,15 @@ import javax.validation.constraints.NotNull;
 
 import com.cntt.rentalmanagement.domain.enums.AuthProvider;
 import com.cntt.rentalmanagement.domain.models.audit.DateAudit;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
@@ -47,6 +43,9 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(
+		  generator = ObjectIdGenerators.PropertyGenerator.class, 
+		  property = "id")
 public class User extends DateAudit {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -93,11 +92,5 @@ public class User extends DateAudit {
 
 	@OneToMany(mappedBy = "user")
 	private List<Rate> rates;
-
-	@OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
-	private Set<Message> sentMessages = new HashSet<>();
-
-	@OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
-	private Set<Message> receivedMessages = new HashSet<>();
 
 }

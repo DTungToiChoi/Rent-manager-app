@@ -96,8 +96,6 @@ export function signup(signupRequest) {
     });
 }
 
-<<<<<<< HEAD
-=======
 export function changePassword(changePasswordRequest) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -190,7 +188,6 @@ export function sendEmailForRentaler(id, sendEmailRequest) {
 }
 
 
->>>>>>> 710218f6c061481477397eb534333dc8e5e7326c
 // RENTALER
 export function getAllRoomOfRentaler(pageNo, pageSize, name) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
@@ -203,8 +200,6 @@ export function getAllRoomOfRentaler(pageNo, pageSize, name) {
     });
 }
 
-<<<<<<< HEAD
-=======
 export function getAllContractOfRentaler(pageNo, pageSize, name) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -238,7 +233,6 @@ export function getAllRequireOfRentaler(pageNo, pageSize, name) {
     });
 }
 
->>>>>>> 710218f6c061481477397eb534333dc8e5e7326c
 export function getRoom(id) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -250,8 +244,6 @@ export function getRoom(id) {
     });
 }
 
-<<<<<<< HEAD
-=======
 export function getRentOfHome() {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -341,7 +333,6 @@ export function exportBillRequest(nameBill, description, price, nameRoom, nameOf
 }
 
 
->>>>>>> 710218f6c061481477397eb534333dc8e5e7326c
 export function disableRoom(id) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -351,9 +342,6 @@ export function disableRoom(id) {
         url: API_BASE_URL + "/room/"+id,
         method: 'POST'
     });
-<<<<<<< HEAD
-}
-=======
 }
 
 export function deleteMaintenance(id) {
@@ -366,4 +354,3 @@ export function deleteMaintenance(id) {
         method: 'DELETE'
     });
 }
->>>>>>> 710218f6c061481477397eb534333dc8e5e7326c

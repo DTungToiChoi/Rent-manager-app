@@ -1,40 +1,40 @@
 import React, { useEffect, useRef } from "react";
+import jwtDecode from "jwt-decode";
+
 
 const Message = ({ message }) => {
-  //const { data } = useContext(ChatContext);
-
   const ref = useRef();
 
+  const accessToken = localStorage.getItem("accessToken");
+  const decodedToken = jwtDecode(accessToken);
+  const userId = decodedToken.sub;
+
+  console.log("Message: " + message)
   useEffect(() => {
     ref.current?.scrollIntoView({ behavior: "smooth" });
   }, [message]);
 
-  // Mock data for the current user and chat user
-  const mockCurrentUser = {
-    uid: "user123",
-    photoURL: "https://example.com/avatar.jpg",
-  };
+  const isSentByCurrentUser = false;
 
-  const mockChatUser = {
-    photoURL: "https://example.com/jane_avatar.jpg",
-  };
+  const isSender = message && message.sender.id === userId ? true : false; 
 
   return (
-    <div ref={ref} className={`message`}>
+    <div ref={ref} className={`message ${isSentByCurrentUser ? "sent" : "received"}`}>
       <div className="messageInfo">
         <img
           src={
-            message.senderId === mockCurrentUser.uid
-              ? mockCurrentUser.photoURL
-              : mockChatUser.photoURL
+            isSentByCurrentUser
+              ? (message && message.receiver ? message.receiver.imageUrl : "")
+              : (message && message.sender ? message.sender.imageUrl : "")
           }
           alt=""
         />
-        <span>just now</span>
+        {/* <span>just now</span> */}
       </div>
       <div className="messageContent">
-        <p>{message.text}</p>
-        {message.img && <img src={message.img} alt="" />}
+        {message && message.content && message.content.map((contentItem) => (
+          <p key={contentItem.id} className={`content ${contentItem.sendBy ? "sent" : "received"}`}>{contentItem.content}</p>
+        ))}
       </div>
     </div>
   );

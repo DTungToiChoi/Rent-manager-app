@@ -1,36 +1,69 @@
 import React, { Component } from "react";
 import Header from "../../common/Header";
 import Footer from "../../common/Footer";
+import { useParams, withRouter } from 'react-router-dom';
+import axios from "axios"; // Import axios for making API requests
+import AliceCarousel from 'react-alice-carousel';
+
+import "react-alice-carousel/lib/alice-carousel.css";
+
 
 class RentailHomeDetail extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            rooms: null, // State to store fetched rooms data
+        };
+    }
+
+    componentDidMount() {
+        this.fetchRooms(); // Call the fetchRooms function when component mounts
+    }
+
+    fetchRooms = async () => {
+        try {
+            const id = window.location.pathname.split("/").pop();
+            const response = await axios.get(`http://localhost:8080/room/${id}`);
+            const data = response.data; // Assuming API returns rooms data
+
+            this.setState({
+                rooms: data,
+            });
+        } catch (error) {
+            console.error("Error fetching rooms:", error);
+        }
+    };
+
     render() {
+
+        const { rooms } = this.state;
+
         return (
             <>
                 <Header authenticated={this.props.authenticated} currentUser={this.props.currentUser} onLogout={this.props.onLogout} />
                 <main id="main">
-
-                   
                     <section class="intro-single">
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-12 col-lg-8">
                                     <div class="title-single-box">
-                                        <h1 class="title-single">304 Blaster Up</h1>
-                                        <span class="color-text-a">Chicago, IL 606543</span>
+                                        <h1 class="title-single">{rooms ? rooms.title : ""}</h1>
+                                        <span class="color-text-a">Khu vực: {rooms ? rooms.location.cityName : ""}</span>
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-lg-4">
                                     <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
                                         <ol class="breadcrumb">
                                             <li class="breadcrumb-item">
-                                                <a href="index.html">Home</a>
+                                                <a href="/">Trang chủ</a>
                                             </li>
                                             <li class="breadcrumb-item">
+                                                {rooms ? rooms.category.name : ""}
+                                            </li>
+                                            {/* <li class="breadcrumb-item">
                                                 <a href="property-grid.html">Properties</a>
-                                            </li>
-                                            <li class="breadcrumb-item active" aria-current="page">
-                                                304 Blaster Up
-                                            </li>
+                                            </li> */}
                                         </ol>
                                     </nav>
                                 </div>
@@ -42,14 +75,17 @@ class RentailHomeDetail extends Component {
                             <div class="row justify-content-center">
                                 <div class="col-lg-8">
                                     <div id="property-single-carousel" class="swiper">
-                                        <div class="swiper-wrapper">
-                                            <div class="carousel-item-b swiper-slide">
-                                                <img src="../../assets/img/slide-1.jpg" alt=""/>
-                                            </div>
-                                            <div class="carousel-item-b swiper-slide">
-                                                <img src="../../assets/img/slide-2.jpg" alt=""/>
-                                            </div>
+                                        <div>
+                                            <AliceCarousel autoPlay autoPlayInterval="1500">
+                                                {rooms && rooms.roomMedia.map((media, index) => (
+                                                    <div key={index} style={{ width: "100%", height: "1000px", objectFit: "cover" }}>
+                                                        <img className="sliderimg" src={media.files} alt={`Slide ${index}`} />
+                                                    </div>
+                                                ))}
+                                            </AliceCarousel>
+
                                         </div>
+
                                     </div>
                                     <div class="property-single-carousel-pagination carousel-pagination"></div>
                                 </div>
@@ -63,10 +99,10 @@ class RentailHomeDetail extends Component {
                                             <div class="property-price d-flex justify-content-center foo">
                                                 <div class="card-header-c d-flex">
                                                     <div class="card-box-ico">
-                                                        <span class="bi bi-cash">$</span>
+                                                        <span class="bi bi-cash"></span>
                                                     </div>
                                                     <div class="card-title-c align-self-center">
-                                                        <h5 class="title-c">15000</h5>
+                                                        <h5 class="title-c">{rooms ? rooms.price : ""} VNĐ</h5>
                                                     </div>
                                                 </div>
                                             </div>
@@ -74,46 +110,40 @@ class RentailHomeDetail extends Component {
                                                 <div class="row">
                                                     <div class="col-sm-12">
                                                         <div class="title-box-d section-t4">
-                                                            <h3 class="title-d">Quick Summary</h3>
+                                                            <h3 class="title-d">Mô tả nhanh</h3>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="summary-list">
                                                     <ul class="list">
                                                         <li class="d-flex justify-content-between">
-                                                            <strong>Property ID:</strong>
-                                                            <span>1134</span>
+                                                            <strong>Mô tả</strong>
+                                                            <span>{rooms && rooms.description}</span>
                                                         </li>
                                                         <li class="d-flex justify-content-between">
-                                                            <strong>Location:</strong>
-                                                            <span>Chicago, IL 606543</span>
+                                                            <strong>Địa chỉ:</strong>
+                                                            <span>{rooms && rooms.address}</span>
                                                         </li>
                                                         <li class="d-flex justify-content-between">
-                                                            <strong>Property Type:</strong>
-                                                            <span>House</span>
+                                                            <strong>Loại phòng</strong>
+                                                            <span>{rooms && rooms.category.name}</span>
                                                         </li>
                                                         <li class="d-flex justify-content-between">
-                                                            <strong>Status:</strong>
-                                                            <span>Sale</span>
+                                                            <strong>Trạng thái:</strong>
+                                                            <span>{rooms && rooms.status ? (rooms.status == "ROOM_RENT" ? "Cho thuê" : "Bán") : ""}</span>
                                                         </li>
                                                         <li class="d-flex justify-content-between">
-                                                            <strong>Area:</strong>
-                                                            <span>340m
-                                                                <sup>2</sup>
+                                                            <strong>Khu vực</strong>
+                                                            <span>
+                                                                {rooms && rooms.location.cityName}
                                                             </span>
                                                         </li>
-                                                        <li class="d-flex justify-content-between">
-                                                            <strong>Beds:</strong>
-                                                            <span>4</span>
-                                                        </li>
-                                                        <li class="d-flex justify-content-between">
-                                                            <strong>Baths:</strong>
-                                                            <span>2</span>
-                                                        </li>
-                                                        <li class="d-flex justify-content-between">
-                                                            <strong>Garage:</strong>
-                                                            <span>1</span>
-                                                        </li>
+                                                        {rooms && rooms.assets.map((item) => (
+                                                            <li class="d-flex justify-content-between">
+                                                                <strong>{item.name}:</strong>
+                                                                <span>{item.number}</span>
+                                                            </li>
+                                                        ))}
                                                     </ul>
                                                 </div>
                                             </div>
@@ -122,44 +152,16 @@ class RentailHomeDetail extends Component {
                                             <div class="row">
                                                 <div class="col-sm-12">
                                                     <div class="title-box-d">
-                                                        <h3 class="title-d">Property Description</h3>
+                                                        <h3 class="title-d">Mô tả chi tiết</h3>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="property-description">
                                                 <p class="description color-text-a">
-                                                    Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit
-                                                    neque, auctor sit amet
-                                                    aliquam vel, ullamcorper sit amet ligula. Cras ultricies ligula sed magna dictum porta.
-                                                    Curabitur aliquet quam id dui posuere blandit. Mauris blandit aliquet elit, eget tincidunt
-                                                    nibh pulvinar quam id dui posuere blandit.
-                                                </p>
-                                                <p class="description color-text-a no-margin">
-                                                    Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Donec rutrum congue leo eget
-                                                    malesuada. Quisque velit nisi,
-                                                    pretium ut lacinia in, elementum id enim. Donec sollicitudin molestie malesuada.
+                                                    {rooms ? rooms.description : ""}
                                                 </p>
                                             </div>
-                                            <div class="row section-t3">
-                                                <div class="col-sm-12">
-                                                    <div class="title-box-d">
-                                                        <h3 class="title-d">Amenities</h3>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="amenities-list color-text-a">
-                                                <ul class="list-a no-margin">
-                                                    <li>Balcony</li>
-                                                    <li>Outdoor Kitchen</li>
-                                                    <li>Cable Tv</li>
-                                                    <li>Deck</li>
-                                                    <li>Tennis Courts</li>
-                                                    <li>Internet</li>
-                                                    <li>Parking</li>
-                                                    <li>Sun Room</li>
-                                                    <li>Concrete Flooring</li>
-                                                </ul>
-                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -180,10 +182,10 @@ class RentailHomeDetail extends Component {
                                             <iframe src="https://player.vimeo.com/video/73221098" width="100%" height="460" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
                                         </div>
                                         <div class="tab-pane fade" id="pills-plans" role="tabpanel" aria-labelledby="pills-plans-tab">
-                                            <img src="../../assets/img/plan2.jpg" alt="" class="img-fluid"/>
+                                            <img src="../../assets/img/plan2.jpg" alt="" class="img-fluid" />
                                         </div>
                                         <div class="tab-pane fade" id="pills-map" role="tabpanel" aria-labelledby="pills-map-tab">
-                                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.1422937950147!2d-73.98731968482413!3d40.75889497932681!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25855c6480299%3A0x55194ec5a1ae072e!2sTimes+Square!5e0!3m2!1ses-419!2sve!4v1510329142834" width="100%" height="460" frameborder="0" style={{border:"0"}} allowfullscreen></iframe>
+                                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.1422937950147!2d-73.98731968482413!3d40.75889497932681!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25855c6480299%3A0x55194ec5a1ae072e!2sTimes+Square!5e0!3m2!1ses-419!2sve!4v1510329142834" width="100%" height="460" frameborder="0" style={{ border: "0" }} allowfullscreen></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -191,38 +193,33 @@ class RentailHomeDetail extends Component {
                                     <div class="row section-t3">
                                         <div class="col-sm-12">
                                             <div class="title-box-d">
-                                                <h3 class="title-d">Contact Agent</h3>
+                                                <h3 class="title-d">Người cho thuê</h3>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6 col-lg-4">
-                                            <img src="../../assets/img/agent-4.jpg" alt="" class="img-fluid"/>
+                                            <img src="../../assets/img/agent-4.jpg" alt="" class="img-fluid" />
                                         </div>
                                         <div class="col-md-6 col-lg-4">
                                             <div class="property-agent">
-                                                <h4 class="title-agent">Anabella Geller</h4>
+                                                <h4 class="title-agent">{rooms ? rooms.user.name : ""}</h4>
                                                 <p class="color-text-a">
-                                                    Nulla porttitor accumsan tincidunt. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet
-                                                    dui. Quisque velit nisi,
-                                                    pretium ut lacinia in, elementum id enim.
+
+
                                                 </p>
                                                 <ul class="list-unstyled">
                                                     <li class="d-flex justify-content-between">
-                                                        <strong>Phone:</strong>
-                                                        <span class="color-text-a">(222) 4568932</span>
+                                                        <strong>Số điện thoại:</strong>
+                                                        <span class="color-text-a">{rooms ? rooms.user.phone : ""}</span>
                                                     </li>
                                                     <li class="d-flex justify-content-between">
-                                                        <strong>Mobile:</strong>
-                                                        <span class="color-text-a">777 287 378 737</span>
+                                                        <strong>Địa chỉ:</strong>
+                                                        <span class="color-text-a">{rooms ? rooms.user.address : ""}</span>
                                                     </li>
                                                     <li class="d-flex justify-content-between">
-                                                        <strong>Email:</strong>
-                                                        <span class="color-text-a">annabella@example.com</span>
-                                                    </li>
-                                                    <li class="d-flex justify-content-between">
-                                                        <strong>Skype:</strong>
-                                                        <span class="color-text-a">Annabela.ge</span>
+                                                        <strong>Email: </strong>
+                                                        <span class="color-text-a"> {rooms ? rooms.user.email : ""}</span>
                                                     </li>
                                                 </ul>
                                                 <div class="socials-a">
@@ -257,7 +254,7 @@ class RentailHomeDetail extends Component {
                                                     <div class="row">
                                                         <div class="col-md-12 mb-1">
                                                             <div class="form-group">
-                                                                <input type="text" class="form-control form-control-lg form-control-a" id="inputName" placeholder="Name *" required />
+                                                                <input type="text" class="form-control form-control-lg form-control-a" id="inputName" placeholder="Tên *" required />
                                                             </div>
                                                         </div>
                                                         <div class="col-md-12 mb-1">
@@ -267,11 +264,11 @@ class RentailHomeDetail extends Component {
                                                         </div>
                                                         <div class="col-md-12 mb-1">
                                                             <div class="form-group">
-                                                                <textarea id="textMessage" class="form-control" placeholder="Comment *" name="message" cols="45" rows="8" required></textarea>
+                                                                <textarea id="textMessage" class="form-control" placeholder="Bình luận *" name="message" cols="45" rows="8" required></textarea>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-12 mt-3">
-                                                            <button type="submit" class="btn btn-a">Send Message</button>
+                                                            <button type="submit" class="btn btn-a">Gửi tin nhắn</button>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -282,7 +279,6 @@ class RentailHomeDetail extends Component {
                             </div>
                         </div>
                     </section>
-
                 </main>
                 <Footer />
             </>

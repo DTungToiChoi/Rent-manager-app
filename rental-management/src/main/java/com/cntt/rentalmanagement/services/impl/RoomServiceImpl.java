@@ -1,19 +1,8 @@
 package com.cntt.rentalmanagement.services.impl;
 
-import com.cntt.rentalmanagement.domain.enums.LockedStatus;
-import com.cntt.rentalmanagement.domain.enums.RoomStatus;
-import com.cntt.rentalmanagement.domain.models.*;
-import com.cntt.rentalmanagement.domain.payload.request.AssetRequest;
-import com.cntt.rentalmanagement.domain.payload.request.RoomRequest;
-import com.cntt.rentalmanagement.domain.payload.response.MessageResponse;
-import com.cntt.rentalmanagement.domain.payload.response.RoomResponse;
-import com.cntt.rentalmanagement.exception.BadRequestException;
-import com.cntt.rentalmanagement.repository.*;
-import com.cntt.rentalmanagement.services.BaseService;
-import com.cntt.rentalmanagement.services.FileStorageService;
-import com.cntt.rentalmanagement.services.RoomService;
-import com.cntt.rentalmanagement.utils.MapperUtils;
-import lombok.RequiredArgsConstructor;
+import java.util.Comparator;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +10,31 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import com.cntt.rentalmanagement.domain.enums.LockedStatus;
+import com.cntt.rentalmanagement.domain.enums.RoomStatus;
+import com.cntt.rentalmanagement.domain.models.Asset;
+import com.cntt.rentalmanagement.domain.models.Category;
+import com.cntt.rentalmanagement.domain.models.Location;
+import com.cntt.rentalmanagement.domain.models.Room;
+import com.cntt.rentalmanagement.domain.models.RoomMedia;
+import com.cntt.rentalmanagement.domain.models.User;
+import com.cntt.rentalmanagement.domain.payload.request.AssetRequest;
+import com.cntt.rentalmanagement.domain.payload.request.RoomRequest;
+import com.cntt.rentalmanagement.domain.payload.response.MessageResponse;
+import com.cntt.rentalmanagement.domain.payload.response.RoomResponse;
+import com.cntt.rentalmanagement.exception.BadRequestException;
+import com.cntt.rentalmanagement.repository.AssetRepository;
+import com.cntt.rentalmanagement.repository.CategoryRepository;
+import com.cntt.rentalmanagement.repository.LocationRepository;
+import com.cntt.rentalmanagement.repository.RoomMediaRepository;
+import com.cntt.rentalmanagement.repository.RoomRepository;
+import com.cntt.rentalmanagement.repository.UserRepository;
+import com.cntt.rentalmanagement.services.BaseService;
+import com.cntt.rentalmanagement.services.FileStorageService;
+import com.cntt.rentalmanagement.services.RoomService;
+import com.cntt.rentalmanagement.utils.MapperUtils;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -77,6 +90,7 @@ public class RoomServiceImpl extends BaseService implements RoomService {
     public Page<RoomResponse> getRoomByRentaler(String title, Integer pageNo, Integer pageSize) {
         int page = pageNo == 0 ? pageNo : pageNo - 1;
         Pageable pageable = PageRequest.of(page, pageSize);
+        Page<RoomResponse> result = mapperUtils.convertToResponsePage(roomRepository.searchingRoom(title, getUserId() ,pageable),RoomResponse.class,pageable);
         return mapperUtils.convertToResponsePage(roomRepository.searchingRoom(title, getUserId() ,pageable),RoomResponse.class,pageable);
     }
 
@@ -142,11 +156,26 @@ public class RoomServiceImpl extends BaseService implements RoomService {
     }
 
     @Override
-    public Page<RoomResponse> getAllRoomForAdmin(String title, Integer pageNo, Integer pageSize) {
+    public Page<RoomResponse> getAllRoomForAdmin(String title, Integer pageNo, Integer pageSize, String typeSort) {
         int page = pageNo == 0 ? pageNo : pageNo - 1;
         Pageable pageable = PageRequest.of(page, pageSize);
         return mapperUtils.convertToResponsePage(roomRepository.searchingRoomForAdmin(title,pageable), RoomResponse.class, pageable);
     }
+    
+    private List<RoomResponse> sortRooms(List<RoomResponse> rooms, String typeSort) {
+        if ("Thời gian: Mới đến cũ".equals(typeSort)) {
+            rooms.sort(Comparator.comparing(RoomResponse::getCreatedAt).reversed());
+        } else if ("Thời gian: Cũ đến mới".equals(typeSort)) {
+            rooms.sort(Comparator.comparing(RoomResponse::getCreatedAt));
+        } else if ("Giá: Thấp đến cao".equals(typeSort)) {
+            rooms.sort(Comparator.comparing(RoomResponse::getPrice));
+        } else if ("Giá: Cao đến thấp".equals(typeSort)) {
+            rooms.sort(Comparator.comparing(RoomResponse::getPrice).reversed());
+        }
+        
+        return rooms;
+    }
+
 
     @Override
     public MessageResponse checkoutRoom(Long id) {

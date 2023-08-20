@@ -71,6 +71,10 @@ public class AuthServiceImpl extends BaseService implements AuthService {
         if (!signUpRequest.getPassword().equals(signUpRequest.getConfirmPassword())) {
             throw new BadRequestException("Mật khẩu không khớp. Vui lòng thử lại.");
         }
+        
+        if (!signUpRequest.getEmail().endsWith("@gmail.com")) {
+        	throw new BadRequestException("Định dạng email không hợp lệ. Vui lòng thử lại.");
+        }
 
         // Creating user's account
         User user = new User();

@@ -141,7 +141,7 @@ function AddRoom(props) {
                                 <form onSubmit={handleSubmit}>
                                     <div className="row">
                                         <div className="mb-3 col-md-6">
-                                            <label className="form-label" htmlFor="title">Tiều đề phòng</label>
+                                            <label className="form-label" htmlFor="title">Tiêu đề phòng</label>
                                             <input type="text" className="form-control" id="title" name="title" value={roomData.title} onChange={handleInputChange} />
                                         </div>
                                         <div className="mb-3 col-md-6">

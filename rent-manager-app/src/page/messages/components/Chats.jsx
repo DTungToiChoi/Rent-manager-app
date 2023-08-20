@@ -7,7 +7,7 @@ const Chats = () => {
     const fetchChats = async () => {
       try {
         // Lấy access token từ local storage
-        const accessToken = localStorage.getItem("access_token");
+        const accessToken = localStorage.getItem("accessToken");
         
         if (!accessToken) {
           console.log("Access token not found.");
@@ -23,13 +23,7 @@ const Chats = () => {
 
         if (response.ok) {
           const data = await response.json();
-          // Dữ liệu trả về từ API có định dạng như sau:
-          // [
-          //   { userName: "User 1", imageUrl: "url_to_photo1", message: "Hello there!" },
-          //   { userName: "User 2", imageUrl: "url_to_photo2", message: "How are you?" },
-          //   ...
-          // ]
-
+          //console.log(data);
           setChats(data);
         } else {
           console.log("Error fetching chats:", response.statusText);
