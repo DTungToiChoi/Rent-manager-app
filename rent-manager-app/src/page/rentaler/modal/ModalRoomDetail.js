@@ -88,7 +88,7 @@ const ModalRoomDetails = ({ roomId }) => {
 
                                                         return (
                                                             <SwiperSlide className="carousel-item-b swiper-slide" >
-                                                                <img src={`http://localhost:8080/image/` + item.files.replace('photographer/files/', '')} alt="" style={{ width: "100%" }} />
+                                                                <img src={item.files} alt="" style={{ width: "100%" }} />
                                                             </SwiperSlide>
                                                         )
                                                     })}

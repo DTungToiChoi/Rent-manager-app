@@ -4,8 +4,9 @@ import Footer from "../../common/Footer";
 import { useParams, withRouter } from 'react-router-dom';
 import axios from "axios"; // Import axios for making API requests
 import AliceCarousel from 'react-alice-carousel';
-
+import { Swiper, SwiperSlide } from 'swiper/react';
 import "react-alice-carousel/lib/alice-carousel.css";
+import { Navigation } from 'swiper/modules';
 
 
 class RentailHomeDetail extends Component {
@@ -76,14 +77,14 @@ class RentailHomeDetail extends Component {
                                 <div class="col-lg-8">
                                     <div id="property-single-carousel" class="swiper">
                                         <div>
-                                            <AliceCarousel autoPlay autoPlayInterval="1500">
-                                                {rooms && rooms.roomMedia.map((media, index) => (
-                                                    <div key={index} style={{ width: "100%", height: "1000px", objectFit: "cover" }}>
-                                                        <img className="sliderimg" src={media.files} alt={`Slide ${index}`} />
-                                                    </div>
+                                        
+                                        <Swiper navigation={true} modules={[Navigation]} className="swiper-wrapper">
+                                                {rooms && rooms.roomMedia.map((media) => (
+                                                    <SwiperSlide className="carousel-item-b swiper-slide" >
+                                                    <img src={media.files} alt="" style={{ width: "100%", height: "100%" }} />
+                                                </SwiperSlide>
                                                 ))}
-                                            </AliceCarousel>
-
+                                        </Swiper>
                                         </div>
 
                                     </div>

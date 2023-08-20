@@ -19,11 +19,7 @@ public interface RoomService {
 
     Page<RoomResponse> getRentOfHome();
 
-<<<<<<< HEAD
-    Page<RoomResponse> getAllRoomForAdmin(String title, Integer pageNo, Integer pageSize, String typeSort);
-=======
-    Page<RoomResponse> getAllRoomForAdmin(String title,Boolean approve, Integer pageNo, Integer pageSize);
->>>>>>> 9bede565020a926920c70222e35394a2affc71fc
+    Page<RoomResponse> getAllRoomForAdmin(String title,Boolean approve, Integer pageNo, Integer pageSize, String typeSort);
 
     MessageResponse checkoutRoom(Long id);
 
