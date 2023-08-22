@@ -4,12 +4,15 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,8 +20,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.cntt.rentalmanagement.domain.enums.RoomStatus;
+import com.cntt.rentalmanagement.domain.models.DTO.CommentDTO;
 import com.cntt.rentalmanagement.domain.payload.request.AssetRequest;
 import com.cntt.rentalmanagement.domain.payload.request.RoomRequest;
+import com.cntt.rentalmanagement.secruity.CurrentUser;
+import com.cntt.rentalmanagement.secruity.UserPrincipal;
 import com.cntt.rentalmanagement.services.RoomService;
 
 import lombok.RequiredArgsConstructor;
@@ -85,7 +91,21 @@ public class RoomController {
     public ResponseEntity<?> checkoutRoom(@PathVariable Long id) {
         return ResponseEntity.ok(roomService.checkoutRoom(id));
     }
-
+    
+    @GetMapping("/{roomId}/comments")
+	public List<CommentDTO> getAllComment(@PathVariable Long roomId) {
+		return roomService.getAllCommentRoom(roomId);
+	}
+    
+	@PostMapping("/{roomId}/comments")
+	@PreAuthorize("hasRole('USER')")
+	public ResponseEntity<?> addComment(@CurrentUser UserPrincipal userPrincipal, @PathVariable Long roomId,
+			@RequestBody CommentDTO commentDTO) {
+		System.out.println(commentDTO.getRateRating());
+		return roomService.addComment(userPrincipal.getId(), commentDTO).equals("Thêm bình luận thành công")
+				? ResponseEntity.ok("Thêm bình luận thành công")
+				: new ResponseEntity<String>("Thêm bình luận thất bại", HttpStatus.BAD_REQUEST);
+	}
 
     private RoomRequest putRoomRequest(MultipartHttpServletRequest request) {
         String title = request.getParameter("title");

@@ -14,10 +14,14 @@ import com.cntt.rentalmanagement.domain.enums.LockedStatus;
 import com.cntt.rentalmanagement.domain.enums.RoomStatus;
 import com.cntt.rentalmanagement.domain.models.Asset;
 import com.cntt.rentalmanagement.domain.models.Category;
+import com.cntt.rentalmanagement.domain.models.Comment;
 import com.cntt.rentalmanagement.domain.models.Location;
+import com.cntt.rentalmanagement.domain.models.Rate;
 import com.cntt.rentalmanagement.domain.models.Room;
 import com.cntt.rentalmanagement.domain.models.RoomMedia;
 import com.cntt.rentalmanagement.domain.models.User;
+import com.cntt.rentalmanagement.domain.models.DTO.CommentDTO;
+import com.cntt.rentalmanagement.domain.models.DTO.MessageDTO;
 import com.cntt.rentalmanagement.domain.payload.request.AssetRequest;
 import com.cntt.rentalmanagement.domain.payload.request.RoomRequest;
 import com.cntt.rentalmanagement.domain.payload.response.MessageResponse;
@@ -25,6 +29,7 @@ import com.cntt.rentalmanagement.domain.payload.response.RoomResponse;
 import com.cntt.rentalmanagement.exception.BadRequestException;
 import com.cntt.rentalmanagement.repository.AssetRepository;
 import com.cntt.rentalmanagement.repository.CategoryRepository;
+import com.cntt.rentalmanagement.repository.CommentRepository;
 import com.cntt.rentalmanagement.repository.LocationRepository;
 import com.cntt.rentalmanagement.repository.RoomMediaRepository;
 import com.cntt.rentalmanagement.repository.RoomRepository;
@@ -46,6 +51,7 @@ public class RoomServiceImpl extends BaseService implements RoomService {
     private final RoomMediaRepository roomMediaRepository;
     private final CategoryRepository categoryRepository;
     private final AssetRepository assetRepository;
+    private final CommentRepository commentRepository;
     private final MapperUtils mapperUtils;
 
     @Override
@@ -162,6 +168,12 @@ public class RoomServiceImpl extends BaseService implements RoomService {
         return mapperUtils.convertToResponsePage(roomRepository.searchingRoomForAdmin(title, approve ,pageable), RoomResponse.class, pageable);
     }
     
+    @Override
+    public List<CommentDTO> getAllCommentRoom(Long id){
+    	Room room = roomRepository.findById(id).get();
+    	return mapperUtils.convertToEntityList(room.getComment(), CommentDTO.class);
+    }
+    
     private List<RoomResponse> sortRooms(List<RoomResponse> rooms, String typeSort) {
         if ("Thời gian: Mới đến cũ".equals(typeSort)) {
             rooms.sort(Comparator.comparing(RoomResponse::getCreatedAt).reversed());
@@ -208,7 +220,25 @@ public class RoomServiceImpl extends BaseService implements RoomService {
         return MessageResponse.builder().message("Bài đăng đã bị gỡ thành công").build();
     }
 
-    private User getUser() {
+	@Override
+	public String addComment(Long id, CommentDTO commentDTO) {
+		try {
+			Room room = roomRepository.findById(commentDTO.getRoom_id()).orElseThrow(() -> new BadRequestException("Phòng không còn tồn tại"));
+			User user = userRepository.findById(id).orElseThrow(() -> new BadRequestException("Người dùng không tồn tại"));
+			Rate rate = new Rate();
+			rate.setRating(commentDTO.getRateRating());
+			rate.setUser(user);
+			rate.setRoom(room);
+			Comment comment = new Comment(commentDTO.getContent(), user, room, rate);
+			commentRepository.save(comment);
+			return "Thêm bình luận thành công";
+		} catch (Exception e) {
+			return "Thêm bình luận thất bại";
+		}
+		
+	}
+	
+	private User getUser() {
         return userRepository.findById(getUserId()).orElseThrow(() -> new BadRequestException("Người dùng không tồn tại"));
     }
 }

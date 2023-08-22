@@ -19,13 +19,28 @@ public class Comment extends DateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
     private String content;
-    @Column(name = "created_by")
-    private String createdBy;
+    
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Column(name = "updated_by")
-    private String updatedBy;
+    @ManyToOne
+    @JoinColumn(name = "room_id")
+    private Room rooms;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "rate_id")
+    private Rate rate;
 
-    @OneToMany(mappedBy = "comment")
-    private List<Room> rooms;
+	public Comment(String content, User user, Room rooms, Rate rate) {
+		super();
+		this.content = content;
+		this.user = user;
+		this.rooms = rooms;
+		this.rate = rate;
+	}
+    
+    
 }

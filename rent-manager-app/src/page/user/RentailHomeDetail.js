@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import Header from "../../common/Header";
 import Footer from "../../common/Footer";
-import { useParams, withRouter } from 'react-router-dom';
 import axios from "axios"; // Import axios for making API requests
-import AliceCarousel from 'react-alice-carousel';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import "react-alice-carousel/lib/alice-carousel.css";
 import { Navigation } from 'swiper/modules';
-
+import Rating from '@mui/material/Rating';
+import Stack from '@mui/material/Stack';
+import { Button, Comment, Form } from 'semantic-ui-react'
+import 'semantic-ui-css/semantic.min.css'
 
 class RentailHomeDetail extends Component {
 
@@ -15,11 +16,17 @@ class RentailHomeDetail extends Component {
         super(props);
         this.state = {
             rooms: null, // State to store fetched rooms data
+            showCommentForm: false,
+            content: "",
+            rate: 5,
+            submittingComment: false,
+            comments: [],
         };
     }
 
     componentDidMount() {
         this.fetchRooms(); // Call the fetchRooms function when component mounts
+        this.fetchComments();
     }
 
     fetchRooms = async () => {
@@ -36,9 +43,67 @@ class RentailHomeDetail extends Component {
         }
     };
 
+    fetchComments = async () => {
+        try {
+          const id = window.location.pathname.split("/").pop();
+          const response = await axios.get(`http://localhost:8080/room/${id}/comments`);
+          const comments = response.data; // Assuming API returns comments data
+    
+          this.setState({
+            comments: comments,
+          });
+        } catch (error) {
+          console.error("Error fetching comments:", error);
+        }
+      };
+
+    handleSubmitComment = async (event) => {
+        event.preventDefault();
+        const { content, rate, rooms } = this.state;
+        const roomId = window.location.pathname.split("/").pop();; // Assuming room id is available
+
+        // Construct the comment data
+        const commentData = {
+            content: content,
+            rateRating: rate,
+            room_id: roomId,
+        };
+
+        // Replace with your JWT token retrieval logic from localStorage
+        const accessToken = localStorage.getItem("accessToken");
+
+        try {
+            this.setState({ submittingComment: true });
+            // Make the API request to submit the comment
+            const response = await axios.post(
+                `http://localhost:8080/room/${roomId}/comments`,
+                commentData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+
+            // Handle success and reset the form
+            console.log("Comment submitted:", response.data);
+            this.setState({
+                content: "",
+                rate: 5,
+                submittingComment: false,
+                showCommentForm: false, // Hide the form after submitting
+            });
+            this.fetchComments();
+        } catch (error) {
+            console.log(commentData)
+            console.error("Error submitting comment:", error);
+            this.setState({ submittingComment: false });
+        }
+    };
+
     render() {
 
-        const { rooms } = this.state;
+        const { rooms, comments, showCommentForm, content, rate, submittingComment } = this.state;
 
         return (
             <>
@@ -77,14 +142,14 @@ class RentailHomeDetail extends Component {
                                 <div class="col-lg-8">
                                     <div id="property-single-carousel" class="swiper">
                                         <div>
-                                        
-                                        <Swiper navigation={true} modules={[Navigation]} className="swiper-wrapper">
+
+                                            <Swiper navigation={true} modules={[Navigation]} className="swiper-wrapper">
                                                 {rooms && rooms.roomMedia.map((media) => (
                                                     <SwiperSlide className="carousel-item-b swiper-slide" >
-                                                    <img src={media.files} alt="" style={{ width: "100%", height: "100%" }} />
-                                                </SwiperSlide>
+                                                        <img src={media.files} alt="" style={{ width: "100%", height: "100%" }} />
+                                                    </SwiperSlide>
                                                 ))}
-                                        </Swiper>
+                                            </Swiper>
                                         </div>
 
                                     </div>
@@ -277,9 +342,84 @@ class RentailHomeDetail extends Component {
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-12">
+                                    <div class="row section-t3">
+                                        <div class="col-sm-12">
+                                            <div class="title-box-d">
+                                                <h3 class="title-d">Bình luận và đánh giá</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-lg-4">
+                                            <div class="property-agent">
+                                                {/* <h4 class="title-agent">{rooms ? rooms.user.name : ""}</h4> */}
+                                                <Comment.Group>
+                                                {comments && comments.map((comment) => (
+                                                    <Comment>
+                                                        <Comment.Content style={{ padding: '1rem' }}>
+                                                            <Stack spacing={1}>
+                                                                <Rating name="half-rating" defaultValue={comment.rateRating} precision={0.5} readOnly />
+                                                            </Stack>
+                                                            <Comment.Avatar src= {comment.user.imageUrl} />
+                                                            <Comment.Author as='a'>{comment.user.name}</Comment.Author>
+                                                            <Comment.Metadata>
+                                                                <div>{comment.createdAt}</div>
+                                                            </Comment.Metadata>
+                                                            <Comment.Text>{comment.content}</Comment.Text>
+                                                            <Comment.Actions>
+                                                                <Comment.Action>Reply</Comment.Action>
+                                                            </Comment.Actions>
+                                                        </Comment.Content>
+                                                    </Comment>
+                                                ))}
+                                                </Comment.Group>
+
+                                                {showCommentForm ? (
+                                                    <Form onSubmit={this.handleSubmitComment}>
+                                                        <h1>Đánh giá chất lượng</h1>
+                                                        <Stack spacing={1}>
+                                                            <Rating
+                                                                name="half-rating"
+                                                                value={rate}
+                                                                precision={0.5}
+                                                                onChange={(event, newValue) =>
+                                                                    this.setState({ rate: newValue })
+                                                                }
+                                                            />
+                                                        </Stack>
+                                                        <h1></h1>
+                                                        <Form.TextArea
+                                                            label="Chất lượng nhà trọ"
+                                                            placeholder="Để lại cảm nhận của bạn tại đây...."
+                                                            value={content}
+                                                            onChange={(event) =>
+                                                                this.setState({ content: event.target.value })
+                                                            }
+                                                        />
+                                                        <div className="col-md-12 mt-3">
+                                                            <Button
+                                                                type="submit"
+                                                                className="btn btn-a"
+                                                                disabled={submittingComment}
+                                                            >
+                                                                {submittingComment ? "Đang gửi..." : "Bình luận"}
+                                                            </Button>
+                                                        </div>
+                                                    </Form>
+                                                ) : (
+                                                    <div class="col-md-12 mt-3">
+                                                        <button onClick={() => this.setState({ showCommentForm: true })} class="btn btn-a">Thêm bình luận</button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </section>
+
                 </main>
                 <Footer />
             </>

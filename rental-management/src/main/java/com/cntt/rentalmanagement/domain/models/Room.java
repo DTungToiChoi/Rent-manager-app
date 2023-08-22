@@ -63,9 +63,8 @@ public class Room extends DateAudit {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "comment_id")
-    private Comment comment;
+    @OneToMany(mappedBy = "rooms")
+    private List<Comment> comment;
 
     @ManyToOne
     @JoinColumn(name = "category_id")

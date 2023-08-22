@@ -1,8 +1,12 @@
 package com.cntt.rentalmanagement.services;
 
+import com.cntt.rentalmanagement.domain.models.DTO.CommentDTO;
 import com.cntt.rentalmanagement.domain.payload.request.RoomRequest;
 import com.cntt.rentalmanagement.domain.payload.response.MessageResponse;
 import com.cntt.rentalmanagement.domain.payload.response.RoomResponse;
+
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 
 public interface RoomService {
@@ -26,4 +30,8 @@ public interface RoomService {
     MessageResponse isApproveRoom(Long id);
 
     MessageResponse removeRoom(Long id);
+
+	String addComment(Long id, CommentDTO commentDTO);
+
+	List<CommentDTO> getAllCommentRoom(Long id);
 }

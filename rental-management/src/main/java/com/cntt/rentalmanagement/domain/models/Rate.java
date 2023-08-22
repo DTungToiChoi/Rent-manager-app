@@ -18,8 +18,11 @@ public class Rate extends DateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
     private Double rating;
-    private String description;
+    
+    @OneToOne(mappedBy = "rate", cascade = CascadeType.ALL)
+    private Comment comment;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -28,4 +31,14 @@ public class Rate extends DateAudit {
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
+
+	public Rate(Double rating, Comment comment, User user, Room room) {
+		super();
+		this.rating = rating;
+		this.comment = comment;
+		this.user = user;
+		this.room = room;
+	}
+    
+    
 }
