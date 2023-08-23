@@ -105,8 +105,6 @@ function App() {
     setAuthenticated(false);
     setCurrentUser(null);
     toast.success("Bạn đăng xuất thành công!!!");
-    window.location.reload()
-
   }
 
   const exitLogoutChangePassword = () => {

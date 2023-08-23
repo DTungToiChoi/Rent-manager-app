@@ -25,7 +25,7 @@ class RentalHome extends Component {
     fetchRooms = async (pageNo) => {
         try {
             //console.log(pageNo)
-            const response = await axios.get(`http://localhost:8080/room/all?pageNo=${pageNo}`);
+            const response = await axios.get(`http://localhost:8080/room/all?pageNo=${pageNo}&pageSize=10`);
             const data = response.data; // Assuming API returns rooms data
 
             this.setState({

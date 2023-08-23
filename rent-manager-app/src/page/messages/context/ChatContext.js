@@ -4,7 +4,7 @@ import {
   useReducer,
 } from "react";
 import { AuthContext } from "./AuthContext";
-import '../style.scss';
+import '../style.css';
 
 export const ChatContext = createContext();
 

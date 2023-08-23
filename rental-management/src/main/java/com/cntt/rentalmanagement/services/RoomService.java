@@ -22,9 +22,6 @@ public interface RoomService {
     MessageResponse updateRoomInfo(Long id, RoomRequest roomRequest);
 
     Page<RoomResponse> getRentOfHome();
-
-    Page<RoomResponse> getAllRoomForAdmin(String title,Boolean approve, Integer pageNo, Integer pageSize, String typeSort);
-
     MessageResponse checkoutRoom(Long id);
 
     MessageResponse isApproveRoom(Long id);
@@ -34,4 +31,7 @@ public interface RoomService {
 	String addComment(Long id, CommentDTO commentDTO);
 
 	List<CommentDTO> getAllCommentRoom(Long id);
+
+    Page<RoomResponse> getAllRoomForAdmin(String title,Boolean approve, Integer pageNo, Integer pageSize);
+
 }

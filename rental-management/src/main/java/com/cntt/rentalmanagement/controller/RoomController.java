@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cntt.rentalmanagement.services.BlogService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,14 +37,14 @@ public class RoomController {
 
     private final RoomService roomService;
 
-    @GetMapping("/all")
-    private ResponseEntity<?> getAllRoom(@RequestParam(required = false) String title,
-                                         @RequestParam(defaultValue = "1") Integer pageNo,
-                                         @RequestParam(defaultValue = "6") Integer pageSize,
-                                         @RequestParam(defaultValue = "Thời gian: Cũ đến mới") String typeSort,
-                                         @RequestParam(required = false) Boolean approve) {
-        return ResponseEntity.ok(roomService.getAllRoomForAdmin(title,approve, pageNo, pageSize,typeSort));
-    }
+//    @GetMapping("/all")
+//    private ResponseEntity<?> getAllRoom(@RequestParam(required = false) String title,
+//                                         @RequestParam(required = false) Boolean approve,
+//                                         @RequestParam Integer pageNo,
+//                                         @RequestParam Integer pageSize) {
+//        return ResponseEntity.ok(blogService.getAllRoomForAdmin(title, approve, pageNo, pageSize));
+//    }
+
 
     @GetMapping
     public ResponseEntity<?> getRoomByRentaler(@RequestParam(required = false) String title,
@@ -98,7 +99,7 @@ public class RoomController {
 	}
     
 	@PostMapping("/{roomId}/comments")
-	@PreAuthorize("hasRole('USER')")
+//	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<?> addComment(@CurrentUser UserPrincipal userPrincipal, @PathVariable Long roomId,
 			@RequestBody CommentDTO commentDTO) {
 		System.out.println(commentDTO.getRateRating());

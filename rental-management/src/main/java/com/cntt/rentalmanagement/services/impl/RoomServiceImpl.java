@@ -160,20 +160,20 @@ public class RoomServiceImpl extends BaseService implements RoomService {
         Pageable pageable = PageRequest.of(0,100);
         return mapperUtils.convertToResponsePage(roomRepository.getAllRentOfHome( getUserId(), pageable), RoomResponse.class, pageable);
     }
-
-    @Override
-    public Page<RoomResponse> getAllRoomForAdmin(String title,Boolean approve, Integer pageNo, Integer pageSize, String typeSort) {
-        int page = pageNo == 0 ? pageNo : pageNo - 1;
-        Pageable pageable = PageRequest.of(page, pageSize);
-        return mapperUtils.convertToResponsePage(roomRepository.searchingRoomForAdmin(title, approve ,pageable), RoomResponse.class, pageable);
-    }
     
     @Override
     public List<CommentDTO> getAllCommentRoom(Long id){
     	Room room = roomRepository.findById(id).get();
     	return mapperUtils.convertToEntityList(room.getComment(), CommentDTO.class);
     }
-    
+
+    @Override
+    public Page<RoomResponse> getAllRoomForAdmin(String title,Boolean approve, Integer pageNo, Integer pageSize) {
+        int page = pageNo == 0 ? pageNo : pageNo - 1;
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return mapperUtils.convertToResponsePage(roomRepository.searchingRoomForAdmin(title, approve ,pageable), RoomResponse.class, pageable);
+    }
+
     private List<RoomResponse> sortRooms(List<RoomResponse> rooms, String typeSort) {
         if ("Thời gian: Mới đến cũ".equals(typeSort)) {
             rooms.sort(Comparator.comparing(RoomResponse::getCreatedAt).reversed());
