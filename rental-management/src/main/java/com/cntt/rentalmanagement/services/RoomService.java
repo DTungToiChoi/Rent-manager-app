@@ -34,4 +34,5 @@ public interface RoomService {
 
     Page<RoomResponse> getAllRoomForAdmin(String title,Boolean approve, Integer pageNo, Integer pageSize);
 
+    Page<RoomResponse> getRoomByUserId(Long userId, Integer pageNo, Integer pageSize);
 }

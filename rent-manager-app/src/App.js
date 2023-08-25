@@ -46,6 +46,14 @@ import AccountManagement from './page/admin/AccountManagement';
 import SendEmail from './page/admin/SendEmail';
 import Chat from './page/rentaler/Chat';
 import Authorization from './page/admin/Authorization';
+import ChangePasswordOfUser from './page/user/ChangePassword';
+import RoomHired from './page/user/RoomHired';
+import AgentsGird from './page/user/AgentsGird';
+import AgentSingle from './page/user/AgentSingle';
+import SendRequest from './page/user/SendRequest';
+import RequestManagement from './page/user/RequestManagement';
+import Follow from './page/user/Follow';
+import SaveBlog from './page/user/SaveBlog';
 
 
 
@@ -131,14 +139,21 @@ function App() {
           <Route exact path="/" element={<Main authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/rental-home" element={<RentalHome authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/rental-home/:id" element={<RentailHomeDetail authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/angent-gird" element={<AgentsGird authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/angent-single/:id" element={<AgentSingle authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/send-request/:id" element={<SendRequest authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/request-status" element={<RequestManagement authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/follow-agents" element={<Follow authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/save-blog" element={<SaveBlog authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/about-us" element={<About authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/contact" element={<Contact authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/forgot-password" element={<ForgotPassword authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/message" element={<Message authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/room-hired" element={<RoomHired authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/reset-password/:email" element={<ResetPassword />} />
           <Route exact path="/success-comfirmed/:email" element={<SuccessConfirmed />} />
-          <Route exact path="/profile" element={<Profile />} />
-          <Route exact path="/update-profile" element={<UpdateProfile />} />
+          <Route exact path="/profile" element={<Profile authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout}/>} />
+          <Route exact path="/change-password" element={<ChangePasswordOfUser authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/login" element={<Login authenticated={authenticated} />} />
           <Route exact path="/login-rentaler" element={<LoginRentaler authenticated={authenticated} currentUser={currentUser} role={role} />} />
           <Route exact path="/login-admin" element={<LoginAdmin authenticated={authenticated} currentUser={currentUser} role={role} />} />
@@ -170,7 +185,7 @@ function App() {
           <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
         </Routes>
         <Routes>
-          <Route path='*' exact={true} component={NotFound} />
+          <Route path="*" exact={true} component={NotFound} />
         </Routes>
       </Router>
 

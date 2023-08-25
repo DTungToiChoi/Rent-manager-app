@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 @RequiredArgsConstructor
 public class BlogServiceImpl implements BlogService {
@@ -21,5 +23,12 @@ public class BlogServiceImpl implements BlogService {
         int page = pageNo == 0 ? pageNo : pageNo - 1;
         Pageable pageable = PageRequest.of(page, pageSize);
         return mapperUtils.convertToResponsePage(roomRepository.searchingRoomForAdmin(title, approve ,pageable), RoomResponse.class, pageable);
+    }
+
+    @Override
+    public Page<RoomResponse> getAllRoomForCustomer(String title, BigDecimal price, Integer pageNo, Integer pageSize) {
+        int page = pageNo == 0 ? pageNo : pageNo - 1;
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return mapperUtils.convertToResponsePage(roomRepository.searchingRoomForCustomer(title,price,null,pageable),RoomResponse.class,pageable);
     }
 }

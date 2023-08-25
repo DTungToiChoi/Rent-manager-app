@@ -108,6 +108,7 @@ function ContractManagement(props) {
                                             <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "224px" }}  >Tên Hợp Đồng</th>
                                             <th className="sorting sorting_asc" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "224px" }}  >Tên Phòng</th>
                                             <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "180px" }} >Người thuê</th>
+                                            <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "180px" }} >Số điện thoại</th>
                                             <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "166px" }} >Hợp Đồng</th>
                                             <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "75px" }} >Giá</th>
                                             <th className="sorting" tabindex="0" aria-controls="datatables-buttons" rowspan="1" colspan="1" style={{ width: "100px" }} >Thời hạn</th>
@@ -120,6 +121,7 @@ function ContractManagement(props) {
                                                 <td className="dtr-control sorting_1" tabindex="0">{item.name}</td>
                                                 <td>{item.room.title}</td>
                                                 <td>{item.nameOfRent}</td>
+                                                <td>{item.phone}</td>
                                                 <td>
                                                     <button type="button" class="btn btn-outline-success">
                                                         <a href={item.files === null ? "" : `http://localhost:8080/document/` + item.files.replace('photographer/files/', '')} target="_blank">Xem</a>

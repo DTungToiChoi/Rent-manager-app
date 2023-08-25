@@ -14,8 +14,10 @@ function EditContract(props) {
     const [contractData, setContractData] = useState({
         name: '',
         roomId: '',
-        nameOfRent: '',
-        deadlineContract: '',
+        nameRentHome: '',
+        phone: '',
+        numOfPeople: '',
+        deadline: null,
         files: [],
         room: ''
     });
@@ -44,6 +46,8 @@ function EditContract(props) {
         formData.append('name', contractData.name);
         formData.append('roomId', roomId);
         formData.append('nameOfRent', contractData.nameOfRent);
+        formData.append('numOfPeople', contractData.numOfPeople);
+        formData.append('phone', contractData.phone);
         formData.append('deadlineContract', contractData.deadlineContract);
         contractData.files && contractData.files.forEach((file, index) => {
             formData.append(`files`, file);
@@ -120,6 +124,16 @@ function EditContract(props) {
                                             <input type="text" className="form-control" id="description" name="nameOfRent" value={contractData.nameOfRent} onChange={handleInputChange} />
                                         </div>
                                     </div>
+                                    <div className="row">
+                                        <div className="mb-3 col-md-6">
+                                            <label className="form-label" htmlFor="title">Số lượng người</label>
+                                            <input type="text" className="form-control" id="title" name="numOfPeople" value={contractData.numOfPeople} onChange={handleInputChange} />
+                                        </div>
+                                        <div className="mb-3 col-md-6">
+                                            <label className="form-label" htmlFor="description">Số điện thoại</label>
+                                            <input type="text" className="form-control" id="description" name="phone" value={contractData.phone} onChange={handleInputChange} />
+                                        </div>
+                                    </div>
                                     <div className="mb-3">
                                         <label className="form-label" htmlFor="locationId">Chọn phòng</label>
                                         <select className="form-select" id="locationId" name="roomId" value={contractData.roomId} onChange={handleInputChange} disabled>
@@ -138,7 +152,9 @@ function EditContract(props) {
                                         <div className="mb-3">
                                             <label className="form-label">Tải File Hợp Đồng</label> <br />
                                             <h6 className="card-subtitle text-muted">Tải mẫu hợp đồng để tạo hợp đồng với người thuê và đẩy lên lưu trữ trên hệ thống. Sau đó chuyển sang file .pdf để upload.<a href='https://image.luatvietnam.vn/uploaded/Others/2021/04/08/hop-dong-thue-nha-o_2810144434_2011152916_0804150405.doc'>Tải Mẫu</a></h6>
-
+                                            <button type="button" class="btn btn-outline-success" style={{marginBottom: "10px"}}>
+                                                <a href={contractData.files} target="_blank">Xem Hợp Đồng</a>
+                                            </button>
                                             <input className="form-control" id="fileInput" type="file" accept=".pdf" name="files" multiple onChange={handleFileChange} />
                                         </div>
                                     </div>

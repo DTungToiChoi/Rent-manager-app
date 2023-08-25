@@ -20,18 +20,30 @@ public class ContractController {
     private ResponseEntity<?> addContract(@RequestParam String name,
                                           @RequestParam Long roomId,
                                           @RequestParam String nameOfRent,
+                                          @RequestParam Long numOfPeople,
+                                          @RequestParam String phone,
                                           @RequestParam String deadlineContract,
                                           @RequestParam List<MultipartFile> files) {
-        return ResponseEntity.ok(contractService.addContract(name,roomId,nameOfRent,deadlineContract,files));
+        return ResponseEntity.ok(contractService.addContract(name,roomId,nameOfRent, numOfPeople, phone,deadlineContract,files));
     }
 
 
     @GetMapping
     private ResponseEntity<?> getAllContract(@RequestParam String name,
+                                             @RequestParam String phone,
                                              @RequestParam Integer pageNo,
                                              @RequestParam Integer pageSize) {
-        return ResponseEntity.ok(contractService.getAllContractOfRentaler(name,pageNo, pageSize));
+        return ResponseEntity.ok(contractService.getAllContractOfRentaler(name, phone ,pageNo, pageSize));
     }
+
+    @GetMapping("/customer")
+    private ResponseEntity<?> getAllContractForCustomer(
+                                             @RequestParam String phone,
+                                             @RequestParam Integer pageNo,
+                                             @RequestParam Integer pageSize) {
+        return ResponseEntity.ok(contractService.getAllContractOfCustomer( phone ,pageNo, pageSize));
+    }
+
 
     @GetMapping("/{id}")
     private ResponseEntity<?> getContractById(@PathVariable Long id){
@@ -43,8 +55,10 @@ public class ContractController {
                                                  @RequestParam String name,
                                                  @RequestParam Long roomId,
                                                  @RequestParam String nameOfRent,
+                                                 @RequestParam Long numOfPeople,
+                                                 @RequestParam String phone,
                                                  @RequestParam String deadlineContract,
                                                  @RequestParam List<MultipartFile> files) {
-        return ResponseEntity.ok(contractService.editContractInfo(id, name, roomId, nameOfRent, deadlineContract, files));
+        return ResponseEntity.ok(contractService.editContractInfo(id, name, roomId, nameOfRent,numOfPeople, phone, deadlineContract, files));
     }
 }

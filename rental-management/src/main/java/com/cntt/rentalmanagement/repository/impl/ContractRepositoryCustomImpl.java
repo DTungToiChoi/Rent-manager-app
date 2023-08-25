@@ -25,7 +25,7 @@ public class ContractRepositoryCustomImpl implements ContractRepositoryCustom {
     private static final String INNER_JOIN_ROOM = " inner join rental_home.room r on c.room_id  = r.id ";
 
     @Override
-    public Page<Contract> searchingContact(String name, Long userId, Pageable pageable) {
+    public Page<Contract> searchingContact(String name,String phone, Long userId, Pageable pageable) {
         StringBuilder strQuery = new StringBuilder();
         strQuery.append(FROM_CONTRACT);
         strQuery.append(INNER_JOIN_ROOM);
@@ -35,6 +35,11 @@ public class ContractRepositoryCustomImpl implements ContractRepositoryCustom {
         if (Objects.nonNull(name) && !name.isEmpty()) {
             strQuery.append(" AND c.name LIKE :title");
             params.put("title", "%"+name+"%");
+        }
+
+        if (Objects.nonNull(phone) && !phone.isEmpty()) {
+            strQuery.append(" AND c.phone = :phone");
+            params.put("phone", phone);
         }
 
         if (Objects.nonNull(userId)) {
@@ -63,5 +68,25 @@ public class ContractRepositoryCustomImpl implements ContractRepositoryCustom {
 
         String strSelectQuery = "SELECT * " + strQuery;
         return BaseRepository.getResultListNativeQuery(em,strSelectQuery, params, Contract.class);
+    }
+
+    @Override
+    public Page<Contract> searchingContact(String phone, Pageable pageable) {
+        StringBuilder strQuery = new StringBuilder();
+        strQuery.append(FROM_CONTRACT);
+        strQuery.append(INNER_JOIN_ROOM);
+        strQuery.append(" where 1=1");
+
+        Map<String, Object> params = new HashMap<>();
+
+        if (Objects.nonNull(phone) && !phone.isEmpty()) {
+            strQuery.append(" AND c.phone = :phone");
+            params.put("phone", phone);
+        }
+
+        String strSelectQuery = "SELECT * " + strQuery;
+
+        String strCountQuery = "SELECT COUNT(DISTINCT c.id)" + strQuery;
+        return BaseRepository.getPagedNativeQuery(em,strSelectQuery, strCountQuery, params, pageable, Contract.class);
     }
 }

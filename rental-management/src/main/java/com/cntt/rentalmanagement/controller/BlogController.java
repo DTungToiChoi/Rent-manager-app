@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequiredArgsConstructor
 public class BlogController {
@@ -19,4 +21,15 @@ public class BlogController {
                                          @RequestParam Integer pageSize) {
         return ResponseEntity.ok(blogService.getAllRoomForAdmin(title,approve, pageNo, pageSize));
     }
+
+    @GetMapping("/customer/room")
+    private ResponseEntity<?> getAllRoomForCustomer(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) BigDecimal price,
+            @RequestParam Integer pageNo,
+            @RequestParam Integer pageSize
+    ){
+        return ResponseEntity.ok(blogService.getAllRoomForCustomer(title, price, pageNo, pageSize));
+    }
+
 }

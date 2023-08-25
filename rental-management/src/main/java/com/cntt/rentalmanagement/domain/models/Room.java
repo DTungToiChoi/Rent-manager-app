@@ -3,6 +3,7 @@ package com.cntt.rentalmanagement.domain.models;
 import com.cntt.rentalmanagement.domain.enums.LockedStatus;
 import com.cntt.rentalmanagement.domain.enums.RoomStatus;
 import com.cntt.rentalmanagement.domain.models.audit.DateAudit;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -87,6 +88,10 @@ public class Room extends DateAudit {
 
     @OneToMany(mappedBy = "room")
     private List<RoomMedia> roomMedia;
+
+    @OneToMany(mappedBy = "room")
+    @JsonIgnore
+    private List<BlogStore> stores;
 
 
     public Room(String title, String description, BigDecimal price, Double latitude, Double longitude, String address, String createdBy, String updatedBy, Location location, Category category, User user, RoomStatus roomStatus) {

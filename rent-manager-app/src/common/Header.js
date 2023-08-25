@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link, NavLink } from 'react-router-dom';
+import './Profile.css';
 
 class Header extends Component {
 
@@ -37,8 +38,8 @@ class Header extends Component {
                                     </NavLink>
                                 </li>
                                 <li className="nav-item">
-                                    <NavLink className="nav-link " to="/message" activeClassName="active">
-                                        Tin nhắn
+                                    <NavLink className="nav-link " to="/angent-gird" activeClassName="active">
+                                        Người cho thuê
                                     </NavLink>
                                 </li>
                             </ul>
@@ -65,21 +66,21 @@ class Header extends Component {
                             </>
                         ) : (
                             <>
-                                <div className="d-flex align-items-center mb-4">
-                                    <div className="flex-shrink-0">
+                                <div className="profile-info">
+                                    <div className="profile-avatar">
                                         {
                                             this.props.currentUser.imageUrl ? (
                                                 <img src={this.props.currentUser.imageUrl}
-                                                alt={this.props.currentUser.name} className="img-fluid rounded-circle border border-dark border-3"
-                                                style={{ width: "70px" }} />
-                                               
+                                                    alt={this.props.currentUser.name} className="img-fluid rounded-circle border border-dark border-3"
+                                                    style={{ width: "50px" }} />
+
                                             ) : (
-                                                <div className="img-fluid rounded-circle border border-dark border-3">
-                                                    <span>{this.props.currentUser.name && this.props.currentUser.name[0]}</span>
+                                                <div className="text-avatar" style={{    width: "50px",
+                                                    height: "50px"}}>
+                                                    <span style={{lineHeight: "50px"}}>{this.props.currentUser.name && this.props.currentUser.name[0]}</span>
                                                 </div>
                                             )
                                         }
-
                                     </div>
                                     <div className="flex-grow-1 ms-3">
                                         <div className="d-flex flex-row align-items-center mb-2">
@@ -103,15 +104,15 @@ class Header extends Component {
                                             </ul>
                                         </div>
                                         <div>
-                                            <Link to = "/profile">
+                                            <Link to="/profile">
                                                 <button type="button" className="btn btn-outline-dark btn-rounded btn-sm"
-                                                    data-mdb-ripple-color="dark">Xem</button>&nbsp;
+                                                    data-mdb-ripple-color="dark">Hồ Sơ</button>&nbsp;
                                             </Link>
                                             <button type="button" className="btn btn-outline-dark btn-rounded btn-sm"
                                                 data-mdb-ripple-color="dark" onClick={this.props.onLogout}>Đăng xuất</button>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                             </>
                         )}

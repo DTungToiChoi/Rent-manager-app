@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -61,6 +62,40 @@ public class RoomRepositoryCustomImpl implements RoomRepositoryCustom {
 
         String strCountQuery = "SELECT COUNT(DISTINCT r.id)" + strQuery;
         return BaseRepository.getPagedNativeQuery(em,strSelectQuery, strCountQuery, params, pageable, Room.class);
+    }
+
+    @Override
+    public Page<Room> searchingRoomForCustomer(String title, BigDecimal price,Long userId, Pageable pageable) {
+        StringBuilder strQuery = new StringBuilder();
+        strQuery.append(" from rental_home.room r ");
+        strQuery.append(" where 1=1");
+        Map<String, Object> params = new HashMap<>();
+        if (Objects.nonNull(title) && !title.isEmpty()) {
+            strQuery.append(" AND r.title LIKE :title");
+            params.put("title", "%"+title+"%");
+        }
+
+        if (Objects.nonNull(price) ) {
+            strQuery.append(" AND r.price = :price");
+            params.put("price", price );
+        }
+        if (Objects.nonNull(userId)) {
+            strQuery.append(" AND r.user_id = :userId");
+            params.put("userId", userId);
+        }
+
+        strQuery.append(" AND r.is_approve = :approve");
+        params.put("approve", true);
+        strQuery.append(" AND r.is_locked = 'ENABLE'");
+        strQuery.append(" AND r.is_remove = :remove");
+        params.put("remove", false);
+
+
+        String strSelectQuery = "SELECT * " + strQuery + " ORDER BY r.id DESC";
+
+        String strCountQuery = "SELECT COUNT(DISTINCT r.id)" + strQuery;
+        return BaseRepository.getPagedNativeQuery(em,strSelectQuery, strCountQuery, params, pageable, Room.class);
+
     }
 
     @Override

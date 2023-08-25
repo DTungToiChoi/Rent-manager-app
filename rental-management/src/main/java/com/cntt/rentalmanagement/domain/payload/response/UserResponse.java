@@ -22,4 +22,8 @@ public class UserResponse {
     private String phone;
 
     private String imageUrl;
+
+    private String zaloUrl;
+
+    private String facebookUrl;
 }

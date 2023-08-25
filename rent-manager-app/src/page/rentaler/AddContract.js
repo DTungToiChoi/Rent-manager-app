@@ -16,7 +16,9 @@ function AddContract(props) {
         name: '',
         roomId: '',
         nameRentHome: '',
-        deadline: '',
+        phone:'',
+        numOfPeople: '',
+        deadline: null,
         files: []
     });
 
@@ -43,6 +45,8 @@ function AddContract(props) {
         formData.append('name', contractData.name);
         formData.append('roomId', contractData.roomId);
         formData.append('nameOfRent', contractData.nameRentHome);
+        formData.append('numOfPeople', contractData.numOfPeople);
+        formData.append('phone', contractData.phone);
         formData.append('deadlineContract', contractData.deadline);
         contractData.files.forEach((file, index) => {
             formData.append(`files`, file);
@@ -61,6 +65,8 @@ function AddContract(props) {
                     name: '',
                     roomId: '',
                     nameRentHome: '',
+                    phone:'',
+                    numOfPeople: '',
                     deadline: null,
                     files: []
                 });
@@ -122,6 +128,16 @@ function AddContract(props) {
                                         <div className="mb-3 col-md-6">
                                             <label className="form-label" htmlFor="description">Người thuê</label>
                                             <input type="text" className="form-control" id="description" name="nameRentHome" value={contractData.nameRentHome} onChange={handleInputChange} />
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="mb-3 col-md-6">
+                                            <label className="form-label" htmlFor="title">Số lượng người</label>
+                                            <input type="text" className="form-control" id="title" name="numOfPeople" value={contractData.numOfPeople} onChange={handleInputChange} />
+                                        </div>
+                                        <div className="mb-3 col-md-6">
+                                            <label className="form-label" htmlFor="description">Số điện thoại</label>
+                                            <input type="text" className="form-control" id="description" name="phone" value={contractData.phone} onChange={handleInputChange} />
                                         </div>
                                     </div>
                                     <div className="mb-3">

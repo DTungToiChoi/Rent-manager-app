@@ -80,7 +80,12 @@ public class User extends DateAudit {
 
 	private String address;
 
+	@Column(name = "phone", unique = true)
 	private String phone;
+
+	private String zaloUrl;
+
+	private String facebookUrl;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -91,8 +96,14 @@ public class User extends DateAudit {
 	private List<Room> rooms;
 
     @OneToMany(mappedBy = "user")
+	@JsonIgnore
     private List<Rate> rates;
     
     @OneToMany(mappedBy = "user")
+	@JsonIgnore
     private List<Comment> comments;
+
+	@OneToMany(mappedBy = "user")
+	@JsonIgnore
+	private List<BlogStore> stores;
 }

@@ -16,5 +16,7 @@ public class ContractResponse {
     private LocalDateTime deadlineContract;
     private RoomResponse room;
     private LocalDateTime createdAt;
+    private String phone;
+    private Long numOfPeople;
 
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import SidebarNav from './SidebarNav';
 import { getAccountById, sendEmailForRentaler } from "../../services/fetch/ApiUtils";
 import { toast } from "react-toastify";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import Nav from "./Nav";
 
 function SendEmail(props) {
@@ -55,6 +55,14 @@ function SendEmail(props) {
             }
         )
     };
+
+    if (!authenticated) {
+        return <Navigate
+          to={{
+            pathname: "/login-admin",
+            state: { from: location }
+          }} />;
+      }
 
 
     return (

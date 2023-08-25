@@ -174,6 +174,13 @@ public class RoomServiceImpl extends BaseService implements RoomService {
         return mapperUtils.convertToResponsePage(roomRepository.searchingRoomForAdmin(title, approve ,pageable), RoomResponse.class, pageable);
     }
 
+    @Override
+    public Page<RoomResponse> getRoomByUserId(Long userId, Integer pageNo, Integer pageSize) {
+        int page = pageNo == 0 ? pageNo : pageNo - 1;
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return mapperUtils.convertToResponsePage(roomRepository.searchingRoomForCustomer(null,null,userId, pageable), RoomResponse.class, pageable );
+    }
+
     private List<RoomResponse> sortRooms(List<RoomResponse> rooms, String typeSort) {
         if ("Thời gian: Mới đến cũ".equals(typeSort)) {
             rooms.sort(Comparator.comparing(RoomResponse::getCreatedAt).reversed());
