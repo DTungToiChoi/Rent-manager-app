@@ -1,0 +1,430 @@
+import React, { Component } from "react";
+import Header from "../../common/Header";
+import Footer from "../../common/Footer";
+import axios from "axios"; // Import axios for making API requests
+import { Swiper, SwiperSlide } from 'swiper/react';
+import "react-alice-carousel/lib/alice-carousel.css";
+import { Navigation } from 'swiper/modules';
+import Rating from '@mui/material/Rating';
+import Stack from '@mui/material/Stack';
+import { Button, Comment, Form } from 'semantic-ui-react'
+import 'semantic-ui-css/semantic.min.css'
+
+class RentailHomeDetail extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            rooms: null, // State to store fetched rooms data
+            showCommentForm: false,
+            content: "",
+            rate: 5,
+            submittingComment: false,
+            comments: [],
+        };
+    }
+
+    componentDidMount() {
+        this.fetchRooms(); // Call the fetchRooms function when component mounts
+        this.fetchComments();
+    }
+
+    fetchRooms = async () => {
+        try {
+            const id = window.location.pathname.split("/").pop();
+            const response = await axios.get(`http://localhost:8080/room/${id}`);
+            const data = response.data; // Assuming API returns rooms data
+
+            this.setState({
+                rooms: data,
+            });
+        } catch (error) {
+            console.error("Error fetching rooms:", error);
+        }
+    };
+
+    fetchComments = async () => {
+        try {
+          const id = window.location.pathname.split("/").pop();
+          const response = await axios.get(`http://localhost:8080/room/${id}/comments`);
+          const comments = response.data; // Assuming API returns comments data
+    
+          this.setState({
+            comments: comments,
+          });
+        } catch (error) {
+          console.error("Error fetching comments:", error);
+        }
+      };
+
+    handleSubmitComment = async (event) => {
+        event.preventDefault();
+        const { content, rate, rooms } = this.state;
+        const roomId = window.location.pathname.split("/").pop();; // Assuming room id is available
+
+        // Construct the comment data
+        const commentData = {
+            content: content,
+            rateRating: rate,
+            room_id: roomId,
+        };
+
+        // Replace with your JWT token retrieval logic from localStorage
+        const accessToken = localStorage.getItem("accessToken");
+
+        try {
+            this.setState({ submittingComment: true });
+            // Make the API request to submit the comment
+            const response = await axios.post(
+                `http://localhost:8080/room/${roomId}/comments`,
+                commentData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+
+            // Handle success and reset the form
+            console.log("Comment submitted:", response.data);
+            this.setState({
+                content: "",
+                rate: 5,
+                submittingComment: false,
+                showCommentForm: false, // Hide the form after submitting
+            });
+            this.fetchComments();
+        } catch (error) {
+            console.log(commentData)
+            console.error("Error submitting comment:", error);
+            this.setState({ submittingComment: false });
+        }
+    };
+
+    render() {
+
+        const { rooms, comments, showCommentForm, content, rate, submittingComment } = this.state;
+
+        return (
+            <>
+                <Header authenticated={this.props.authenticated} currentUser={this.props.currentUser} onLogout={this.props.onLogout} />
+                <main id="main">
+                    <section class="intro-single">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12 col-lg-8">
+                                    <div class="title-single-box">
+                                        <h1 class="title-single">{rooms ? rooms.title : ""}</h1>
+                                        <span class="color-text-a">Khu vực: {rooms ? rooms.location.cityName : ""}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-lg-4">
+                                    <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+                                        <ol class="breadcrumb">
+                                            <li class="breadcrumb-item">
+                                                <a href="/">Trang chủ</a>
+                                            </li>
+                                            <li class="breadcrumb-item">
+                                                {rooms ? rooms.category.name : ""}
+                                            </li>
+                                            {/* <li class="breadcrumb-item">
+                                                <a href="property-grid.html">Properties</a>
+                                            </li> */}
+                                        </ol>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="property-single nav-arrow-b">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <div id="property-single-carousel" class="swiper">
+                                        <div>
+
+                                            <Swiper navigation={true} modules={[Navigation]} className="swiper-wrapper">
+                                                {rooms && rooms.roomMedia.map((media) => (
+                                                    <SwiperSlide className="carousel-item-b swiper-slide" >
+                                                        <img src={media.files} alt="" style={{ width: "100%", height: "100%" }} />
+                                                    </SwiperSlide>
+                                                ))}
+                                            </Swiper>
+                                        </div>
+
+                                    </div>
+                                    <div class="property-single-carousel-pagination carousel-pagination"></div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+
+                                    <div class="row justify-content-between">
+                                        <div class="col-md-5 col-lg-4">
+                                            <div class="property-price d-flex justify-content-center foo">
+                                                <div class="card-header-c d-flex">
+                                                    <div class="card-box-ico">
+                                                        <span class="bi bi-cash"></span>
+                                                    </div>
+                                                    <div class="card-title-c align-self-center">
+                                                        <h5 class="title-c">{rooms ? rooms.price : ""} VNĐ</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="property-summary">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="title-box-d section-t4">
+                                                            <h3 class="title-d">Mô tả nhanh</h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="summary-list">
+                                                    <ul class="list">
+                                                        <li class="d-flex justify-content-between">
+                                                            <strong>Mô tả</strong>
+                                                            <span>{rooms && rooms.description}</span>
+                                                        </li>
+                                                        <li class="d-flex justify-content-between">
+                                                            <strong>Địa chỉ:</strong>
+                                                            <span>{rooms && rooms.address}</span>
+                                                        </li>
+                                                        <li class="d-flex justify-content-between">
+                                                            <strong>Loại phòng</strong>
+                                                            <span>{rooms && rooms.category.name}</span>
+                                                        </li>
+                                                        <li class="d-flex justify-content-between">
+                                                            <strong>Trạng thái:</strong>
+                                                            <span>{rooms && rooms.status ? (rooms.status == "ROOM_RENT" ? "Cho thuê" : "Bán") : ""}</span>
+                                                        </li>
+                                                        <li class="d-flex justify-content-between">
+                                                            <strong>Khu vực</strong>
+                                                            <span>
+                                                                {rooms && rooms.location.cityName}
+                                                            </span>
+                                                        </li>
+                                                        {rooms && rooms.assets.map((item) => (
+                                                            <li class="d-flex justify-content-between">
+                                                                <strong>{item.name}:</strong>
+                                                                <span>{item.number}</span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7 col-lg-7 section-md-t3">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="title-box-d">
+                                                        <h3 class="title-d">Mô tả chi tiết</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="property-description">
+                                                <p class="description color-text-a">
+                                                    {rooms ? rooms.description : ""}
+                                                </p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-10 offset-md-1">
+                                    <ul class="nav nav-pills-a nav-pills mb-3 section-t3" id="pills-tab" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="pills-video-tab" data-bs-toggle="pill" href="#pills-video" role="tab" aria-controls="pills-video" aria-selected="true">Video</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="pills-plans-tab" data-bs-toggle="pill" href="#pills-plans" role="tab" aria-controls="pills-plans" aria-selected="false">Floor Plans</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="pills-map-tab" data-bs-toggle="pill" href="#pills-map" role="tab" aria-controls="pills-map" aria-selected="false">Ubication</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content" id="pills-tabContent">
+                                        <div class="tab-pane fade show active" id="pills-video" role="tabpanel" aria-labelledby="pills-video-tab">
+                                            <iframe src="https://player.vimeo.com/video/73221098" width="100%" height="460" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                                        </div>
+                                        <div class="tab-pane fade" id="pills-plans" role="tabpanel" aria-labelledby="pills-plans-tab">
+                                            <img src="../../assets/img/plan2.jpg" alt="" class="img-fluid" />
+                                        </div>
+                                        <div class="tab-pane fade" id="pills-map" role="tabpanel" aria-labelledby="pills-map-tab">
+                                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.1422937950147!2d-73.98731968482413!3d40.75889497932681!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25855c6480299%3A0x55194ec5a1ae072e!2sTimes+Square!5e0!3m2!1ses-419!2sve!4v1510329142834" width="100%" height="460" frameborder="0" style={{ border: "0" }} allowfullscreen></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="row section-t3">
+                                        <div class="col-sm-12">
+                                            <div class="title-box-d">
+                                                <h3 class="title-d">Người cho thuê</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-lg-4">
+                                            <img src="../../assets/img/agent-4.jpg" alt="" class="img-fluid" />
+                                        </div>
+                                        <div class="col-md-6 col-lg-4">
+                                            <div class="property-agent">
+                                                <h4 class="title-agent">{rooms ? rooms.user.name : ""}</h4>
+                                                <p class="color-text-a">
+
+
+                                                </p>
+                                                <ul class="list-unstyled">
+                                                    <li class="d-flex justify-content-between">
+                                                        <strong>Số điện thoại:</strong>
+                                                        <span class="color-text-a">{rooms ? rooms.user.phone : ""}</span>
+                                                    </li>
+                                                    <li class="d-flex justify-content-between">
+                                                        <strong>Địa chỉ:</strong>
+                                                        <span class="color-text-a">{rooms ? rooms.user.address : ""}</span>
+                                                    </li>
+                                                    <li class="d-flex justify-content-between">
+                                                        <strong>Email: </strong>
+                                                        <span class="color-text-a"> {rooms ? rooms.user.email : ""}</span>
+                                                    </li>
+                                                </ul>
+                                                <div class="socials-a">
+                                                    <ul class="list-inline">
+                                                        <li class="list-inline-item">
+                                                            <a href="#">
+                                                                <i class="bi bi-facebook" aria-hidden="true"></i>
+                                                            </a>
+                                                        </li>
+                                                        <li class="list-inline-item">
+                                                            <a href="#">
+                                                                <i class="bi bi-twitter" aria-hidden="true"></i>
+                                                            </a>
+                                                        </li>
+                                                        <li class="list-inline-item">
+                                                            <a href="#">
+                                                                <i class="bi bi-instagram" aria-hidden="true"></i>
+                                                            </a>
+                                                        </li>
+                                                        <li class="list-inline-item">
+                                                            <a href="#">
+                                                                <i class="bi bi-linkedin" aria-hidden="true"></i>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 col-lg-4">
+                                            <div class="property-contact">
+                                                <form class="form-a">
+                                                    <div class="row">
+                                                        <div class="col-md-12 mb-1">
+                                                            <div class="form-group">
+                                                                <input type="text" class="form-control form-control-lg form-control-a" id="inputName" placeholder="Tên *" required />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12 mb-1">
+                                                            <div class="form-group">
+                                                                <input type="email" class="form-control form-control-lg form-control-a" id="inputEmail1" placeholder="Email *" required />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12 mb-1">
+                                                            <div class="form-group">
+                                                                <textarea id="textMessage" class="form-control" placeholder="Bình luận *" name="message" cols="45" rows="8" required></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12 mt-3">
+                                                            <button type="submit" class="btn btn-a">Gửi tin nhắn</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="row section-t3">
+                                        <div class="col-sm-12">
+                                            <div class="title-box-d">
+                                                <h3 class="title-d">Bình luận và đánh giá</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-lg-4">
+                                            <div class="property-agent">
+                                                {/* <h4 class="title-agent">{rooms ? rooms.user.name : ""}</h4> */}
+                                                <Comment.Group>
+                                                {comments && comments.map((comment) => (
+                                                    <Comment>
+                                                        <Comment.Content style={{ padding: '1rem' }}>
+                                                            <Stack spacing={1}>
+                                                                <Rating name="half-rating" defaultValue={comment.rateRating} precision={0.5} readOnly />
+                                                            </Stack>
+                                                            <Comment.Avatar src= {comment.user.imageUrl} />
+                                                            <Comment.Author as='a'>{comment.user.name}</Comment.Author>
+                                                            <Comment.Metadata>
+                                                                <div>{comment.createdAt}</div>
+                                                            </Comment.Metadata>
+                                                            <Comment.Text>{comment.content}</Comment.Text>
+                                                            <Comment.Actions>
+                                                                <Comment.Action>Reply</Comment.Action>
+                                                            </Comment.Actions>
+                                                        </Comment.Content>
+                                                    </Comment>
+                                                ))}
+                                                </Comment.Group>
+
+                                                {showCommentForm ? (
+                                                    <Form onSubmit={this.handleSubmitComment}>
+                                                        <h1>Đánh giá chất lượng</h1>
+                                                        <Stack spacing={1}>
+                                                            <Rating
+                                                                name="half-rating"
+                                                                value={rate}
+                                                                precision={0.5}
+                                                                onChange={(event, newValue) =>
+                                                                    this.setState({ rate: newValue })
+                                                                }
+                                                            />
+                                                        </Stack>
+                                                        <h1></h1>
+                                                        <Form.TextArea
+                                                            label="Chất lượng nhà trọ"
+                                                            placeholder="Để lại cảm nhận của bạn tại đây...."
+                                                            value={content}
+                                                            onChange={(event) =>
+                                                                this.setState({ content: event.target.value })
+                                                            }
+                                                        />
+                                                        <div className="col-md-12 mt-3">
+                                                            <Button
+                                                                type="submit"
+                                                                className="btn btn-a"
+                                                                disabled={submittingComment}
+                                                            >
+                                                                {submittingComment ? "Đang gửi..." : "Bình luận"}
+                                                            </Button>
+                                                        </div>
+                                                    </Form>
+                                                ) : (
+                                                    <div class="col-md-12 mt-3">
+                                                        <button onClick={() => this.setState({ showCommentForm: true })} class="btn btn-a">Thêm bình luận</button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                </main>
+                <Footer />
+            </>
+        )
+    }
+}
+
+export default RentailHomeDetail;
