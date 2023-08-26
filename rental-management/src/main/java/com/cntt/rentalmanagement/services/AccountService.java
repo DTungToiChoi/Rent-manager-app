@@ -19,4 +19,8 @@ public interface AccountService {
     MessageResponse sendEmailForRentaler(Long id, SendEmailRequest sendEmailRequest) throws MessagingException, IOException;
 
     MessageResponse divideAuthorization(Long id, RoleRequest roleRequest);
+
+    MessageResponse sendEmailForRentaler(SendEmailRequest sendEmailRequest) throws MessagingException, IOException;
+
+    MessageResponse sendEmailOfCustomer(SendEmailRequest sendEmailRequest) throws MessagingException, IOException;
 }

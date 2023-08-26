@@ -13,13 +13,15 @@ const RentalHome = (props) => {
     const [totalItems, setTotalItems] = useState(0);
     const [rooms, setRooms] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
+    const [price, setPrice] = useState('');
+    const [cateId, setCateId] = useState(0);
 
     useEffect(() => {
         fetchData();
-    }, [currentPage, searchQuery]);
+    }, [currentPage, searchQuery, price, cateId]);
 
     const fetchData = () => {
-        getAllRoomOfCustomer(currentPage, itemsPerPage, searchQuery, '').then(response => {
+        getAllRoomOfCustomer(currentPage, itemsPerPage, searchQuery, price, cateId).then(response => {
             setRooms(response.content);
             setTotalItems(response.totalElements);
         }).catch(
@@ -28,6 +30,18 @@ const RentalHome = (props) => {
             }
         )
     }
+
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
+
+    const handlePriceChange = (event) => {
+        setPrice(event.target.value);
+    };
+
+    const handleCategoryChange = (event) => {
+        setCateId(event.target.value);
+    };
 
     const paginate = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -62,19 +76,43 @@ const RentalHome = (props) => {
                 </section>
                 <section className="property-grid grid">
                     <div className="container">
-                        <div className="row">
-                            <div className="col-sm-12">
-                                <div className="grid-option">
-                                    <form>
-                                        <select className="custom-select">
-                                            <option selected>Thời gian: Mới đến cũ</option>
-                                            <option value="1">Thời gian: Cũ đến mới</option>
-                                            <option value="2">Giá: Thấp đến cao</option>
-                                            <option value="3">Giá: Cao đến thấp</option>
-                                        </select>
-                                    </form>
-                                </div>
+                        <div className="row" style={{ marginBottom: "30px" }}>
+                            <div className="col-sm-3">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    name="searchQuery"
+                                    value={searchQuery}
+                                    onChange={handleSearchChange}
+                                    id="inputAddress"
+                                    placeholder="Tên phòng"
+
+                                />
                             </div>
+                            <div className="col-sm-3">
+                                <input
+                                    type="number"
+                                    className="form-control"
+                                    name="price"
+                                    value={price}
+                                    onChange={handlePriceChange}
+                                    id="inputAddress"
+                                    placeholder="Giá"
+
+                                />
+                            </div>
+                            <div className="col-sm-3">
+                                <select className="form-select" id="categoryId" name="categoryId"                                     
+                                    value={cateId}
+                                    onChange={handleCategoryChange}>
+                                    <option value={0}>Chọn...</option>
+                                    <option value={1}>Bất động sản</option>
+                                    <option value={2}>Phòng trọ</option>
+                                    <option value={3}>Chung cư mini</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className="row">
                             {rooms.map(room => (
 
                                 <div className="col-md-4">

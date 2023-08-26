@@ -53,9 +53,18 @@ public class AuthController {
     }
 
     @PostMapping("/upload-avatar")
-    public  ResponseEntity<?> changeImage(@RequestParam MultipartFile file){
+    public  ResponseEntity<?> changeImage(@RequestParam(required = false) MultipartFile file){
         return ResponseEntity.ok(authService.changeImage(file));
     }
+
+    @PostMapping("/upload-profile")
+    public ResponseEntity<?> changeImage(@RequestParam(required = false) MultipartFile file,
+                                         @RequestParam(required = false) String zalo,
+                                         @RequestParam(required = false) String facebook,
+                                         @RequestParam(required = false) String address) {
+        return ResponseEntity.ok(authService.uploadProfile(file, zalo, facebook, address));
+    }
+
 
     @PostMapping("/{id}/locked")
     private ResponseEntity<?> lockedAccount(@PathVariable Long id) {

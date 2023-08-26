@@ -15,5 +15,16 @@ class AuthService {
     );
 
   }
+
+  uploadProfile(formData) {
+    return axios.post(BASE_URL + 'auth/upload-profile', formData,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`
+        }
+      }
+    );
+
+  }
 }
 export default new AuthService();

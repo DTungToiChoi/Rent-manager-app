@@ -108,9 +108,9 @@ export function changePassword(changePasswordRequest) {
     });
 }
 
-export function getAllRoomOfCustomer(pageNo, pageSize, title, price) {
+export function getAllRoomOfCustomer(pageNo, pageSize, title, price,categoryId) {
     return request({
-        url: API_BASE_URL + "/customer/room?pageNo="+pageNo+"&pageSize="+pageSize+"&title="+title+"&price="+price,
+        url: API_BASE_URL + "/customer/room?pageNo="+pageNo+"&pageSize="+pageSize+"&title="+title+"&price="+price+"&categoryId="+categoryId,
         method: 'GET'
     });
 }
@@ -236,6 +236,15 @@ export function sendEmailForRentaler(id, sendEmailRequest) {
 
     return request({
         url: API_BASE_URL +"/account/send-email/"+ id ,
+        method: 'POST',
+        body: JSON.stringify(sendEmailRequest)
+    });
+}
+
+export function sendEmailForContact(sendEmailRequest) {
+
+    return request({
+        url: API_BASE_URL +"/account/send-mail-rentaler" ,
         method: 'POST',
         body: JSON.stringify(sendEmailRequest)
     });

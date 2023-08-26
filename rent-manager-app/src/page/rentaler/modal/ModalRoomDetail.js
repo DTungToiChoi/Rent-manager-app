@@ -11,12 +11,17 @@ import { getRoom } from '../../../services/fetch/ApiUtils';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Map from '../map/MyMapComponent';
+import Rating from '@mui/material/Rating';
+import Stack from '@mui/material/Stack';
+import { Button, Comment, Form } from 'semantic-ui-react'
+import 'semantic-ui-css/semantic.min.css'
+import axios from 'axios';
 
 
 const ModalRoomDetails = ({ roomId }) => {
 
 
-
+    const [comments, setComments] = useState();
     const [roomData, setRoomData] = useState({
         title: '',
         description: '',
@@ -47,7 +52,21 @@ const ModalRoomDetails = ({ roomId }) => {
             .catch(error => {
                 toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
             });
+            fetchComments();
     }, [roomId]);
+
+
+
+    const fetchComments = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8080/room/${roomId}/comments`);
+            const comments = response.data; // Assuming API returns comments data
+            setComments(comments);
+        } catch (error) {
+            console.error("Error fetching comments:", error);
+        }
+    };
+
 
     console.log(roomData)
     return (
@@ -210,7 +229,7 @@ const ModalRoomDetails = ({ roomId }) => {
                                                     <img src="../../assets/img/plan2.jpg" alt="" class="img-fluid" />
                                                 </div>
                                                 <div class="tab-pane fade" id="pills-map" role="tabpanel" aria-labelledby="pills-map-tab">
-                                                    <Map latitude={roomData.latitude} longitude={roomData.longitude}/>
+                                                    <Map latitude={roomData.latitude} longitude={roomData.longitude} />
                                                 </div>
                                             </div>
                                         </div>
@@ -272,6 +291,45 @@ const ModalRoomDetails = ({ roomId }) => {
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="row section-t3">
+                                                <div class="col-sm-12">
+                                                    <div class="title-box-d">
+                                                        <h3 class="title-d">Bình luận và đánh giá</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 col-lg-4">
+                                                    <div class="property-agent">
+                                                        {/* <h4 class="title-agent">{rooms ? rooms.user.name : ""}</h4> */}
+                                                        <Comment.Group>
+                                                            {comments && comments.map((comment) => (
+                                                                <Comment>
+                                                                    <Comment.Content style={{ padding: '1rem' }}>
+                                                                        <Stack spacing={1}>
+                                                                            <Rating name="half-rating" defaultValue={comment.rateRating} precision={0.5} readOnly />
+                                                                        </Stack>
+                                                                        {comment.user.imageUrl ?
+                                                                            <Comment.Avatar src={comment.user.imageUrl} style={{ marginRight: "10px" }} />
+                                                                            :
+                                                                            <Comment.Avatar src="../../assets/img/agent-1.jpg" style={{ marginRight: "10px" }} />
+                                                                        }
+                                                                        <Comment.Author as='a'>{comment.user.name}</Comment.Author>
+                                                                        <Comment.Metadata>
+                                                                            <div>{comment.createdAt}</div>
+                                                                        </Comment.Metadata>
+                                                                        <Comment.Text>{comment.content}</Comment.Text>
+                                                                    </Comment.Content>
+                                                                </Comment>
+                                                            ))}
+                                                        </Comment.Group>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
                                         </div>
                                     </div>
                                 </div>

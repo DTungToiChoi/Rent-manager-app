@@ -10,11 +10,18 @@ import { toast } from 'react-toastify';
 import { getRoom } from '../../../services/fetch/ApiUtils';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import Map from '../map/MyMapComponent';
+import Rating from '@mui/material/Rating';
+import Stack from '@mui/material/Stack';
+import { Button, Comment, Form } from 'semantic-ui-react'
+import 'semantic-ui-css/semantic.min.css'
+import axios from 'axios';
+
 
 const ModalRoomDetails = ({ roomId }) => {
 
 
-
+    const [comments, setComments] = useState();
     const [roomData, setRoomData] = useState({
         title: '',
         description: '',
@@ -29,7 +36,8 @@ const ModalRoomDetails = ({ roomId }) => {
         assets: [
             { name: '', number: '' }
         ],
-        files: []
+        roomMedia: [],
+        user: ''
     });
 
     useEffect(() => {
@@ -44,11 +52,32 @@ const ModalRoomDetails = ({ roomId }) => {
             .catch(error => {
                 toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
             });
+        fetchComments();
     }, [roomId]);
 
+
+
+    const fetchComments = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8080/room/${roomId}/comments`);
+            const comments = response.data; // Assuming API returns comments data
+            setComments(comments);
+        } catch (error) {
+            console.error("Error fetching comments:", error);
+        }
+    };
+
+
+    console.log(roomData)
     return (
         <>
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div
+                className="modal fade bd-example-modal-lg"
+                tabIndex="-1"
+                role="dialog"
+                aria-labelledby="myLargeModalLabel"
+                aria-hidden="true"
+            >
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -78,14 +107,15 @@ const ModalRoomDetails = ({ roomId }) => {
                                     <div class="row justify-content-center">
                                         <div class="col-lg-8">
                                             <div id="property-single-carousel" class="swiper">
-                                                <Swiper autoHeight={true} navigation={true} modules={[Navigation]} className="swiper-wrapper">
+                                                <Swiper navigation={true} modules={[Navigation]} className="swiper-wrapper">
+                                                    {roomData.roomMedia.map(item => {
 
-                                                    <SwiperSlide className="carousel-item-b swiper-slide" >                                                   
-                                                        <img src="../../assets/img/slide-2.jpg" alt="" style={{ width: "100%" }} />
-                                                    </SwiperSlide>
-                                                    <SwiperSlide className="carousel-item-b swiper-slide" >                                                   
-                                                        <img src="../../assets/img/slide-1.jpg" alt="" style={{ width: "100%" }} />
-                                                    </SwiperSlide>
+                                                        return (
+                                                            <SwiperSlide className="carousel-item-b swiper-slide" >
+                                                                <img src={item.files} alt="" style={{ width: "100%" }} />
+                                                            </SwiperSlide>
+                                                        )
+                                                    })}
                                                 </Swiper>
                                             </div>
                                             <div class="property-single-carousel-pagination carousel-pagination"></div>
@@ -138,14 +168,14 @@ const ModalRoomDetails = ({ roomId }) => {
                                                                     <span>Chưa thuê</span>
                                                                 </li>
                                                                 {roomData.assets.map((asset, index) => (
-                                                                <li class="d-flex justify-content-between">
-                                                                
-                                                                    <strong>{asset.name}:</strong>
-                                                                    <span>
-                                                                        <sup>{asset.number}</sup>
-                                                                    </span>
-                                                                
-                                                                </li>
+                                                                    <li class="d-flex justify-content-between">
+
+                                                                        <strong>{asset.name}:</strong>
+                                                                        <span>
+                                                                            <sup>{asset.number}</sup>
+                                                                        </span>
+
+                                                                    </li>
                                                                 ))}
                                                             </ul>
                                                         </div>
@@ -161,7 +191,7 @@ const ModalRoomDetails = ({ roomId }) => {
                                                     </div>
                                                     <div class="property-description">
                                                         <p class="description color-text-a">
-                                                                {roomData.description}
+                                                            {roomData.description}
                                                         </p>
                                                     </div>
                                                     <div class="row section-t3">
@@ -204,7 +234,7 @@ const ModalRoomDetails = ({ roomId }) => {
                                                     <img src="../../assets/img/plan2.jpg" alt="" class="img-fluid" />
                                                 </div>
                                                 <div class="tab-pane fade" id="pills-map" role="tabpanel" aria-labelledby="pills-map-tab">
-                                                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.1422937950147!2d-73.98731968482413!3d40.75889497932681!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25855c6480299%3A0x55194ec5a1ae072e!2sTimes+Square!5e0!3m2!1ses-419!2sve!4v1510329142834" width="100%" height="460" frameborder="0" style={{ border: "0" }} allowfullscreen></iframe>
+                                                    <Map latitude={roomData.latitude} longitude={roomData.longitude} />
                                                 </div>
                                             </div>
                                         </div>
@@ -218,58 +248,25 @@ const ModalRoomDetails = ({ roomId }) => {
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6 col-lg-4">
-                                                    <img src="../../assets/img/agent-4.jpg" alt="" class="img-fluid" />
+                                                    <img src={roomData.user.imageUrl} alt="" class="img-fluid" />
                                                 </div>
                                                 <div class="col-md-6 col-lg-4">
                                                     <div class="property-agent">
-                                                        <h4 class="title-agent">Anabella Geller</h4>
+                                                        <h4 class="title-agent">{roomData.user.name}</h4>
                                                         <p class="color-text-a">
-                                                            Nulla porttitor accumsan tincidunt. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet
-                                                            dui. Quisque velit nisi,
-                                                            pretium ut lacinia in, elementum id enim.
+                                                            Phòng luôn chất lượng đảm bảo đúng sự thật và không các chi tiết khiến người dùng thất vọng
+                                                            khi đến xem và kiểm tra phòng. An ninh tuyệt đối.
                                                         </p>
                                                         <ul class="list-unstyled">
                                                             <li class="d-flex justify-content-between">
-                                                                <strong>Phone:</strong>
-                                                                <span class="color-text-a">(222) 4568932</span>
-                                                            </li>
-                                                            <li class="d-flex justify-content-between">
-                                                                <strong>Mobile:</strong>
-                                                                <span class="color-text-a">777 287 378 737</span>
+                                                                <strong>Điện thoại:</strong>
+                                                                <span class="color-text-a">{roomData.user.phone}</span>
                                                             </li>
                                                             <li class="d-flex justify-content-between">
                                                                 <strong>Email:</strong>
-                                                                <span class="color-text-a">annabella@example.com</span>
-                                                            </li>
-                                                            <li class="d-flex justify-content-between">
-                                                                <strong>Skype:</strong>
-                                                                <span class="color-text-a">Annabela.ge</span>
+                                                                <span class="color-text-a">{roomData.user.email}</span>
                                                             </li>
                                                         </ul>
-                                                        <div class="socials-a">
-                                                            <ul class="list-inline">
-                                                                <li class="list-inline-item">
-                                                                    <a href="#">
-                                                                        <i class="bi bi-facebook" aria-hidden="true"></i>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="list-inline-item">
-                                                                    <a href="#">
-                                                                        <i class="bi bi-twitter" aria-hidden="true"></i>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="list-inline-item">
-                                                                    <a href="#">
-                                                                        <i class="bi bi-instagram" aria-hidden="true"></i>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="list-inline-item">
-                                                                    <a href="#">
-                                                                        <i class="bi bi-linkedin" aria-hidden="true"></i>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12 col-lg-4">
@@ -300,6 +297,45 @@ const ModalRoomDetails = ({ roomId }) => {
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-md-12">
+                                            <div class="row section-t3">
+                                                <div class="col-sm-12">
+                                                    <div class="title-box-d">
+                                                        <h3 class="title-d">Bình luận và đánh giá</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 col-lg-4">
+                                                    <div class="property-agent">
+                                                        {/* <h4 class="title-agent">{rooms ? rooms.user.name : ""}</h4> */}
+                                                        <Comment.Group>
+                                                            {comments && comments.map((comment) => (
+                                                                <Comment>
+                                                                    <Comment.Content style={{ padding: '1rem' }}>
+                                                                        <Stack spacing={1}>
+                                                                            <Rating name="half-rating" defaultValue={comment.rateRating} precision={0.5} readOnly />
+                                                                        </Stack>
+                                                                        {comment.user.imageUrl ?
+                                                                            <Comment.Avatar src={comment.user.imageUrl} style={{ marginRight: "10px" }} />
+                                                                            :
+                                                                            <Comment.Avatar src="../../assets/img/agent-1.jpg" style={{ marginRight: "10px" }} />
+                                                                        }
+                                                                        <Comment.Author as='a'>{comment.user.name}</Comment.Author>
+                                                                        <Comment.Metadata>
+                                                                            <div>{comment.createdAt}</div>
+                                                                        </Comment.Metadata>
+                                                                        <Comment.Text>{comment.content}</Comment.Text>
+                                                                    </Comment.Content>
+                                                                </Comment>
+                                                            ))}
+                                                        </Comment.Group>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
                                     </div>
                                 </div>
                             </section>
@@ -315,5 +351,6 @@ const ModalRoomDetails = ({ roomId }) => {
         </>
     )
 }
+
 
 export default ModalRoomDetails;

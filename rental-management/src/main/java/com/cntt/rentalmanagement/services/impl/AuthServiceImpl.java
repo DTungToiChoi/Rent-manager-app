@@ -13,6 +13,7 @@ import com.cntt.rentalmanagement.secruity.TokenProvider;
 import com.cntt.rentalmanagement.services.AuthService;
 import com.cntt.rentalmanagement.services.BaseService;
 import com.cntt.rentalmanagement.services.FileStorageService;
+import org.apache.activemq.kaha.impl.index.BadMagicException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,6 +37,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Collections;
+import java.util.Objects;
 
 @Service
 public class AuthServiceImpl extends BaseService implements AuthService {
@@ -66,6 +68,10 @@ public class AuthServiceImpl extends BaseService implements AuthService {
     public URI registerAccount(SignUpRequest signUpRequest) throws MessagingException, IOException {
         if(userRepository.existsByEmail(signUpRequest.getEmail())) {
             throw new BadRequestException("Email đã được sử dụng!!");
+        }
+
+        if (userRepository.findByPhone(signUpRequest.getPhone()).isPresent()) {
+            throw new BadMagicException("Số điện thoại đã được sử dụng.");
         }
 
         if (!signUpRequest.getPassword().equals(signUpRequest.getConfirmPassword())) {
@@ -171,8 +177,10 @@ public class AuthServiceImpl extends BaseService implements AuthService {
     @Override
     public MessageResponse changeImage(MultipartFile file) {
         User user = userRepository.findById(getUserId()).orElseThrow(() -> new BadRequestException("Tài khoảng không tồn tại"));
-        String image = fileStorageService.storeFile(file).replace("photographer/files/", "");
-        user.setImageUrl("http://localhost:8080/image/" + image);
+        if (Objects.nonNull(file)) {
+            String image = fileStorageService.storeFile(file).replace("photographer/files/", "");
+            user.setImageUrl("http://localhost:8080/image/" + image);
+        }
         userRepository.save(user);
         return MessageResponse.builder().message("Thay ảnh đại diện thành công.").build();
     }
@@ -187,6 +195,20 @@ public class AuthServiceImpl extends BaseService implements AuthService {
         }
         userRepository.save(user);
         return MessageResponse.builder().message("Cập nhật trạng thái của tài khoản thành công").build();
+    }
+
+    @Override
+    public MessageResponse uploadProfile(MultipartFile file, String zalo, String facebook, String address) {
+        User user = userRepository.findById(getUserId()).orElseThrow(() -> new BadRequestException("Tài khoảng không tồn tại"));
+        user.setZaloUrl(zalo);
+        user.setFacebookUrl(facebook);
+        user.setAddress(address);
+        if (Objects.nonNull(file)) {
+            String image = fileStorageService.storeFile(file).replace("photographer/files/", "");
+            user.setImageUrl("http://localhost:8080/image/" + image);
+        }
+        userRepository.save(user);
+        return MessageResponse.builder().message("Thay thông tin cá nhân thành công.").build();
     }
 
     public void sendEmailFromTemplate(String email) throws MessagingException, IOException {
