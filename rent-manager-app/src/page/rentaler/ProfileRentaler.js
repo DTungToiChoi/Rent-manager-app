@@ -10,6 +10,17 @@ const ProfileRentaler = (props) => {
     const { authenticated, role, currentUser, location, onLogout } = props;
 
     const [imageFile, setImageFile] = useState(null);
+    const [zalo, setZalo] = useState(currentUser?.zaloUrl);
+    const [facebook, setFacebook] = useState(currentUser?.facebookUrl);
+
+    const handleZaloChange = (event) => {
+        setZalo(event.target.value);
+    };
+
+    const handleFacebookChange = (event) => {
+        setFacebook(event.target.value);
+    };
+
 
 
     const onFileChange = (event) => {
@@ -18,41 +29,39 @@ const ProfileRentaler = (props) => {
             // Perform file validation
             const allowedTypes = ["image/jpeg", "image/png"];
             const maxFileSize = 1 * 1024 * 1024; // 1MB
-    
+
             // Check file type
             if (!allowedTypes.includes(file.type)) {
                 toast.error("Only JPEG and PNG images are allowed.");
                 return;
             }
-    
+
             // Check file size
             if (file.size > maxFileSize) {
                 toast.error("File size exceeds the maximum limit of 1MB.");
                 return;
             }
-    
+
             setImageFile(file);
         }
     };
 
-    
+
 
     const handleSubmit = (event) => {
 
-        if (!imageFile) {
-            toast.error("Please select an image to upload.");
-            return;
-        }
-    
         // Prepare data for updating the user profile
         const formData = new FormData();
         formData.append('file', imageFile);
+        formData.append('zalo', zalo);
+        formData.append('facebook', facebook)
 
         event.preventDefault();
         // Handle form submission
 
-        AuthService.uploadAvatar(formData).then(response => {
+        AuthService.uploadProfile(formData).then(response => {
             toast.success(response.message);
+            toast.success("Cập nhật thông tin cá nhân thành công.");
             props.loadCurrentUser();
         }).catch(error => {
             toast.error((error && error.message) || 'Oops! Có điều gì đó xảy ra. Vui lòng thử lại!');
@@ -114,7 +123,7 @@ const ProfileRentaler = (props) => {
                                     </div>
                                     <div class="mb-3 col-md-6">
                                         <label class="form-label" >Số điện thoại</label>
-                                        <input type="text" className="form-control" name='phone' value={currentUser && currentUser.phone}  id="inputPassword4" placeholder="Số điện thoại" disabled/>
+                                        <input type="text" className="form-control" name='phone' value={currentUser && currentUser.phone} id="inputPassword4" placeholder="Số điện thoại" disabled />
                                     </div>
                                 </div>
                                 <div class="mb-3">
@@ -128,6 +137,20 @@ const ProfileRentaler = (props) => {
                                 <div class="mb-3">
                                     <label class="form-label">Tải Hình Ảnh</label>
                                     <input class="form-control" accept=".png, .jpeg" type="file" onChange={onFileChange} />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="inputAddress">Liện hệ Zalo </label>
+                                    <input type="text" className="form-control" name='zalo'
+                                        value={zalo}
+                                        onChange={handleZaloChange}
+                                        id="inputAddress" placeholder="https://zalo.me/(Số điện thoại)" />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="inputAddress">Liên Hệ Facebook</label>
+                                    <input type="text" className="form-control" name='facebook'
+                                        value={facebook}
+                                        onChange={handleFacebookChange}
+                                        id="inputAddress" placeholder="https://www.facebook.com/(Domain trang cá nhân)" />
                                 </div>
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form>

@@ -178,7 +178,7 @@ public class RoomServiceImpl extends BaseService implements RoomService {
     public Page<RoomResponse> getRoomByUserId(Long userId, Integer pageNo, Integer pageSize) {
         int page = pageNo == 0 ? pageNo : pageNo - 1;
         Pageable pageable = PageRequest.of(page, pageSize);
-        return mapperUtils.convertToResponsePage(roomRepository.searchingRoomForCustomer(null,null,userId, pageable), RoomResponse.class, pageable );
+        return mapperUtils.convertToResponsePage(roomRepository.searchingRoomForCustomer(null,null,null,userId, pageable), RoomResponse.class, pageable );
     }
 
     private List<RoomResponse> sortRooms(List<RoomResponse> rooms, String typeSort) {

@@ -81,6 +81,18 @@ public class AccountServiceImpl implements AccountService {
         return MessageResponse.builder().message("Phân quyền thành công.").build();
     }
 
+    @Override
+    public MessageResponse sendEmailForRentaler(SendEmailRequest sendEmailRequest) throws MessagingException, IOException {
+        sendEmailFromTemplateForContact(sendEmailRequest);
+        return MessageResponse.builder().message("Liện hệ đã được gửi thành công").build();
+    }
+
+    @Override
+    public MessageResponse sendEmailOfCustomer(SendEmailRequest sendEmailRequest) throws MessagingException, IOException {
+        sendEmailFromTemplateForCustomer(sendEmailRequest);
+        return MessageResponse.builder().message("Liên hệ thành công.").build();
+    }
+
 
     public void sendEmailFromTemplate(SendEmailRequest sendEmailRequest) throws MessagingException, IOException {
         MimeMessage message = mailSender.createMimeMessage();
@@ -95,6 +107,46 @@ public class AccountServiceImpl implements AccountService {
         // Replace placeholders in the HTML template with dynamic values
         htmlTemplate = htmlTemplate.replace("NAM NGHIEM", sendEmailRequest.getNameOfRentaler());
         htmlTemplate = htmlTemplate.replace("DESCRIPTION", sendEmailRequest.getDescription());
+
+        // Set the email's content to be the HTML template
+        message.setContent(htmlTemplate, "text/html; charset=utf-8");
+
+        mailSender.send(message);
+    }
+
+    public void sendEmailFromTemplateForCustomer(SendEmailRequest sendEmailRequest) throws MessagingException, IOException {
+        MimeMessage message = mailSender.createMimeMessage();
+
+
+        message.setRecipients(MimeMessage.RecipientType.TO, sendEmailRequest.getToEmail());
+        message.setSubject("Tin thuê phòng");
+
+        // Read the HTML template into a String variable
+        String htmlTemplate = readFile("send-email.html");
+
+        // Replace placeholders in the HTML template with dynamic values
+        htmlTemplate = htmlTemplate.replace("NAM NGHIEM", sendEmailRequest.getNameOfRentaler());
+        htmlTemplate = htmlTemplate.replace("DESCRIPTION", sendEmailRequest.getDescription() + "Email:" + sendEmailRequest.getTitle());
+
+        // Set the email's content to be the HTML template
+        message.setContent(htmlTemplate, "text/html; charset=utf-8");
+
+        mailSender.send(message);
+    }
+
+    public void sendEmailFromTemplateForContact(SendEmailRequest sendEmailRequest) throws MessagingException, IOException {
+        MimeMessage message = mailSender.createMimeMessage();
+
+        message.setFrom(new InternetAddress("trungdang82678@gmail.com"));
+        message.setRecipients(MimeMessage.RecipientType.TO, "dinhnam.nghiem.2611@gmail.com");
+        message.setSubject(sendEmailRequest.getTitle());
+
+        // Read the HTML template into a String variable
+        String htmlTemplate = readFile("send-email.html");
+
+        // Replace placeholders in the HTML template with dynamic values
+        htmlTemplate = htmlTemplate.replace("NAM NGHIEM", sendEmailRequest.getNameOfRentaler());
+        htmlTemplate = htmlTemplate.replace("DESCRIPTION", sendEmailRequest.getDescription() + ".Email: "+ sendEmailRequest.getToEmail());
 
         // Set the email's content to be the HTML template
         message.setContent(htmlTemplate, "text/html; charset=utf-8");

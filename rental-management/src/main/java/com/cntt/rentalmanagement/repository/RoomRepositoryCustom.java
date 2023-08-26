@@ -12,7 +12,7 @@ public interface RoomRepositoryCustom {
 
     Page<Room> searchingRoomForAdmin(String title,Boolean approve, Pageable pageable);
 
-    Page<Room> searchingRoomForCustomer(String title, BigDecimal price, Long userId, Pageable pageable);
+    Page<Room> searchingRoomForCustomer(String title, BigDecimal price,Long categoryId, Long userId, Pageable pageable);
 
     Page<Room> getAllRentOfHome(Long userId, Pageable pageable);
 

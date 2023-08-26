@@ -65,10 +65,9 @@ public class RoomRepositoryCustomImpl implements RoomRepositoryCustom {
     }
 
     @Override
-    public Page<Room> searchingRoomForCustomer(String title, BigDecimal price,Long userId, Pageable pageable) {
+    public Page<Room> searchingRoomForCustomer(String title, BigDecimal price,Long categoryId,Long userId, Pageable pageable) {
         StringBuilder strQuery = new StringBuilder();
-        strQuery.append(" from rental_home.room r ");
-        strQuery.append(" where 1=1");
+        strQuery.append(" from rental_home.room r where 1=1 ");
         Map<String, Object> params = new HashMap<>();
         if (Objects.nonNull(title) && !title.isEmpty()) {
             strQuery.append(" AND r.title LIKE :title");
@@ -79,6 +78,12 @@ public class RoomRepositoryCustomImpl implements RoomRepositoryCustom {
             strQuery.append(" AND r.price = :price");
             params.put("price", price );
         }
+
+        if (Objects.nonNull(categoryId) && categoryId != 0) {
+            strQuery.append(" AND r.category_id = :categoryId");
+            params.put("categoryId", categoryId);
+        }
+
         if (Objects.nonNull(userId)) {
             strQuery.append(" AND r.user_id = :userId");
             params.put("userId", userId);

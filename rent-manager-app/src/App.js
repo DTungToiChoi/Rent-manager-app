@@ -152,7 +152,7 @@ function App() {
           <Route exact path="/room-hired" element={<RoomHired authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/reset-password/:email" element={<ResetPassword />} />
           <Route exact path="/success-comfirmed/:email" element={<SuccessConfirmed />} />
-          <Route exact path="/profile" element={<Profile authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout}/>} />
+          <Route exact path="/profile" element={<Profile authenticated={authenticated} loadCurrentUser={loadCurrentlyLoggedInUser} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/change-password" element={<ChangePasswordOfUser authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/login" element={<Login authenticated={authenticated} />} />
           <Route exact path="/login-rentaler" element={<LoginRentaler authenticated={authenticated} currentUser={currentUser} role={role} />} />

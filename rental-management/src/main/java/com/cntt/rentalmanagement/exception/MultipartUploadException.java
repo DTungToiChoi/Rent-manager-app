@@ -25,7 +25,7 @@ public class MultipartUploadException {
         return ResponseEntity.ok(MessageResponse.builder().message("Đăng nhập để sử dụng chức năng.").build());
     }
 
-    @ExceptionHandler({ Exception.class })
+    @ExceptionHandler({ BadRequestException.class })
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ResponseEntity<?> handleException(Exception e) {
         return ResponseEntity.ok(MessageResponse.builder().message("Forbidden.").build());

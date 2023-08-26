@@ -27,4 +27,6 @@ public interface AuthService {
     MessageResponse changeImage(MultipartFile file);
 
     MessageResponse lockAccount(Long id);
+
+    MessageResponse uploadProfile(MultipartFile file, String zalo, String facebook, String address);
 }
