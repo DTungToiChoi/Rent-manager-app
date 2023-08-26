@@ -44,7 +44,7 @@ public class Message {
 	@JoinColumn(name = "user2")
 	private User receiver;
 	
-	@OneToMany(mappedBy = "message")
+	@OneToMany(mappedBy = "message", cascade = CascadeType.ALL)
 	private List<MessageChat> content;
 
 }

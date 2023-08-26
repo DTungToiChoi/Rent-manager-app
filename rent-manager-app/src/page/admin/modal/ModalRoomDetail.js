@@ -78,7 +78,7 @@ const ModalRoomDetails = ({ roomId }) => {
                                     <div class="row justify-content-center">
                                         <div class="col-lg-8">
                                             <div id="property-single-carousel" class="swiper">
-                                                <Swiper navigation={true} modules={[Navigation]} className="swiper-wrapper">
+                                                <Swiper autoHeight={true} navigation={true} modules={[Navigation]} className="swiper-wrapper">
 
                                                     <SwiperSlide className="carousel-item-b swiper-slide" >                                                   
                                                         <img src="../../assets/img/slide-2.jpg" alt="" style={{ width: "100%" }} />

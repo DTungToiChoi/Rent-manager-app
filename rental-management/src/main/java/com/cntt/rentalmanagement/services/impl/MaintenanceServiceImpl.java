@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +42,7 @@ public class MaintenanceServiceImpl extends BaseService implements MaintenanceSe
     public MessageResponse addNewMaintenance(String maintenanceDate, BigDecimal price, Long roomId, List<MultipartFile> files) {
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new BadRequestException("Phòng đã không tồn tại"));
 
-        Maintenance maintenance = new Maintenance(LocalDateTime.parse(maintenanceDate),price,fileStorageService.storeFile(files.get(0)),getUsername(), getUsername(), room);
+        Maintenance maintenance = new Maintenance(LocalDateTime.parse(maintenanceDate),price,"http://localhost:8080/document/"+fileStorageService.storeFile(files.get(0)).replace("photographer/files/", ""),getUsername(), getUsername(), room);
         maintenanceRepository.save(maintenance);
         return MessageResponse.builder().message("Thêm phiếu bảo trì thành công").build();
     }
@@ -53,8 +54,10 @@ public class MaintenanceServiceImpl extends BaseService implements MaintenanceSe
         Maintenance maintenance = maintenanceRepository.findById(id).orElseThrow(() -> new BadRequestException("Phiếu bảo trì không tồn tại"));
         maintenance.setMaintenanceDate(LocalDateTime.parse(maintenanceDate));
         maintenance.setPrice(price);
-        String file = fileStorageService.storeFile(files.get(0));
-        maintenance.setFiles(file);
+        if (Objects.nonNull(files.get(0))) {
+            String file = fileStorageService.storeFile(files.get(0)).replace("photographer/files/", "");
+            maintenance.setFiles(file);
+        }
         maintenance.setRoom(room);
         maintenanceRepository.save(maintenance);
         return MessageResponse.builder().message("Cập nhật thành công").build();

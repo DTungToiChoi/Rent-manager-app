@@ -3,7 +3,7 @@ import SidebarNav from './SidebarNav';
 import Nav from './Nav';
 import Pagination from './Pagnation';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { disableRoom, getAllAccpuntOfAdmin, lockedAccount } from '../../services/fetch/ApiUtils';
 
 function AccountManagement(props) {
@@ -56,6 +56,14 @@ function AccountManagement(props) {
     const paginate = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
+
+    if (!authenticated) {
+        return <Navigate
+          to={{
+            pathname: "/login-admin",
+            state: { from: location }
+          }} />;
+      }
 
     return (
         <>

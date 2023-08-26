@@ -1,5 +1,6 @@
 package com.cntt.rentalmanagement.controller;
 
+import com.cntt.rentalmanagement.domain.payload.request.RequestRequest;
 import com.cntt.rentalmanagement.services.RequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,20 @@ public class RequestController {
                                                   @RequestParam Integer pageSize){
         return ResponseEntity.ok(requestService.getRequestOfRentHome(keyword, pageNo, pageSize));
     }
+
+    @GetMapping("/customer")
+    public ResponseEntity<?> getRequestOfCustomer(@RequestParam String keyword,
+                                                  @RequestParam String phone,
+                                                  @RequestParam Integer pageNo,
+                                                  @RequestParam Integer pageSize){
+        return ResponseEntity.ok(requestService.getRequestOfCustomer(keyword, phone, pageNo, pageSize));
+    }
+
+    @PostMapping
+    public ResponseEntity<?> addRequest(@RequestBody RequestRequest request) {
+        return ResponseEntity.ok(requestService.addRequest(request));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getRequestById(@PathVariable Long id) {
         return ResponseEntity.ok(requestService.getRequest(id));

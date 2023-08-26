@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cntt.rentalmanagement.services.BlogService;
+import com.cntt.rentalmanagement.services.RoomService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -45,6 +46,12 @@ public class RoomController {
 //        return ResponseEntity.ok(blogService.getAllRoomForAdmin(title, approve, pageNo, pageSize));
 //    }
 
+    @GetMapping("/{userId}/rentaler")
+    public ResponseEntity<?> getAllRoomOfUserId(@PathVariable Long userId,
+                                                @RequestParam Integer pageNo,
+                                                @RequestParam Integer pageSize) {
+        return ResponseEntity.ok(roomService.getRoomByUserId(userId, pageNo, pageSize));
+    }
 
     @GetMapping
     public ResponseEntity<?> getRoomByRentaler(@RequestParam(required = false) String title,

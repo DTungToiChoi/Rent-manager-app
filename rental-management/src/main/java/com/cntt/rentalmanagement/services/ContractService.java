@@ -8,12 +8,14 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface ContractService {
-    MessageResponse addContract(String name, Long roomId, String nameRentHome, String deadline, List<MultipartFile> files);
+    MessageResponse addContract(String name, Long roomId, String nameRentHome,Long numOfPeople,String phone, String deadline, List<MultipartFile> files);
 
-    Page<ContractResponse> getAllContractOfRentaler(String name, Integer pageNo, Integer pageSize);
+    Page<ContractResponse> getAllContractOfRentaler(String name, String phone, Integer pageNo, Integer pageSize);
 
     ContractResponse getContractById(Long id);
 
 
-    MessageResponse editContractInfo(Long id, String name, Long roomId, String nameOfRent, String deadlineContract, List<MultipartFile> files);
+    MessageResponse editContractInfo(Long id, String name, Long roomId, String nameOfRent,Long numOfPeople,String phone, String deadlineContract, List<MultipartFile> files);
+
+    Page<ContractResponse> getAllContractOfCustomer(String phone, Integer pageNo, Integer pageSize);
 }

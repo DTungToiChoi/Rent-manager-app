@@ -7,7 +7,9 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface ContractRepositoryCustom {
-    Page<Contract> searchingContact(String name, Long userId, Pageable pageable);
+    Page<Contract> searchingContact(String name,String phone, Long userId, Pageable pageable);
 
     List<Contract> getAllContract(Long userId);
+
+    Page<Contract> searchingContact(String phone, Pageable pageable);
 }

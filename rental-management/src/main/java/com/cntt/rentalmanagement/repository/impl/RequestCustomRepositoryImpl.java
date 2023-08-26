@@ -45,4 +45,29 @@ public class RequestCustomRepositoryImpl implements RequestCustomRepository {
 
         return BaseRepository.getPagedNativeQuery(em,strSelectQuery, strCountQuery, params, pageable, Request.class);
     }
+
+    @Override
+    public Page<Request> searchingOfRequest(String keyword, String phone, Pageable pageable) {
+        StringBuilder strQuery = new StringBuilder();
+        strQuery.append(FROM_REQUEST);
+        strQuery.append(INNER_JOIN_ROOM);
+        strQuery.append(" where 1=1");
+        Map<String, Object> params = new HashMap<>();
+        if (!keyword.isEmpty() && Objects.nonNull(keyword)){
+            strQuery.append(" AND (r.name like :keyword OR ro.title like :keyword) ");
+            params.put("keyword", "%"+keyword+"%");
+        }
+
+        if (Objects.nonNull(phone) && !phone.isEmpty()) {
+            strQuery.append(" AND r.phone_number = :phone");
+            params.put("phone", phone);
+        }
+
+        String strSelectQuery = "SELECT * " + strQuery;
+
+        String strCountQuery = "SELECT COUNT(DISTINCT r.id)" + strQuery;
+
+        return BaseRepository.getPagedNativeQuery(em,strSelectQuery, strCountQuery, params, pageable, Request.class);
+
+    }
 }

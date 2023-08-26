@@ -3,7 +3,7 @@ import SidebarNav from './SidebarNav';
 import Nav from './Nav';
 import Pagination from './Pagnation';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { approveRoomOfAdmin, disableRoom, getAllRoomOfAdmin, removeRoomOfAdmin } from '../../services/fetch/ApiUtils';
 import ModalRoomDetails from './modal/ModalRoomDetail';
 
@@ -75,6 +75,14 @@ function RoomManagement(props) {
     };
 
     console.log("ROOMID", roomId)
+
+    if (!authenticated) {
+        return <Navigate
+          to={{
+            pathname: "/login-admin",
+            state: { from: location }
+          }} />;
+      }
 
     return (
         <>

@@ -24,6 +24,13 @@ public class AccountController {
         return ResponseEntity.ok(accountService.getAllAccount(keyword,pageNo,pageSize));
     }
 
+    @GetMapping("/customer")
+    private ResponseEntity<?> getAllAccountForCustomer(@RequestParam(required = false) String keyword,
+                                            @RequestParam Integer pageNo,
+                                            @RequestParam Integer pageSize) {
+        return ResponseEntity.ok(accountService.getAllAccount(keyword,pageNo,pageSize));
+    }
+
     @GetMapping("/{id}")
     private ResponseEntity<?> getAccountById(@PathVariable Long id) {
         return ResponseEntity.ok(accountService.getAccountById(id));
