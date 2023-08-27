@@ -56,8 +56,6 @@ function SendEmail(props) {
         )
     };
 
-<<<<<<< HEAD
-=======
     if (!authenticated) {
         return <Navigate
           to={{
@@ -66,7 +64,6 @@ function SendEmail(props) {
           }} />;
       }
 
->>>>>>> d88893a69d337e178a2f0b5f97d18a75548632ea
 
     return (
         <div className="wrapper">

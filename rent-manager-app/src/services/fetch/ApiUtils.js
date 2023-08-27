@@ -190,6 +190,7 @@ export function getAllAccpuntOfAdmin(pageNo, pageSize, name) {
 
 export function getAccountById(id) {
 
+
     return request({
         url: API_BASE_URL + "/account/" + id,
         method: 'GET'

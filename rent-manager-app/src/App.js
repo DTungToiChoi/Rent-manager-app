@@ -28,7 +28,6 @@ import AddRoom from './page/rentaler/AddRoom';
 import RoomManagement from './page/rentaler/RoomManagement';
 import EditRoom from './page/rentaler/EditRoom';
 import Profile from './page/user/Profile';
-import UpdateProfile from './page/user/UpdateProfile';
 import Message from './page/messages/pages/Home'
 import ContractManagement from './page/rentaler/ContractManagement';
 import AddContract from './page/rentaler/AddContract';
@@ -54,6 +53,7 @@ import SendRequest from './page/user/SendRequest';
 import RequestManagement from './page/user/RequestManagement';
 import Follow from './page/user/Follow';
 import SaveBlog from './page/user/SaveBlog';
+import ChatOfUser from './page/user/ChatOfUser';
 
 
 
@@ -148,7 +148,7 @@ function App() {
           <Route exact path="/about-us" element={<About authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/contact" element={<Contact authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/forgot-password" element={<ForgotPassword authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
-          <Route exact path="/message" element={<Message authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
+          <Route exact path="/message" element={<ChatOfUser authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/room-hired" element={<RoomHired authenticated={authenticated} currentUser={currentUser} onLogout={handleLogout} />} />
           <Route exact path="/reset-password/:email" element={<ResetPassword />} />
           <Route exact path="/success-comfirmed/:email" element={<SuccessConfirmed />} />
@@ -169,7 +169,7 @@ function App() {
           <Route exact path="/rentaler/change-password" element={<ChangePassword authenticated={authenticated} exit={exitLogoutChangePassword} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
           <Route exact path="/rentaler/profile" element={<ProfileRentaler authenticated={authenticated} currentUser={currentUser} role={role} loadCurrentUser={loadCurrentlyLoggedInRetanler} onLogout={handleLogout} />} />
           <Route exact path="/rentaler" element={<DashboardRentaler authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
-          <Route exact path="/rentaler/chat" element={<Message authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
+          <Route exact path="/rentaler/chat" element={<Chat authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
           <Route exact path="/rentaler/add-room" element={<AddRoom authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
           <Route exact path="/rentaler/edit-room/:id" element={<EditRoom authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />
           <Route exact path="/rentaler/add-contract" element={<AddContract authenticated={authenticated} currentUser={currentUser} role={role} onLogout={handleLogout} />} />

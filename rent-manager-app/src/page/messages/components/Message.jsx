@@ -15,7 +15,7 @@ const Message = ({ message, scrollToLast }) => {
 
   return (
     <div>
-      <div className="messageContainer">
+      <div className="chat-messages p-4">
         {message &&
           message.content &&
           message.content.map((contentItem) => {
@@ -23,9 +23,19 @@ const Message = ({ message, scrollToLast }) => {
             return (
               <p
                 key={contentItem.id}
-                className={`${isSentByCurrentUser ? "sent" : "received"}`}
+                className={`${isSentByCurrentUser ? "chat-message-right pb-4" : "pb-4"}`}
               >
-                {contentItem.content}
+                {isSentByCurrentUser ?
+                  <div className="flex-shrink-1 bg-light rounded py-2 px-3 me-3" style={{backgroundColor : "black"}}>
+                    <div className="font-weight-bold mb-1">B</div>
+                    {contentItem.content}
+                  </div>
+                  :
+                  <div className="flex-shrink-1 bg-light rounded py-2 px-3 me-3">
+                    <div className="font-weight-bold mb-1">A</div>
+                    {contentItem.content}
+                  </div>
+                }
               </p>
             );
           })}

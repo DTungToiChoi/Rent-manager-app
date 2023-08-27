@@ -9,22 +9,16 @@ import '../style.css'
 
 const Chat = (props) => {
   //const { data } = props.currentUser;
-  const {selectedUser} = useUserContext();
+  const { selectedUser } = useUserContext();
 
   //console.log("Chat selected User: " + selectedUser.message)
 
   return (
-    <div className="chat">
-      <div className="chatInfo">
-        {<span></span>}
-        <div className="chatIcons">
-          {/* <img src={Cam} alt="" />
-          <img src={Add} alt="" /> */}
-          <img src={More} alt="" />
-        </div>
+    <div className="position-relative">
+      <div className="chat-messages p-4">
+        <Messages selectedUser={selectedUser} />
       </div>
-      <Messages selectedUser={selectedUser} />
-      <Input selectedUser={selectedUser}/>
+      <Input selectedUser={selectedUser} />
     </div>
   );
 };
