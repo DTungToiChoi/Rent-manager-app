@@ -13,7 +13,7 @@ public interface UserService {
 
 	String updateUser(User user);
 
-	List<MessageDTO> getMessageUser(Long id);
+	List<MessageDTO> getMessageUser();
 
 	MessageDTO toMessageDTO(User user, Message message);
 

@@ -2,6 +2,7 @@ package com.cntt.rentalmanagement.services.impl;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -135,13 +136,15 @@ public class RoomServiceImpl extends BaseService implements RoomService {
         room.setStatus(roomRequest.getStatus());
         roomRepository.save(room);
 
-        roomMediaRepository.deleteAllByRoom(room);
-        for (MultipartFile file : roomRequest.getFiles()) {
-            String fileName = fileStorageService.storeFile(file);
-            RoomMedia roomMedia = new RoomMedia();
-            roomMedia.setFiles(fileName);
-            roomMedia.setRoom(room);
-            roomMediaRepository.save(roomMedia);
+        if (Objects.nonNull(roomRequest.getFiles())) {
+            roomMediaRepository.deleteAllByRoom(room);
+            for (MultipartFile file : roomRequest.getFiles()) {
+                String fileName = fileStorageService.storeFile(file);
+                RoomMedia roomMedia = new RoomMedia();
+                roomMedia.setFiles(fileName);
+                roomMedia.setRoom(room);
+                roomMediaRepository.save(roomMedia);
+            }
         }
 
         assetRepository.deleteAllByRoom(room);

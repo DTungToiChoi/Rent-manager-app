@@ -26,9 +26,10 @@ const Chats = () => {
         });
 
         if (response.ok) {
-          const data = await response.json();
-          //console.log(data);
+          const data = await response.json();        
+          // console.log(data);
           setChats(data);
+          console.log("MESSAGE",chats)
         } else {
           console.log("Error fetching chats:", response.statusText);
         }
@@ -39,6 +40,7 @@ const Chats = () => {
 
     fetchChats();
   }, []);
+
 
   const handleSelect = async (user) => {
     try {
@@ -71,21 +73,19 @@ const Chats = () => {
   }
 
   return (
-    <div className="chats">
-      {chats.map((chat, index) => (
-        <div className="userChat" key={index} onClick={() => handleSelect(chat)}>
-          <img
-          src={chat.imageUrl}
-          alt="User Avatar"
-          style={{ maxWidth: '50px', maxHeight: '75px' }}
-        />
-          <div className="userChatInfo">
-            <span>{chat.userName}</span>
-            <p>{chat.message}</p>
+    <>
+    {chats.map((chat) => (
+        <a href="#"  onClick={() => handleSelect(chat)} className="list-group-item list-group-item-action border-0" style={{ margin: "10px 10px 10px 15.2px", paddingLeft: "10px" }}>
+          <div className="d-flex align-items-start">
+            <img src={chat.imageUrl} className="rounded-circle me-1" alt="Vanessa Tucker" width="40" height="40" />
+            <div className="flex-grow-1 ms-3">
+              {chat.userName}
+              <div className="small"><span className="fas fa-circle chat-online">{chat.message}</span></div>
+            </div>
           </div>
-        </div>
+        </a>
       ))}
-    </div>
+    </>
   );
 };
 

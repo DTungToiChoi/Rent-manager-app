@@ -29,8 +29,8 @@ public class ContractController {
 
 
     @GetMapping
-    private ResponseEntity<?> getAllContract(@RequestParam String name,
-                                             @RequestParam String phone,
+    private ResponseEntity<?> getAllContract(@RequestParam(required = false) String name,
+                                             @RequestParam(required = false) String phone,
                                              @RequestParam Integer pageNo,
                                              @RequestParam Integer pageSize) {
         return ResponseEntity.ok(contractService.getAllContractOfRentaler(name, phone ,pageNo, pageSize));
@@ -38,7 +38,7 @@ public class ContractController {
 
     @GetMapping("/customer")
     private ResponseEntity<?> getAllContractForCustomer(
-                                             @RequestParam String phone,
+                                             @RequestParam(required = false) String phone,
                                              @RequestParam Integer pageNo,
                                              @RequestParam Integer pageSize) {
         return ResponseEntity.ok(contractService.getAllContractOfCustomer( phone ,pageNo, pageSize));

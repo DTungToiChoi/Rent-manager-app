@@ -154,6 +154,18 @@ export function saveBlog(storeRequest) {
 }
 
 
+export function getUserOfChat() {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/user/message",
+        method: 'GET'
+    });
+}
+
+
 // ADMIN
 export function getAllRoomOfAdmin(pageNo, pageSize, name) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {

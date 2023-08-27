@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useUserContext } from "../context/UserContext";
 import '../style.css'
+import Chats from "./Chats";
 
 const Search = () => {
   const [username, setUsername] = useState("");
@@ -103,20 +104,6 @@ const Search = () => {
             </div>
           </div>
         </div>
-
-        <a href="#" className="list-group-item list-group-item-action border-0" style={{ margin: "10px 10px 10px 15.2px", paddingLeft: "10px" }}>
-          <div className="badge bg-success float-end">5</div>
-          <div className="d-flex align-items-start">
-            <img src="../../assets/img/author-2.jpg" className="rounded-circle me-1" alt="Vanessa Tucker" width="40" height="40" />
-            <div className="flex-grow-1 ms-3">
-              Vanessa Tucker
-              <div className="small"><span className="fas fa-circle chat-online"></span> Online</div>
-            </div>
-          </div>
-        </a>
-
-
-
 
 
     </>

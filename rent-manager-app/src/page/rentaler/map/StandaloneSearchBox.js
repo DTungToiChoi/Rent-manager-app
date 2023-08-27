@@ -70,11 +70,6 @@ const PlacesWithStandaloneSearchBox = ({ latLong }) => {
           />
         )}
       </div>
-      <div>
-        Selected Place: {selectedPlace ? selectedPlace.description : ""}
-      </div>
-      <div>Latitude: {latitude}</div>
-      <div>Longitude: {longitude}</div>
     </div>
   );
 };

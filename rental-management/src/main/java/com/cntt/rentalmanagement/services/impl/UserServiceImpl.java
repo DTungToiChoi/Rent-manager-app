@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.cntt.rentalmanagement.services.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ import com.cntt.rentalmanagement.repository.UserRepository;
 import com.cntt.rentalmanagement.services.UserService;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl extends BaseService implements UserService{
 	
 	@Autowired
 	UserRepository userRepository;
@@ -77,18 +78,18 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
-	public List<MessageDTO> getMessageUser(Long id) {
+	public List<MessageDTO> getMessageUser() {
 		try {
-			User user = userRepository.findById(id).get();
+			User user = userRepository.findById(getUserId()).get();
 			List<MessageDTO> result = new ArrayList<>();
 			for (Message message : messageRepository.findBySender(user)) {
 				if (message.getReceiver().getId() != message.getSender().getId()) {
 					String lastMessage = message.getContent().get(message.getContent().size() - 1).getContent();
 					if (message.getContent().get(message.getContent().size() - 1).getSendBy()) {
-						if (id == message.getReceiver().getId())
+						if (getUserId() == message.getReceiver().getId())
 							lastMessage = "Bạn: " + lastMessage;
 					} else {
-						if (id == message.getSender().getId())
+						if (getUserId() == message.getSender().getId())
 							lastMessage = "Bạn: " + lastMessage;
 					}
 					result.add(new MessageDTO(message.getReceiver().getId(), message.getReceiver().getName(),
@@ -99,20 +100,22 @@ public class UserServiceImpl implements UserService{
 				if (message.getReceiver().getId() != message.getSender().getId()) {
 					String lastMessage = message.getContent().get(message.getContent().size() - 1).getContent();
 					if (message.getContent().get(message.getContent().size() - 1).getSendBy()) {
-						if (id == message.getReceiver().getId())
+						if (getUserId() == message.getReceiver().getId())
 							lastMessage = "Bạn: " + lastMessage;
 					} else {
-						if (id == message.getSender().getId())
+						if (getUserId() == message.getSender().getId())
 							lastMessage = "Bạn: " + lastMessage;
 					}
 					result.add(new MessageDTO(message.getSender().getId(), message.getSender().getName(),
 							message.getSender().getImageUrl(), lastMessage));
 				}
 			}
+
 			return result;
 		} catch (Exception e) {
 			return null;
 		}
+	}
 	@Override
 	public List<User> findMessageUser(String userName) {
 		List<User> result = new ArrayList<>();

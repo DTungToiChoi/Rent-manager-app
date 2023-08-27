@@ -26,15 +26,16 @@ const Message = ({ message, scrollToLast }) => {
                 className={`${isSentByCurrentUser ? "chat-message-right pb-4" : "pb-4"}`}
               >
                 {isSentByCurrentUser ?
-                  <div className="flex-shrink-1 bg-light rounded py-2 px-3 me-3" style={{backgroundColor : "black"}}>
-                    <div className="font-weight-bold mb-1">B</div>
+                <div className="d-flex justify-content-end">
+                  <div className="flex-shrink-1  bg-primary  rounded py-2 px-3 me-3" style={{ color: "white", display: "inline-block" }}>
                     {contentItem.content}
+                  </div>
                   </div>
                   :
-                  <div className="flex-shrink-1 bg-light rounded py-2 px-3 me-3">
-                    <div className="font-weight-bold mb-1">A</div>
-                    {contentItem.content}
-                  </div>
+                  
+                    <div className="flex-shrink-1 bg-secondary rounded py-2 px-3 me-3" style={{ color: "white", display: "inline-block" }}>
+                      {contentItem.content}
+                    </div>
                 }
               </p>
             );

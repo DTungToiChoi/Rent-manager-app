@@ -186,6 +186,10 @@ function EditRoom(props) {
                                     <div className="row">
                                         <div className="mb-3">
                                             <label className="form-label">Tải Hình Ảnh</label>
+                                            <br/>
+                                            {roomData.roomMedia.map((media, index) => (
+                                                <img src={media.files} style={{width : "10%", marginLeft : "10px", border: "1px"}}/>
+                                            ))}
                                             <input className="form-control" type="file" name="files" multiple onChange={handleFileChange} />
                                         </div>
                                     </div>
