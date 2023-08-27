@@ -38,8 +38,8 @@ class Header extends Component {
                                     </NavLink>
                                 </li>
                                 <li className="nav-item">
-                                    <NavLink className="nav-link " to="/message" activeClassName="active">
-                                        Tin nhắn
+                                    <NavLink className="nav-link " to="/angent-gird" activeClassName="active">
+                                        Người cho thuê
                                     </NavLink>
                                 </li>
                             </ul>

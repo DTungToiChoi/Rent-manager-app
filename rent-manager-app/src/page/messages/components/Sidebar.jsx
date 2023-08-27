@@ -6,12 +6,16 @@ import '../style.css'
 
 const Sidebar = (props) => {
   return (
-    <div className="sidebar">
-      
-      <Navbar {...props}/>
-      <Search {...props}/>
-      <Chats {...props}/>
-    </div>
+    <>
+      <div className="col-12 col-lg-5 col-xl-3 border-end list-group">
+
+        {/* <Navbar {...props}/> */}
+        <Search {...props} />
+
+        <Chats {...props} />
+      </div>
+  
+    </>
   );
 };
 

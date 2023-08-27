@@ -72,21 +72,21 @@ public class MessageController {
 		//return "success";
 		return userServiceImpl.getMessageChatUser(Long.valueOf(1), Long.valueOf(2));
 	}
-	
+
 	@GetMapping("/user/message")
-	@PreAuthorize("hasRole('USER')")
+//	@PreAuthorize("hasRole('USER') or hasRole('RENTALER')")
     public List<MessageDTO> getMessageUser(@CurrentUser UserPrincipal userPrincipal) {
         return userServiceImpl.getMessageUser(userPrincipal.getId());
     }
 	
 	@GetMapping("/user/message/{userName}")
-	@PreAuthorize("hasRole('USER')")
+//	@PreAuthorize("hasRole('USER') or hasRole('RENTALER')")
     public List<User> findMessageUser(@CurrentUser UserPrincipal userPrincipal, @PathVariable String userName) {
         return userServiceImpl.findMessageUser(userName);
     }
 	
 	@GetMapping("/user/message-chat/{userId}")
-	@PreAuthorize("hasRole('USER')")
+//	@PreAuthorize("hasRole('USER') or hasRole('RENTALER')")
     public Message getMessageChatUser(@CurrentUser UserPrincipal userPrincipal, @PathVariable Long userId) {
 		return userServiceImpl.getMessageChatUser(userPrincipal.getId(), userId);
     }

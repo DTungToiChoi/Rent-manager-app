@@ -8,7 +8,8 @@ const Messages = ({ selectedUser }) => {
   console.log("Real messages: " + realMessages)
   
   return (
-    <div className="messages">
+    <div className="overflow-auto messages" style={{height : "450px"}}>
+    
       <Message message={realMessages} />
     </div>
   );
