@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService{
 			imageUrl = message.getReceiver().getImageUrl();
 		}
 		last_message_text = message.getContent().get(message.getContent().size()-1).getContent();
-		return new MessageDTO(userName, imageUrl, last_message_text);
+		return new MessageDTO(1L,userName, imageUrl, last_message_text);
 	}
 	@Override
 	public String updateImageUser(Long id, String image) {
@@ -77,18 +77,42 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
-	public List<MessageDTO> getMessageUser(Long id){
+	public List<MessageDTO> getMessageUser(Long id) {
 		try {
 			User user = userRepository.findById(id).get();
 			List<MessageDTO> result = new ArrayList<>();
-//			for (Message message : user.getSentMessages()) {
-//				result.add(toMessageDTO(user,message));
-//			}
+			for (Message message : messageRepository.findBySender(user)) {
+				if (message.getReceiver().getId() != message.getSender().getId()) {
+					String lastMessage = message.getContent().get(message.getContent().size() - 1).getContent();
+					if (message.getContent().get(message.getContent().size() - 1).getSendBy()) {
+						if (id == message.getReceiver().getId())
+							lastMessage = "Bạn: " + lastMessage;
+					} else {
+						if (id == message.getSender().getId())
+							lastMessage = "Bạn: " + lastMessage;
+					}
+					result.add(new MessageDTO(message.getReceiver().getId(), message.getReceiver().getName(),
+							message.getReceiver().getImageUrl(), lastMessage));
+				}
+			}
+			for (Message message : messageRepository.findByReceiver(user)) {
+				if (message.getReceiver().getId() != message.getSender().getId()) {
+					String lastMessage = message.getContent().get(message.getContent().size() - 1).getContent();
+					if (message.getContent().get(message.getContent().size() - 1).getSendBy()) {
+						if (id == message.getReceiver().getId())
+							lastMessage = "Bạn: " + lastMessage;
+					} else {
+						if (id == message.getSender().getId())
+							lastMessage = "Bạn: " + lastMessage;
+					}
+					result.add(new MessageDTO(message.getSender().getId(), message.getSender().getName(),
+							message.getSender().getImageUrl(), lastMessage));
+				}
+			}
 			return result;
 		} catch (Exception e) {
 			return null;
 		}
-	}
 	@Override
 	public List<User> findMessageUser(String userName) {
 		List<User> result = new ArrayList<>();
