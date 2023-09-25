@@ -9,16 +9,16 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-@EnableConfigurationProperties({ FileStorageProperties.class, AppProperties.class})
+@EnableConfigurationProperties({FileStorageProperties.class, AppProperties.class})
 public class RentalManagementApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(RentalManagementApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(RentalManagementApplication.class, args);
+    }
 
-	@Bean
-	public ModelMapper modelMapper() {
-		return new ModelMapper();
-	}
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
 
 }

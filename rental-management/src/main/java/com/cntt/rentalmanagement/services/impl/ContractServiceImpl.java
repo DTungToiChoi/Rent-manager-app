@@ -45,6 +45,8 @@ public class ContractServiceImpl extends BaseService implements ContractService 
 
         String file = fileStorageService.storeFile(files.get(0)).replace("photographer/files/", "");
         Contract contract = new Contract(name,"http://localhost:8080/document/" +file, nameRentHome, deadline ,getUsername(), getUsername(), room);
+        contract.setPhone(phone);
+        contract.setNumOfPeople(numOfPeople);
         contractRepository.save(contract);
 
         room.setStatus(RoomStatus.HIRED);
