@@ -76,7 +76,6 @@ public class PaymentController {
 
             RentalerPayment payment = paymentService.createPayment(userId, amount);
 
-            // ✅ Tạo item dạng List và chuyển sang JSON
             ObjectMapper objectMapper = new ObjectMapper();
             List<Map<String, Object>> itemList = new ArrayList<>();
             Map<String, Object> itemMap = new HashMap<>();
@@ -105,7 +104,6 @@ public class PaymentController {
             zalopayPayload.put("callback_url", "https://ce55-27-79-141-81.ngrok-free.app/api/payment/callback");
             zalopayPayload.put("mac", mac);
 
-            // ✅ In ra request gửi đi để debug
             System.out.println("GỬI DỮ LIỆU ĐI ZALOPAY:");
             System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(zalopayPayload));
 
