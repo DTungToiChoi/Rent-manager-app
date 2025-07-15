@@ -51,7 +51,7 @@ public class AccountController {
         return ResponseEntity.ok(accountService.sendEmailOfCustomer(sendEmailRequest));
     }
 
-//ok
+
     @PostMapping("/{id}/authorization")
     private ResponseEntity<?> divideAuthorization(@PathVariable Long id, @RequestBody RoleRequest roleRequest) {
         return ResponseEntity.ok(accountService.divideAuthorization(id, roleRequest));
